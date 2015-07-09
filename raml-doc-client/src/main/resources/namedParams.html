@@ -1,0 +1,34 @@
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Constraint</th>
+        <th>Required</th>
+        <th>Repeat</th>
+        <th>Default</th>
+        <th>Description</th>
+    </tr>
+    {% for entry in params %}
+    {% set param = entry.value %}
+    <tr>
+        <td>{{param.displayName | default(entry.key)}}</td>
+        <td>{{param.type | default("STRING")}}</td>
+        <td>
+            {% if param.enumeration is not empty %}<p>{{param.enumeration}}</p>{%endif%}
+            {% if param.pattern is not empty %}<p>{{param.pattern}}</p>{%endif%}
+            {% if param.minLength is not empty or param.maxLength is not empty %}
+            <p>{{str.stringLen(param)}}</p>
+            {%endif%}
+            {% if param.minimum is not empty or param.maximum is not empty %}
+            <p>{{str.intLimit(param)}}</p>
+            {%endif%}
+        </td>
+        <td>{{param.required | boolean}}</td>
+        <td>{{param.repeat | boolean}}</td>
+        <td>{{param.defaultValue}}</td>
+        <td>{{param.description | markdown}}
+            {% if param.example is not empty %}Example: {{param.example}}{%endif%}
+        </td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,53 @@
+#%RAML 0.8
+---
+title: basic
+baseUri: http://nidi.guru/raml/{version}
+version: v1
+documentation:
+  - title: t1
+    content: c1
+  - title: t2
+    content: |
+      ###bla
+
+/nix:
+/data:
+  displayName: TheData
+  description: The Description
+  uriParameters:
+    t:
+      description: The t
+      type: integer
+      required: true
+      minimum: 3
+      maximum: 67
+      default: 18
+      example: 42
+    s:
+      displayName: sName
+      repeat: true
+      enum: [a,b,42]
+      pattern: bb|[^b]{2}
+      minLength: 4
+  /sub:
+  post:
+    description: Get the thing!
+    queryParameters:
+      q:
+        description: The query string
+    headers:
+      h:
+    body:
+      text/plain:
+        schema: |
+          {"type":"string"}
+        example: "hab"
+      application/json:
+    responses:
+      200:
+        body:
+          application/json:
+/data2:
+  get:
+    responses:
+      200:

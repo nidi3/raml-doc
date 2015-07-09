@@ -1,0 +1,34 @@
+<h1>{{raml.title}}</h1>
+
+<p>Version {{raml.version}} {{str.baseUri}}</p>
+
+{% for doc in raml.documentation %}
+<h2>{{doc.title}}</h2>
+{{doc.content | markdown}}
+
+{% endfor %}
+
+<ul>
+    {% for res in util.allResources %}
+    <li>
+        {% set resource = res.value %}
+        {{res.key}} ({{resource.displayName}})
+        <br/>
+        {{resource.description | markdown}}
+
+        {% set params = resource.resolvedUriParameters %}
+        {% if params is not empty %}
+        <h3>URI parameters</h3>
+        {% include "namedParams.html" %}
+        {% endif %}
+
+        {% for actionEntry in resource.actions %}
+        {% set action = actionEntry.value %}
+        {% include "action.html" %}
+
+        {% endfor %}
+    </li>
+    {% endfor %}
+</ul>
+
+

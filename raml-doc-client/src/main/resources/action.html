@@ -1,0 +1,25 @@
+{{action.type}}
+{{action.description | markdown}}
+
+{% set params = action.queryParameters %}
+{% if params is not empty %}
+<h3>Query parameters</h3>
+{% include "namedParams.html" %}
+{% endif %}
+
+{% set params = action.headers %}
+{% if params is not empty %}
+<h3>Headers</h3>
+{% include "namedParams.html" %}
+{% endif %}
+
+{% if action.body is not empty %}
+<h3>Body</h3>
+{% for bodyEntry in action.body %}
+{% set body = bodyEntry.value %}
+
+<h4>{{bodyEntry.key}}</h4>
+<p>{{body.schema}}</p>
+{% if body.example is not empty %}Example: {{body.example}}{% endif %}
+{% endfor %}
+{% endif %}
