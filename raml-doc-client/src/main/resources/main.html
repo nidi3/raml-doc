@@ -1,34 +1,49 @@
-<h1>{{raml.title}}</h1>
+<html>
+<head>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
 
-<p>Version {{raml.version}} {{str.baseUri}}</p>
+<header>
+    <h1>{{raml.title}}</h1>
 
-{% for doc in raml.documentation %}
-<h2>{{doc.title}}</h2>
-{{doc.content | markdown}}
+    <p>Version {{raml.version}}</p>
 
-{% endfor %}
+    <p>{{str.baseUri}}</p>
+</header>
 
-<ul>
-    {% for res in util.allResources %}
-    <li>
-        {% set resource = res.value %}
-        {{res.key}} ({{resource.displayName}})
-        <br/>
-        {{resource.description | markdown}}
-
-        {% set params = resource.resolvedUriParameters %}
-        {% if params is not empty %}
-        <h3>URI parameters</h3>
-        {% include "namedParams.html" %}
-        {% endif %}
-
-        {% for actionEntry in resource.actions %}
-        {% set action = actionEntry.value %}
-        {% include "action.html" %}
-
-        {% endfor %}
-    </li>
+<div class="content">
+    {% for doc in raml.documentation %}
+    <h2>{{doc.title}}</h2>
+    {{doc.content | markdown}}
     {% endfor %}
-</ul>
 
+    <div class="desc">
+        <ul>
+            {% for res in util.allResources %}
+            {% set resource = res.value %}
+            <li>
+                <h3>{{res.key}} ({{resource.displayName}})</h3>
 
+                <div class="desc">
+                    {{resource.description | markdown}}
+
+                    {% set params = resource.resolvedUriParameters %}
+                    {% if params is not empty %}
+                    <h4>URI parameters</h4>
+                    {% include "namedParams.html" %}
+                    {% endif %}
+
+                    {% for actionEntry in resource.actions %}
+                    {% set action = actionEntry.value %}
+                    {% include "action.html" %}
+                    {% endfor %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

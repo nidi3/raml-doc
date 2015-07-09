@@ -1,4 +1,5 @@
 <table>
+    <thead>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -8,6 +9,9 @@
         <th>Default</th>
         <th>Description</th>
     </tr>
+    </thead>
+
+    <tbody>
     {% for entry in params %}
     {% set param = entry.value %}
     <tr>
@@ -23,12 +27,13 @@
             <p>{{str.intLimit(param)}}</p>
             {%endif%}
         </td>
-        <td>{{param.required | boolean}}</td>
-        <td>{{param.repeat | boolean}}</td>
+        <td class="center">{{param.required | boolean}}</td>
+        <td class="center">{{param.repeat | boolean}}</td>
         <td>{{param.defaultValue}}</td>
         <td>{{param.description | markdown}}
             {% if param.example is not empty %}Example: {{param.example}}{%endif%}
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>

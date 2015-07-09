@@ -1,0 +1,104 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em 2em;
+}
+
+.content {
+    padding: 1em 2em;
+}
+
+.desc {
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 1em;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+thead tr {
+    background-color: #888;
+    color: #fff;
+}
+
+th {
+    padding: .2em;
+    border: 1px solid white;
+    text-align: center;
+}
+
+td {
+    padding: .2em;
+    border: 1px solid gray;
+    margin: 0;
+}
+
+td.center {
+    text-align: center;
+}
+
+.actionDesc {
+    display: inline-block;
+    margin-left: 6em;
+    margin-top: -1.7em;
+}
+
+.badge {
+    background-color: #999;
+    border-radius: 0;
+    color: #f3f3f6;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+    width: 4em;
+    padding: .3em;
+}
+
+.badge_GET {
+    background-color: #63a8e2;
+}
+
+.badge_POST {
+    background-color: #6cbd7d;
+}
+
+.badge_PUT {
+    background-color: #22bac4;
+}
+
+.badge_PATCH {
+    background-color: #02b0e2;
+}
+
+.badge_DELETE {
+    background-color: #d26460;
+}
+
+.badge_CONNECT {
+    background-color: #e48f0a;
+}
+
+.badge_TRACE {
+    background-color: #98b805;
+}

@@ -19,7 +19,7 @@ public class Main {
             System.exit(1);
         }
         try {
-            new Generator().generate(file, new PrintWriter(System.out));
+            new Generator().generate(file, new File("."));
         } catch (Exception e) {
             System.out.println("Problem generating doc");
             e.printStackTrace();
