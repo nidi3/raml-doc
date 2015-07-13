@@ -1,0 +1,45 @@
+def(value,def) ::= <<
+    $if(value)$ $value$ $else$ $def$ $endif$
+>>
+
+param(key,param) ::= <<
+    <tr>
+        <td>$def(param.displayName,key)$</td>
+        <td>$def(param.type,"STRING")$</td>
+        <td>
+            $if (param.enumeration)$ <p>$param.enumeration$</p> $endif$
+            $if (param.pattern)$ <p>$param.pattern$</p> $endif$
+            $if (param.minLength || param.maxLength)$ <p>$param;format="strLimit"$</p> $endif$
+            $if (param.minimum || param.maximum)$ <p>$param;format="intLimit"$</p> $endif$
+        </td>
+        <td class="center">$param.required;format="x"$</td>
+        <td class="center">$param.repeat;format="x"$</td>
+        <td>$param.defaultValue$</td>
+        <td>$param.description;format="markdown"$
+            $if(param.example)$ Example: $param.example$ $endif$
+        </td>
+    </tr>
+>>
+
+namedParams(title,params) ::= <<
+    $if(params)$
+        <div class="paramsTitle">$title$</div>
+        <table class="params">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Constraint</th>
+                <th>Required</th>
+                <th>Repeat</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                $params.entrySet:{p | $param(p.key,p.value)$}$
+            </tbody>
+        </table>
+    $endif$
+>>

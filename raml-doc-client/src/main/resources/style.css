@@ -26,11 +26,7 @@ ul {
     list-style-type: none;
 }
 
-li {
-    margin-bottom: 1em;
-}
-
-table {
+table.params {
     width: 100%;
     border-spacing: 0;
     border-collapse: collapse;
@@ -48,7 +44,7 @@ th {
     text-align: center;
 }
 
-td {
+table.params td {
     padding: .2em;
     border: 1px solid gray;
     margin: 0;
@@ -101,4 +97,10 @@ td.center {
 
 .badge_TRACE {
     background-color: #98b805;
+}
+
+.code{
+    max-height: 25em;
+    overflow: auto;
+    background-color: #ccc;
 }

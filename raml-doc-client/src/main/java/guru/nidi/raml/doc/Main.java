@@ -1,8 +1,8 @@
 package guru.nidi.raml.doc;
 
+import guru.nidi.raml.doc.st.Generator;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  *

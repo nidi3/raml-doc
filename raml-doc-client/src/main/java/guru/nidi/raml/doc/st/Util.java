@@ -1,17 +1,15 @@
-package guru.nidi.raml.doc;
+package guru.nidi.raml.doc.st;
 
 import org.raml.model.Raml;
 import org.raml.model.Resource;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  *
  */
-public class Util {
+class Util {
     private final Raml raml;
 
     public Util(Raml raml) {
@@ -33,4 +31,6 @@ public class Util {
             addSubResources(path + entry.getKey(), entry.getValue(), res);
         }
     }
+
+
 }

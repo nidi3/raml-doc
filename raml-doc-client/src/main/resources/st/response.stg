@@ -1,0 +1,18 @@
+body(key,body) ::= <<
+    <h5>$key$</h5>
+
+    <pre class="code">$body.schema;format="schema"$</pre>
+    $if(body.example)$ Example: $body.example$ $endif$
+>>
+
+response(response) ::= <<
+
+    $response.description;format="markdown"$
+
+    <div class="desc">
+        $/namedParams/namedParams("Headers",response.headers)$
+
+        $response.body.entrySet:{entry | $body(entry.key,entry.value)$}$
+    </div>
+
+>>

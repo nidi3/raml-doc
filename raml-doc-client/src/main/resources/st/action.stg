@@ -1,0 +1,35 @@
+body(key,body) ::= <<
+    <h5>$key$</h5>
+
+    $/namedParams/namedParams("Form parameters",body.formParameters)$
+
+    <pre class="code">$body.schema;format="schema"$</pre>
+    $if(body.example)$ Example: $body.example$ $endif$
+>>
+
+action(action) ::= <<
+
+    <div class="badge badge_$action.type$">
+        $action.type$
+    </div>
+    <div class="actionDesc">
+        $action.description;format="markdown"$
+    </div>
+    <div class="desc">
+
+        $/namedParams/namedParams("Query parameters",action.queryParameters)$
+
+        $/namedParams/namedParams("Headers",action.headers)$
+
+        $if(action.body)$
+            <h4>Body</h4>
+
+            <div class="desc">
+                $action.body.entrySet:{entry | $body(entry.key,entry.value)$}$
+            </div>
+
+            $action.responses.entrySet:{entry | <h6>$entry.key$</h6> $/response/response(entry.value)$}$
+        $endif$
+    </div>
+
+>>

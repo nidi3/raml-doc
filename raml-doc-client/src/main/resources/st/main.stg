@@ -1,0 +1,65 @@
+htmlHead() ::= <<
+    <header>
+        <h1>$raml.title$</h1>
+        <p>Version $raml.version$</p>
+        <p>$raml;format="baseUri"$</p>
+    </header>
+>>
+
+ramlDoc(doc) ::= <<
+    <h2>$doc.title$</h2>
+    $doc.content;format="markdown"$
+>>
+
+resourceLink(res) ::= <<
+    <tr>
+        <td>
+            <a href="#$res.key$">$res.key$ ($res.value.displayName$)</a>
+        </td>
+        <td>
+            $res.value.description;format="summary,markdown"$
+        </td>
+    </tr>
+>>
+
+resource(res) ::= <<
+    <li>
+        <h3><a id="$res.key$">$res.key$ ($res.value.displayName$)</a></h3>
+
+        <div class="desc">
+            $res.value.description;format="markdown"$
+
+            $/namedParams/namedParams("URI parameters",res.value.resolvedUriParameters)$
+
+            $res.value.actions.values:/action/action()$
+        </div>
+    </li>
+>>
+
+main(raml,str,util) ::= <<
+    <html>
+    <head>
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+
+    $htmlHead()$
+
+    <div class="content">
+        $raml.documentation:ramlDoc()$
+
+        <div class="desc">
+            <table class="resources">
+                $util.allResources.entrySet:resourceLink()$
+            </table>
+
+            <ul>
+                $util.allResources.entrySet:resource()$
+            </ul>
+        </div>
+    </div>
+
+    </body>
+    </html>
+>>
+
