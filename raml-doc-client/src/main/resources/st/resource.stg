@@ -1,0 +1,27 @@
+resourceLinks() ::= <<
+    <div class="resources">
+        $util.allResources:/resource/resourceLink()$
+    </div>
+>>
+
+resourceLink(res) ::= <<
+    <ul>
+        <li>
+        <a href="$relPath$$res.uri$.html">
+            $res.uri$ ($res.displayName$)
+        </a>
+        </li>
+    </ul>
+>>
+
+resource(res) ::= <<
+    <h3>$res.uri$ ($res.displayName$)</h3>
+
+    <div class="desc">
+        $res.description;format="markdown"$
+
+        $/namedParams/namedParams("URI parameters",res.resolvedUriParameters)$
+
+        $res.actions.values:/action/action()$
+    </div>
+>>

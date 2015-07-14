@@ -38,6 +38,11 @@ documentation:
       pattern: bb|[^b]{2}
       minLength: 4
   /sub:
+  get:
+    description: |
+      fsjh sdfö hfkj shgsfdökhdf kjhkjyhvjkhv lkcjxv cxkjvh köhyjvöh xcyövyx
+      cxvhxckjlvhxck vhxc yvk jkcxv xlykcvh kxjlhv cjkxv hxvv kxjv xlkyhv lxk
+      xkjvxchy vklxhvkljxchy vkjxchy kjvx hvjkxh vkjxych
   post:
     description: |
       Get the thing! sfdkj hdsfklj sdfdf jlkflkj hfkj ffjk fjkl asdhfjks dh
@@ -70,6 +75,9 @@ documentation:
             example: +14158675309
     responses:
       200:
+        description: Everything ok
+        headers:
+          bla:
         body:
           application/json:
             schema: |

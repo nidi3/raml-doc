@@ -1,5 +1,5 @@
-body(key,body) ::= <<
-    <h5>$key$</h5>
+mime(key,body) ::= <<
+    <div class="mimeTitle">$key$</div>
 
     $/namedParams/namedParams("Form parameters",body.formParameters)$
 
@@ -7,14 +7,21 @@ body(key,body) ::= <<
     $if(body.example)$ Example: $body.example$ $endif$
 >>
 
-action(action) ::= <<
+response(key,res) ::= <<
+    <div class="mimeTitle">$key$</div>
+    $/response/response(res)$
+>>
 
-    <div class="badge badge_$action.type$">
-        $action.type$
+action(action) ::= <<
+    <div class="actionHeader">
+        <div class="badge badge_$action.type$">
+            $action.type$
+        </div>
+        <div class="actionDesc">
+            $action.description;format="markdown"$
+        </div>
     </div>
-    <div class="actionDesc">
-        $action.description;format="markdown"$
-    </div>
+
     <div class="desc">
 
         $/namedParams/namedParams("Query parameters",action.queryParameters)$
@@ -22,13 +29,16 @@ action(action) ::= <<
         $/namedParams/namedParams("Headers",action.headers)$
 
         $if(action.body)$
-            <h4>Body</h4>
+            <div class="bodyTitle">Body</div>
 
             <div class="desc">
-                $action.body.entrySet:{entry | $body(entry.key,entry.value)$}$
+                $action.body.entrySet:{entry | $mime(entry.key,entry.value)$}$
             </div>
 
-            $action.responses.entrySet:{entry | <h6>$entry.key$</h6> $/response/response(entry.value)$}$
+            <div class="bodyTitle">Responses</div>
+            <div class="desc">
+                $action.responses.entrySet:{entry | $response(entry.key,entry.value)$}$
+            </div>
         $endif$
     </div>
 

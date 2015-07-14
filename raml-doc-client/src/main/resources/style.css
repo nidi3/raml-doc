@@ -11,15 +11,45 @@ header {
     background-color: #333;
     color: #fff;
     padding: 1em 2em;
+    margin-bottom: 1em;
+}
+
+.resources {
+    width: 14em;
+    float: left;
+    padding-left: 1em;
+}
+
+.resources li{
+    line-height: 150%;
 }
 
 .content {
-    padding: 1em 2em;
+    margin-left: 15em;
+    padding-right: 1em;
 }
 
 .desc {
-    margin-left: 1em;
-    margin-bottom: 1em;
+    margin-left: 2em;
+}
+
+.paramsTitle {
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+.actionHeader{
+    margin-top: 1em;
+}
+
+.bodyTitle{
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+.mimeTitle{
+    margin-top: 1em;
+    font-weight: bold;
 }
 
 ul {
@@ -30,7 +60,6 @@ table.params {
     width: 100%;
     border-spacing: 0;
     border-collapse: collapse;
-    margin-bottom: 1em;
 }
 
 thead tr {
@@ -55,16 +84,14 @@ td.center {
 }
 
 .actionDesc {
-    display: inline-block;
     margin-left: 6em;
-    margin-top: -1.7em;
 }
 
 .badge {
+    float: left;
     background-color: #999;
     border-radius: 0;
     color: #f3f3f6;
-    display: inline-block;
     text-align: center;
     text-transform: uppercase;
     width: 4em;

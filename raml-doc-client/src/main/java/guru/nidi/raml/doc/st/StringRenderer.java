@@ -48,15 +48,27 @@ class StringRenderer implements AttributeRenderer {
     private String format(String s, String formatString) {
         switch (formatString) {
             case "markdown":
-                return processor.markdownToHtml(s);
+                return markdown(s);
             case "summary":
-                final int pos = s.indexOf('.');
-                return pos < 0 ? s : s.substring(0, pos + 1);
+                return summary(s);
             case "schema":
-                final String refSchema = raml.getConsolidatedSchemas().get(s);
-                return refSchema == null ? s : refSchema;
+                return schema(s);
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }
+    }
+
+    private String schema(String s) {
+        final String refSchema = raml.getConsolidatedSchemas().get(s);
+        return refSchema == null ? s : refSchema;
+    }
+
+    private String summary(String s) {
+        final int pos = s.indexOf('.');
+        return pos < 0 ? s : s.substring(0, pos + 1);
+    }
+
+    private String markdown(String s) {
+        return processor.markdownToHtml(s);
     }
 }

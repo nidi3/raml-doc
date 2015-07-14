@@ -1,5 +1,5 @@
 body(key,body) ::= <<
-    <h5>$key$</h5>
+    <div class="mimeTitle">$key$</div>
 
     <pre class="code">$body.schema;format="schema"$</pre>
     $if(body.example)$ Example: $body.example$ $endif$

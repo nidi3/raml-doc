@@ -16,6 +16,7 @@
 package guru.nidi.raml.doc.st;
 
 import org.raml.model.Raml;
+import org.raml.model.Resource;
 import org.raml.model.parameter.AbstractParam;
 import org.raml.parser.loader.FileResourceLoader;
 import org.raml.parser.visitor.RamlDocumentBuilder;
@@ -41,15 +42,41 @@ public class Generator {
         group.registerRenderer(Raml.class, new RamlRenderer());
         final ST main = group.getInstanceOf("main/main");
         main.add("raml", raml);
-        main.add("util", new Util(raml));
+        final Util util = new Util(raml);
+        main.add("util", util);
 
-        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(new File(target, raml.getTitle() + "2.html")))) {
-            out.write(main.render());
+        final File base = new File(target, raml.getTitle());
+        base.mkdirs();
+        main.add("relPath", ".");
+        render(main, new File(base, "index.html"));
+        for (Resource resource : util.getAllResources()) {
+            main.remove("resource");
+            main.add("resource", resource);
+            main.remove("relPath");
+            main.add("relPath", depth(resource.getUri()));
+            final File file = new File(base, resource.getUri() + ".html");
+            render(main, file);
         }
 
         try (final InputStream in = getClass().getResourceAsStream("/style.css");
-             final FileOutputStream out = new FileOutputStream(new File(target, "style.css"))) {
+             final FileOutputStream out = new FileOutputStream(new File(base, "style.css"))) {
             copy(in, out);
+        }
+    }
+
+    private String depth(String s) {
+        String res = "";
+        int pos = 0;
+        while ((pos = s.indexOf('/', pos + 1)) >= 0) {
+            res += "../";
+        }
+        return res + ".";
+    }
+
+    private void render(ST template, File file) throws IOException {
+        file.getParentFile().mkdirs();
+        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file))) {
+            out.write(template.render());
         }
     }
 
