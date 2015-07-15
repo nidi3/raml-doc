@@ -15,8 +15,7 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.raml.model.Raml;
-import org.raml.model.Resource;
+import org.raml.model.*;
 import org.raml.model.parameter.AbstractParam;
 import org.raml.parser.loader.FileResourceLoader;
 import org.raml.parser.visitor.RamlDocumentBuilder;
@@ -40,6 +39,7 @@ public class Generator {
         group.registerRenderer(Boolean.class, new BooleanRenderer());
         group.registerRenderer(AbstractParam.class, new ParamRenderer());
         group.registerRenderer(Raml.class, new RamlRenderer());
+        group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
         final ST main = group.getInstanceOf("main/main");
         main.add("raml", raml);
         final Util util = new Util(raml);
@@ -47,26 +47,41 @@ public class Generator {
 
         final File base = new File(target, raml.getTitle());
         base.mkdirs();
+        main.add("template", "/main/doc");
         main.add("relPath", ".");
         render(main, new File(base, "index.html"));
+
+        set(main, "template", "/resource/resource");
         for (Resource resource : util.getAllResources()) {
-            main.remove("resource");
-            main.add("resource", resource);
-            main.remove("relPath");
-            main.add("relPath", depth(resource.getUri()));
-            final File file = new File(base, resource.getUri() + ".html");
+            set(main, "param", resource);
+            set(main, "relPath", depth(resource.getUri()));
+            final File file = new File(base, "resource/" + resource.getUri() + ".html");
             render(main, file);
         }
 
+        set(main, "template", "/securityScheme/securityScheme");
+        for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
+            for (Map.Entry<String,SecurityScheme> entry : sss.entrySet()) {
+                set(main, "param", entry.getValue());
+                set(main, "relPath", "../.");
+                final File file = new File(base, "security-scheme/" +entry.getKey() + ".html");
+                render(main, file);
+            }
+        }
         try (final InputStream in = getClass().getResourceAsStream("/style.css");
              final FileOutputStream out = new FileOutputStream(new File(base, "style.css"))) {
             copy(in, out);
         }
     }
 
+    private void set(ST template, String name, Object value) {
+        template.remove(name);
+        template.add(name, value);
+    }
+
     private String depth(String s) {
         String res = "";
-        int pos = 0;
+        int pos = -1;
         while ((pos = s.indexOf('/', pos + 1)) >= 0) {
             res += "../";
         }

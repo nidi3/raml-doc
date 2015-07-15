@@ -4,12 +4,13 @@ mime(key,body) ::= <<
     $/namedParams/namedParams("Form parameters",body.formParameters)$
 
     <pre class="code">$body.schema;format="schema"$</pre>
-    $if(body.example)$ Example: $body.example$ $endif$
+    $/main/line("Example",body.example)$
 >>
 
-response(key,res) ::= <<
-    <div class="mimeTitle">$key$</div>
-    $/response/response(res)$
+securityScheme(ss) ::= <<
+    <a href="$relPath$/security-scheme/$ss.name$.html">
+        $ss.name$
+    </a>
 >>
 
 action(action) ::= <<
@@ -28,6 +29,8 @@ action(action) ::= <<
 
         $/namedParams/namedParams("Headers",action.headers)$
 
+        $/main/line("Secured by",action.securitySchemes:securityScheme())$
+
         $if(action.body)$
             <div class="bodyTitle">Body</div>
 
@@ -35,10 +38,8 @@ action(action) ::= <<
                 $action.body.entrySet:{entry | $mime(entry.key,entry.value)$}$
             </div>
 
-            <div class="bodyTitle">Responses</div>
-            <div class="desc">
-                $action.responses.entrySet:{entry | $response(entry.key,entry.value)$}$
-            </div>
+            $/response/responses(action.responses)$
+
         $endif$
     </div>
 

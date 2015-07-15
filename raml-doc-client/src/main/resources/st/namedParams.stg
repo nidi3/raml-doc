@@ -16,7 +16,7 @@ param(key,param) ::= <<
         <td class="center">$param.repeat;format="x"$</td>
         <td>$param.defaultValue$</td>
         <td>$param.description;format="markdown"$
-            $if(param.example)$ Example: $param.example$ $endif$
+            $/main/line("Example",param.example)$
         </td>
     </tr>
 >>

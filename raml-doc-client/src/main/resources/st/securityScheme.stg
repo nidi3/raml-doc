@@ -1,0 +1,17 @@
+securityScheme(scheme) ::= <<
+    <div class="mainTitle">$scheme.type$</div>
+    $scheme.description;format="markdown"$
+    $/namedParams/namedParams("Headers",scheme.describedBy.headers)$
+    $/namedParams/namedParams("Headers",scheme.describedBy.queryParameters)$
+
+    <div class="mimeTitle">Settings</div>
+    $/main/line("Request token URI",scheme.settings.requestTokenUri)$
+    $/main/line("Authorization URI",scheme.settings.authorizationUri)$
+    $/main/line("Token credentials URI",scheme.settings.tokenCredentialsUri)$
+    $/main/line("Access token URI",scheme.settings.accessTokenUri)$
+    $/main/line("Authorization grants",scheme.settings.authorizationGrants)$
+    $/main/line("Scopes",scheme.settings.scopes)$
+
+    $/response/responses(scheme.describedBy.responses)$
+>>
+

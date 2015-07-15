@@ -7,6 +7,39 @@ schemas:
   - refSchema: !include schema.json
     inlineSchema: |
       {"type":"string"}
+resourceTypes:
+  - a:
+      usage: The usage of a
+      description: rt a
+      get:
+        responses:
+          500:
+    b:
+      description: b
+  - c:
+      description: c
+traits:
+  - a:
+      usage: Trait a
+      description: t a
+      headers:
+        ah:
+securitySchemes:
+  - oauth_1_0:
+      description: OAuth 1.0 continues to be supported for all API requests, but OAuth 2.0 is now preferred.
+      type: OAuth 1.0
+      describedBy:
+        headers:
+          xs:
+        responses:
+          403:
+            description: access denied
+            headers:
+              why:
+      settings:
+        requestTokenUri: https://api.dropbox.com/1/oauth/request_token
+        authorizationUri: https://www.dropbox.com/1/oauth/authorize
+        tokenCredentialsUri: https://api.dropbox.com/1/oauth/access_token
 
 documentation:
   - title: t1
@@ -17,11 +50,15 @@ documentation:
 
 /nix:
   description: nix
+  securedBy: [oauth_1_0]
+  get:
 /data:
   displayName: TheData
   description: |
     The Description of it. More blal djkf dskhd fkldsfhsadjk hdfj kd flkjgflksdgfks djsf dlkdslakf
     f safdalkflkg fsdkjlf hsökfjhdsfjk dhsklfj slkhfg sdhjlfg sdlkfg sslh lksdgsjdlfhlas
+  type: a
+  is: [a, cool, yellow]
   uriParameters:
     t:
       description: The t

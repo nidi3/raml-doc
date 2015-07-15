@@ -12,7 +12,7 @@ ramlDoc(doc) ::= <<
     $doc.content;format="markdown"$
 >>
 
-main(raml,resource,util,relPath) ::= <<
+main(raml,template,param,util,relPath) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
@@ -26,14 +26,21 @@ main(raml,resource,util,relPath) ::= <<
     $/resource/resourceLinks()$
 
     <div class="content">
-        $if(resource)$
-            $/resource/resource(resource)$
-        $else$
-            $raml.documentation:ramlDoc()$
-        $endif$
+        $(template)(param)$
     </div>
 
     </body>
     </html>
 >>
+
+doc(nix) ::= <<
+    $raml.documentation:ramlDoc()$
+>>
+
+line(title,value) ::= <<
+    $if(value)$
+        <p> $title$: $value$ </p>
+    $endif$
+>>
+
 

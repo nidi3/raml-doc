@@ -7,7 +7,7 @@ resourceLinks() ::= <<
 resourceLink(res) ::= <<
     <ul>
         <li>
-        <a href="$relPath$$res.uri$.html">
+        <a href="$relPath$/resource$res.uri$.html">
             $res.uri$ ($res.displayName$)
         </a>
         </li>
@@ -15,7 +15,7 @@ resourceLink(res) ::= <<
 >>
 
 resource(res) ::= <<
-    <h3>$res.uri$ ($res.displayName$)</h3>
+    <div class="mainTitle">$res.uri$ ($res.displayName$)</div>
 
     <div class="desc">
         $res.description;format="markdown"$

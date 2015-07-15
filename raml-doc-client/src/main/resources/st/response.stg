@@ -1,11 +1,18 @@
-body(key,body) ::= <<
-    <div class="mimeTitle">$key$</div>
-
-    <pre class="code">$body.schema;format="schema"$</pre>
-    $if(body.example)$ Example: $body.example$ $endif$
+responses(map) ::= <<
+    <div class="bodyTitle">Responses</div>
+        <div class="desc">
+            $map.entrySet:{entry | $/response/response(entry.key,entry.value)$}$
+        </div>
+    </div>
 >>
 
-response(response) ::= <<
+response(key,res) ::= <<
+    <div class="mimeTitle">$key$</div>
+    $res(res)$
+>>
+
+
+res(response) ::= <<
 
     $response.description;format="markdown"$
 
@@ -15,4 +22,11 @@ response(response) ::= <<
         $response.body.entrySet:{entry | $body(entry.key,entry.value)$}$
     </div>
 
+>>
+
+body(key,body) ::= <<
+    <div class="mimeTitle">$key$</div>
+
+    <pre class="code">$body.schema;format="schema"$</pre>
+    $/main/line("Example",body.example)$
 >>
