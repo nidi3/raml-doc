@@ -1,5 +1,28 @@
-def(value,def) ::= <<
-    $if(value)$ $value$ $else$ $def$ $endif$
+namedParams(title,params) ::= <<
+    $if(params)$
+        <div class="paramsTitle">$title$</div>
+        <table class="params">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Constraint</th>
+                <th class="paramBool">Req</th>
+                <th class="paramBool">Rep</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                $params.entrySet:paramEntry()$
+            </tbody>
+        </table>
+    $endif$
+>>
+
+paramEntry(entry) ::= <<
+    $entry.value:{val | $param(entry.key,val)$ }$
 >>
 
 param(key,param) ::= <<
@@ -21,25 +44,8 @@ param(key,param) ::= <<
     </tr>
 >>
 
-namedParams(title,params) ::= <<
-    $if(params)$
-        <div class="paramsTitle">$title$</div>
-        <table class="params">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Constraint</th>
-                <th>Required</th>
-                <th>Repeat</th>
-                <th>Default</th>
-                <th>Description</th>
-            </tr>
-            </thead>
-
-            <tbody>
-                $params.entrySet:{p | $param(p.key,p.value)$}$
-            </tbody>
-        </table>
-    $endif$
+def(value,def) ::= <<
+    $if(value)$ $value$ $else$ $def$ $endif$
 >>
+
+

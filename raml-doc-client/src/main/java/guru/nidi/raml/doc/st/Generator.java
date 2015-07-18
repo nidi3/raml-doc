@@ -15,9 +15,11 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.raml.model.*;
+import org.raml.model.Action;
+import org.raml.model.Raml;
+import org.raml.model.Resource;
+import org.raml.model.SecurityScheme;
 import org.raml.model.parameter.AbstractParam;
-import org.raml.parser.loader.FileResourceLoader;
 import org.raml.parser.visitor.RamlDocumentBuilder;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
@@ -29,10 +31,8 @@ import java.util.Map;
  *
  */
 public class Generator {
-    public void generate(File input, File target) throws Exception {
-        final Raml raml = new RamlDocumentBuilder(new FileResourceLoader(input.getParentFile()))
-                .build(new FileInputStream(input), input.getName());
-
+    public File generate(String ramlLocation, File target) throws IOException {
+        final Raml raml = loadRaml(ramlLocation);
         final STGroupDir group = new STGroupDir("st", '$', '$');
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
         group.registerRenderer(String.class, new StringRenderer(raml));
@@ -61,16 +61,26 @@ public class Generator {
 
         set(main, "template", "/securityScheme/securityScheme");
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
-            for (Map.Entry<String,SecurityScheme> entry : sss.entrySet()) {
+            for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
                 set(main, "param", entry.getValue());
                 set(main, "relPath", "../.");
-                final File file = new File(base, "security-scheme/" +entry.getKey() + ".html");
+                final File file = new File(base, "security-scheme/" + entry.getKey() + ".html");
                 render(main, file);
             }
         }
         try (final InputStream in = getClass().getResourceAsStream("/style.css");
              final FileOutputStream out = new FileOutputStream(new File(base, "style.css"))) {
             copy(in, out);
+        }
+
+        return new File(target, raml.getTitle());
+    }
+
+    private Raml loadRaml(String ramlLocation) throws IOException {
+        try {
+            return new RamlDocumentBuilder().build(ramlLocation);
+        } catch (Exception e) {
+            throw new IOException("No raml found at location '" + ramlLocation + "'");
         }
     }
 

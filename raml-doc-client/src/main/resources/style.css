@@ -59,6 +59,10 @@ header {
     font-size: 125%;
 }
 
+.paramBool{
+    width: 2em;
+}
+
 ul {
     list-style-type: none;
 }

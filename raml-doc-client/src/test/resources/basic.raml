@@ -108,7 +108,7 @@ documentation:
               using a phone number, it must be a Twilio number or a Verified
               outgoing caller id for your account.
             required: true
-            pattern: (\+1|1)?([2-9]\d\d[2-9]\d{6}) # E.164 standard
+            pattern: (\+1|1)?([2-9]\d\d[2-9]\d{6})
             example: +14158675309
     responses:
       200:
@@ -120,7 +120,8 @@ documentation:
             schema: |
               {"type":"string"}
             example: "hab"
-
+      500:
+        description: error
 
 /data2:
   get:

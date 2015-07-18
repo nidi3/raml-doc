@@ -26,10 +26,10 @@ import java.net.URI;
 /**
  *
  */
-public class MainTest {
+public class GeneratorTest {
     @Test
     public void basic() throws Exception {
         final SchemaTree tree = new SchemaLoader().get(URI.create("file:///" + new File("src/test/resources/schema.json").getAbsolutePath()));
-        new Generator().generate(new File("src/test/resources/basic.raml"), new File("target"));
+        new Generator().generate("file:src/test/resources/basic.raml", new File("target"));
     }
 }
