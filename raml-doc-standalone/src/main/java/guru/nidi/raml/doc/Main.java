@@ -27,13 +27,8 @@ public class Main {
             System.out.println("Usage: java -jar raml-doc-standalone.jar <file>");
             System.exit(1);
         }
-        final File file = new File(args[0]);
-        if (!file.exists()) {
-            System.out.println("File '" + args[0] + "' does not exist");
-            System.exit(1);
-        }
         try {
-            new Generator().generate(file, new File("."));
+            new Generator().generate(args[0], new File("."));
         } catch (Exception e) {
             System.out.println("Problem generating doc");
             e.printStackTrace();
