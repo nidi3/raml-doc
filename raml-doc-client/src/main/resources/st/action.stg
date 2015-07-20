@@ -1,18 +1,3 @@
-mime(key,body) ::= <<
-    <div class="mimeTitle">$key$</div>
-
-    $/namedParams/namedParams("Form parameters",body.formParameters)$
-
-    <pre class="code">$body.schema;format="schema"$</pre>
-    $/main/line("Example",body.example)$
->>
-
-securityScheme(ss) ::= <<
-    <a href="$relPath$/security-scheme/$ss.name$.html">
-        $ss.name$
-    </a>
->>
-
 action(action) ::= <<
     <div class="actionHeader">
         <div class="badge badge_$action.type$">
@@ -23,24 +8,23 @@ action(action) ::= <<
         </div>
     </div>
 
+    <div class="mimeTitle">Request</div>
     <div class="desc">
-
-        $/namedParams/namedParams("Query parameters",action.queryParameters)$
-
-        $/namedParams/namedParams("Headers",action.headers)$
-
         $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
-        $if(action.body)$
-            <div class="bodyTitle">Body</div>
-
-            <div class="desc">
-                $action.body.entrySet:{entry | $mime(entry.key,entry.value)$}$
-            </div>
-
-            $/response/responses(action.responses)$
-
-        $endif$
+        $/namedParams/header()$
+            $/namedParams/namedParamsElem("Query parameters",action.queryParameters)$
+            $/namedParams/namedParamsElem("Headers",action.headers)$
+            $/namedParams/namedParamsBody(action.body)$
+        $/namedParams/footer()$
     </div>
 
+    $/response/responses(action.responses)$
 >>
+
+securityScheme(ss) ::= <<
+    <a href="$relPath$/security-scheme/$ss.name$.html">
+        $ss.name$
+    </a>
+>>
+

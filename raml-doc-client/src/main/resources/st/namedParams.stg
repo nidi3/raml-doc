@@ -1,24 +1,74 @@
+header() ::= <<
+    <table class="params">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Constraint</th>
+            <th class="paramBool">Req</th>
+            <th class="paramBool">Rep</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+>>
+
+footer() ::= <<
+        </tbody>
+    </table>
+>>
+
 namedParams(title,params) ::= <<
     $if(params)$
         <div class="paramsTitle">$title$</div>
-        <table class="params">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Constraint</th>
-                <th class="paramBool">Req</th>
-                <th class="paramBool">Rep</th>
-                <th>Default</th>
-                <th>Description</th>
-            </tr>
-            </thead>
-
-            <tbody>
-                $params.entrySet:paramEntry()$
-            </tbody>
-        </table>
+            $header()$
+            $params.entrySet:paramEntry()$
+            $footer()$
     $endif$
+>>
+
+namedParamsElem(title,params) ::= <<
+    $if(params)$
+        $title(title)$
+        <tr>
+            $params.entrySet:paramEntry()$
+        </tr>
+    $endif$
+>>
+
+namedParamsBody(body) ::= <<
+    $if(body)$
+        <tr>
+            <td colspan="7">
+                <span class="paramTitle">Body</span>
+                <select onchange="rd.showTrWithId(this,this.value)">
+                    $body.keys:{key | <option>$key$</option>}$
+                </select>
+            </td>
+        </tr>
+        $body.entrySet:{entry | $mime(entry.key,entry.value)$}$
+        <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
+    $endif$
+>>
+
+mime(key,body) ::= <<
+    <tr class="bodyType $key$">
+        <td></td>
+        <td colspan="6">
+            <pre class="code">$body.schema;format="schema"$</pre>
+            $/main/line("Example",body.example)$
+        </td>
+    </tr>
+    $namedParamsElem("Form parameters",body.formParameters)$
+>>
+
+title(title) ::= <<
+    <tr>
+        <td colspan="7">
+            <span class="paramTitle">$title$</span>
+        </td>
+    </tr>
 >>
 
 paramEntry(entry) ::= <<

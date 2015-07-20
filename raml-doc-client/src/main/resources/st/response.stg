@@ -1,8 +1,7 @@
 responses(map) ::= <<
     <div class="bodyTitle">Responses</div>
-        <div class="desc">
-            $map.entrySet:{entry | $/response/response(entry.key,entry.value)$}$
-        </div>
+    <div class="desc">
+        $map.entrySet:{entry | $/response/response(entry.key,entry.value)$}$
     </div>
 >>
 
@@ -16,12 +15,10 @@ res(response) ::= <<
 
     $response.description;format="markdown"$
 
-    <div class="desc">
-        $/namedParams/namedParams("Headers",response.headers)$
-
-        $response.body.entrySet:{entry | $body(entry.key,entry.value)$}$
-    </div>
-
+    $/namedParams/header()$
+    $/namedParams/namedParamsElem("Headers",response.headers)$
+    $/namedParams/namedParamsBody(response.body)$
+    $/namedParams/footer()$
 >>
 
 body(key,body) ::= <<

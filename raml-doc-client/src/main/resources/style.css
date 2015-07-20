@@ -43,6 +43,11 @@ header {
     min-height: 3em;
 }
 
+.paramTitle{
+    margin-top: 1em;
+    font-weight: bold;
+}
+
 .bodyTitle{
     margin-top: 1em;
     font-weight: bold;
@@ -74,19 +79,20 @@ table.params {
 }
 
 thead tr {
-    background-color: #888;
-    color: #fff;
+}
+
+.bodyType{
+    display:none;
 }
 
 th {
     padding: .2em;
-    border: 1px solid white;
-    text-align: center;
+    border-bottom: 1px solid black;
+    text-align: left;
 }
 
 table.params td {
     padding: .2em;
-    border: 1px solid gray;
     margin: 0;
 }
 

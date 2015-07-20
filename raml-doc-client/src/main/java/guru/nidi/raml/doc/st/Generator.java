@@ -68,12 +68,17 @@ public class Generator {
                 render(main, file);
             }
         }
-        try (final InputStream in = getClass().getResourceAsStream("/style.css");
-             final FileOutputStream out = new FileOutputStream(new File(base, "style.css"))) {
-            copy(in, out);
-        }
+        copyResource(base,"style.css");
+        copyResource(base,"script.js");
 
         return new File(target, raml.getTitle());
+    }
+
+    private void copyResource(File base,String name) throws IOException {
+        try (final InputStream in = getClass().getResourceAsStream("/"+name);
+             final FileOutputStream out = new FileOutputStream(new File(base, name))) {
+            copy(in, out);
+        }
     }
 
     private Raml loadRaml(String ramlLocation) throws IOException {

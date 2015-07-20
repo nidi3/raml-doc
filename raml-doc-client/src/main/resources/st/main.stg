@@ -1,17 +1,3 @@
-htmlHead() ::= <<
-    <header>
-
-        <h1><a href="$relPath$/index.html">$raml.title$</a></h1>
-        <p>Version $raml.version$</p>
-        <p>$raml;format="baseUri"$</p>
-    </header>
->>
-
-ramlDoc(doc) ::= <<
-    <h2>$doc.title$</h2>
-    $doc.content;format="markdown"$
->>
-
 main(raml,template,param,util,relPath) ::= <<
     <!DOCTYPE html>
     <html>
@@ -19,7 +5,9 @@ main(raml,template,param,util,relPath) ::= <<
         <meta charset="utf-8"/>
         <link href="$relPath$/style.css" rel="stylesheet">
     </head>
+
     <body>
+    <script src="$relPath$/script.js"></script>
 
     $htmlHead()$
 
@@ -32,6 +20,20 @@ main(raml,template,param,util,relPath) ::= <<
     </body>
     </html>
 >>
+
+htmlHead() ::= <<
+    <header>
+        <h1><a href="$relPath$/index.html">$raml.title$</a></h1>
+        <p>Version $raml.version$</p>
+        <p>$raml;format="baseUri"$</p>
+    </header>
+>>
+
+ramlDoc(doc) ::= <<
+    <h2>$doc.title$</h2>
+    $doc.content;format="markdown"$
+>>
+
 
 doc(nix) ::= <<
     $raml.documentation:ramlDoc()$
