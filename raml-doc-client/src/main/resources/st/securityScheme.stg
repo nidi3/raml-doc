@@ -1,8 +1,10 @@
 securityScheme(scheme) ::= <<
     <div class="mainTitle">$scheme.type$</div>
     $scheme.description;format="markdown"$
-    $/namedParams/namedParams("Headers",scheme.describedBy.headers)$
-    $/namedParams/namedParams("Headers",scheme.describedBy.queryParameters)$
+    $/namedParams/header(tryOut)$
+    $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,tryOut)$
+    $/namedParams/namedParamsElem("Headers",scheme.describedBy.queryParameters,tryOut)$
+    $/namedParams/footer()$
 
     <div class="mimeTitle">Settings</div>
     $/main/line("Request token URI",scheme.settings.requestTokenUri)$

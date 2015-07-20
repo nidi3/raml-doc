@@ -15,9 +15,9 @@ res(response) ::= <<
 
     $response.description;format="markdown"$
 
-    $/namedParams/header()$
-    $/namedParams/namedParamsElem("Headers",response.headers)$
-    $/namedParams/namedParamsBody(response.body)$
+    $/namedParams/header(false)$
+    $/namedParams/namedParamsElem("Headers",response.headers,false)$
+    $/namedParams/namedParamsBody(response.body,false)$
     $/namedParams/footer()$
 >>
 

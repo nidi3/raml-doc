@@ -31,6 +31,13 @@ import java.util.Map;
  *
  */
 public class Generator {
+    private boolean tryOut;
+
+    public Generator tryOut(boolean tryOut) {
+        this.tryOut = tryOut;
+        return this;
+    }
+
     public File generate(String ramlLocation, File target) throws IOException {
         final Raml raml = loadRaml(ramlLocation);
         final STGroupDir group = new STGroupDir("st", '$', '$');
@@ -44,6 +51,7 @@ public class Generator {
         main.add("raml", raml);
         final Util util = new Util(raml);
         main.add("util", util);
+        main.add("tryOut",tryOut);
 
         final File base = new File(target, raml.getTitle());
         base.mkdirs();
@@ -68,14 +76,14 @@ public class Generator {
                 render(main, file);
             }
         }
-        copyResource(base,"style.css");
-        copyResource(base,"script.js");
+        copyResource(base, "style.css");
+        copyResource(base, "script.js");
 
         return new File(target, raml.getTitle());
     }
 
-    private void copyResource(File base,String name) throws IOException {
-        try (final InputStream in = getClass().getResourceAsStream("/"+name);
+    private void copyResource(File base, String name) throws IOException {
+        try (final InputStream in = getClass().getResourceAsStream("/" + name);
              final FileOutputStream out = new FileOutputStream(new File(base, name))) {
             copy(in, out);
         }

@@ -20,7 +20,7 @@ header {
     padding-left: 1em;
 }
 
-.resources li{
+.resources li {
     line-height: 150%;
 }
 
@@ -38,33 +38,35 @@ header {
     font-weight: bold;
 }
 
-.actionHeader{
+.actionHeader {
     margin-top: 1em;
-    min-height: 3em;
+    min-height: 1.8em;
+    cursor: pointer;
+    padding: .5em;
 }
 
-.paramTitle{
-    margin-top: 1em;
-    font-weight: bold;
-}
-
-.bodyTitle{
+.paramTitle {
     margin-top: 1em;
     font-weight: bold;
 }
 
-.mimeTitle{
+.bodyTitle {
     margin-top: 1em;
     font-weight: bold;
 }
 
-.mainTitle{
+.mimeTitle {
+    /*margin-top: 1em;*/
+    font-weight: bold;
+}
+
+.mainTitle {
     margin-top: 1em;
     font-weight: bold;
     font-size: 125%;
 }
 
-.paramBool{
+.paramBool {
     width: 2em;
 }
 
@@ -81,8 +83,13 @@ table.params {
 thead tr {
 }
 
-.bodyType{
-    display:none;
+.bodyType {
+    display: none;
+}
+
+.actionDetail {
+    display: none;
+    padding: .5em;
 }
 
 th {
@@ -116,23 +123,55 @@ td.center {
 }
 
 .badge_GET {
-    background-color: #63a8e2;
+    background-color: #0f6ab4;
+}
+
+.border_GET {
+    border: 1px solid #c3d9ec;
+}
+
+.bg_GET {
+    background-color: #e7f0f7;
 }
 
 .badge_POST {
-    background-color: #6cbd7d;
+    background-color: #10a54a;
+}
+
+.border_POST {
+    border: 1px solid #c3e8d1;
+}
+
+.bg_POST {
+    background-color: #e7f6ec;
 }
 
 .badge_PUT {
-    background-color: #22bac4;
+    background-color: #c5862b;
+}
+
+.border_PUT{
+    border: 1px solid #f0e0ca;
+}
+
+.bg_PUT{
+    background-color: #faf5ee;
+}
+
+.badge_DELETE {
+    background-color: #a41e22;
+}
+
+.border_DELETE{
+    border: 1px solid #e8c6c7;
+}
+
+.bg_DELETE{
+    background-color: #f5e8e8;
 }
 
 .badge_PATCH {
     background-color: #02b0e2;
-}
-
-.badge_DELETE {
-    background-color: #d26460;
 }
 
 .badge_CONNECT {
@@ -143,7 +182,7 @@ td.center {
     background-color: #98b805;
 }
 
-.code{
+.code {
     max-height: 25em;
     overflow: auto;
     background-color: #ccc;

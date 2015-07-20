@@ -1,8 +1,9 @@
-header() ::= <<
+header(tryOut) ::= <<
     <table class="params">
         <thead>
         <tr>
             <th>Name</th>
+            $if(tryOut)$ <th>Value</th> $endif$
             <th>Type</th>
             <th>Constraint</th>
             <th class="paramBool">Req</th>
@@ -19,25 +20,25 @@ footer() ::= <<
     </table>
 >>
 
-namedParams(title,params) ::= <<
+namedParams(title,params,tryOut) ::= <<
     $if(params)$
         <div class="paramsTitle">$title$</div>
-            $header()$
-            $params.entrySet:paramEntry()$
+            $header(tryOut)$
+            $params.entrySet:paramEntry(tryOut)$
             $footer()$
     $endif$
 >>
 
-namedParamsElem(title,params) ::= <<
+namedParamsElem(title,params,tryOut) ::= <<
     $if(params)$
         $title(title)$
         <tr>
-            $params.entrySet:paramEntry()$
+            $params.entrySet:paramEntry(tryOut)$
         </tr>
     $endif$
 >>
 
-namedParamsBody(body) ::= <<
+namedParamsBody(body,tryOut) ::= <<
     $if(body)$
         <tr>
             <td colspan="7">
@@ -47,20 +48,21 @@ namedParamsBody(body) ::= <<
                 </select>
             </td>
         </tr>
-        $body.entrySet:{entry | $mime(entry.key,entry.value)$}$
+        $body.entrySet:{entry | $mime(entry.key,entry.value,tryOut)$}$
         <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
     $endif$
 >>
 
-mime(key,body) ::= <<
+mime(key,body,tryOut) ::= <<
     <tr class="bodyType $key$">
         <td></td>
+        $if(tryOut)$ <td><input></td> $endif$
         <td colspan="6">
             <pre class="code">$body.schema;format="schema"$</pre>
             $/main/line("Example",body.example)$
         </td>
     </tr>
-    $namedParamsElem("Form parameters",body.formParameters)$
+    $namedParamsElem("Form parameters",body.formParameters,tryOut)$
 >>
 
 title(title) ::= <<
@@ -71,13 +73,14 @@ title(title) ::= <<
     </tr>
 >>
 
-paramEntry(entry) ::= <<
-    $entry.value:{val | $param(entry.key,val)$ }$
+paramEntry(entry,tryOut) ::= <<
+    $entry.value:{val | $param(entry.key,val,tryOut)$ }$
 >>
 
-param(key,param) ::= <<
+param(key,param,tryOut) ::= <<
     <tr>
         <td>$def(param.displayName,key)$</td>
+        $if(tryOut)$ <td><input></td> $endif$
         <td>$def(param.type,"STRING")$</td>
         <td>
             $if (param.enumeration)$ <p>$param.enumeration$</p> $endif$

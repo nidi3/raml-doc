@@ -30,6 +30,7 @@ public class GeneratorTest {
     @Test
     public void basic() throws Exception {
         final SchemaTree tree = new SchemaLoader().get(URI.create("file:///" + new File("src/test/resources/schema.json").getAbsolutePath()));
-        new Generator().generate("file:src/test/resources/basic.raml", new File("target"));
+        new Generator().tryOut(true).generate("file:src/test/resources/basic.raml", new File("target/tryout"));
+        new Generator().tryOut(false).generate("file:src/test/resources/basic.raml", new File("target"));
     }
 }

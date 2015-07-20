@@ -20,7 +20,7 @@ resource(res) ::= <<
     <div class="desc">
         $res.description;format="markdown"$
 
-        $/namedParams/namedParams("URI parameters",res.resolvedUriParameters)$
+        $/namedParams/namedParams("URI parameters",res.resolvedUriParameters,tryOut)$
 
         $res.actions.values:/action/action()$
     </div>

@@ -1,5 +1,5 @@
 action(action) ::= <<
-    <div class="actionHeader">
+    <div class="actionHeader bg_$action.type$ border_$action.type$" onclick="rd.showActionDetail(this)">
         <div class="badge badge_$action.type$">
             $action.type$
         </div>
@@ -8,18 +8,20 @@ action(action) ::= <<
         </div>
     </div>
 
-    <div class="mimeTitle">Request</div>
-    <div class="desc">
-        $/main/line("Secured by",action.securitySchemes:securityScheme())$
+    <div class="actionDetail bg_$action.type$">
+        <div class="mimeTitle">Request</div>
+        <div class="desc">
+            $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
-        $/namedParams/header()$
-            $/namedParams/namedParamsElem("Query parameters",action.queryParameters)$
-            $/namedParams/namedParamsElem("Headers",action.headers)$
-            $/namedParams/namedParamsBody(action.body)$
-        $/namedParams/footer()$
+            $/namedParams/header(tryOut)$
+                $/namedParams/namedParamsElem("Query parameters",action.queryParameters,tryOut)$
+                $/namedParams/namedParamsElem("Headers",action.headers,tryOut)$
+                $/namedParams/namedParamsBody(action.body,tryOut)$
+            $/namedParams/footer()$
+        </div>
+
+        $/response/responses(action.responses)$
     </div>
-
-    $/response/responses(action.responses)$
 >>
 
 securityScheme(ss) ::= <<
