@@ -2,8 +2,8 @@ securityScheme(scheme) ::= <<
     <div class="mainTitle">$scheme.type$</div>
     $scheme.description;format="markdown"$
     $/namedParams/header(tryOut)$
-    $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,tryOut)$
-    $/namedParams/namedParamsElem("Headers",scheme.describedBy.queryParameters,tryOut)$
+    $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,tryOut,"header")$
+    $/namedParams/namedParamsElem("Query Parameters",scheme.describedBy.queryParameters,tryOut,"query")$
     $/namedParams/footer()$
 
     <div class="mimeTitle">Settings</div>

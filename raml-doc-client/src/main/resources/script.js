@@ -39,5 +39,8 @@ var rd = {
             return elem.className && elem.className.substring(0,12) === 'actionDetail';
         });
         next.style.display = next.style.display === 'block' ? 'none' : 'block';
+    },
+    tryOut:function(button){
+        var form = rd.findParent(button, 'form');
     }
 };

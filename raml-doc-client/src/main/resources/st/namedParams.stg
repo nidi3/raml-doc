@@ -9,7 +9,7 @@ header(tryOut) ::= <<
             <th class="paramBool">Req</th>
             <th class="paramBool">Rep</th>
             <th>Default</th>
-            <th>Description</th>
+            <th class="paramDesc">Description</th>
         </tr>
         </thead>
         <tbody>
@@ -20,26 +20,26 @@ footer() ::= <<
     </table>
 >>
 
-namedParams(title,params,tryOut) ::= <<
+namedParams(title,params,tryOut,type) ::= <<
     $if(params)$
         <div class="paramsTitle">$title$</div>
             $header(tryOut)$
-            $params.entrySet:paramEntry(tryOut)$
+            $params.entrySet:paramEntry(tryOut,type)$
             $footer()$
     $endif$
 >>
 
-namedParamsElem(title,params,tryOut) ::= <<
+namedParamsElem(title,params,tryOut,type) ::= <<
     $if(params)$
-        $title(title)$
-        $params.entrySet:paramEntry(tryOut)$
+        $title(title,tryOut)$
+        $params.entrySet:paramEntry(tryOut,type)$
     $endif$
 >>
 
 namedParamsBody(body,tryOut) ::= <<
     $if(body)$
         <tr>
-            <td colspan="7">
+            <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
                 <span class="paramTitle">Body</span>
                 <select onchange="rd.showTrWithId(this,this.value)">
                     $body.keys:{key | <option>$key$</option>}$
@@ -53,35 +53,38 @@ namedParamsBody(body,tryOut) ::= <<
 
 mime(key,body,tryOut) ::= <<
     <tr class="bodyType $key$">
-        <td></td>
-        $if(tryOut)$ <td><input></td> $endif$
+        $if(tryOut)$
+            <td colspan="2"><textarea></textarea></td>
+        $else$
+            <td></td>
+        $endif$
         <td colspan="6">
             <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
             $if(body.example)$ <p>Example:</p><pre class="code prettyprint">$body.example;format="js"$ </pre> $endif$
         </td>
     </tr>
-    $namedParamsElem("Form parameters",body.formParameters,tryOut)$
+    $namedParamsElem("Form parameters",body.formParameters,tryOut,"form")$
 >>
 
-title(title) ::= <<
+title(title,tryOut) ::= <<
     <tr>
-        <td colspan="7">
+        <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
             <span class="paramTitle">$title$</span>
         </td>
     </tr>
 >>
 
-paramEntry(entry,tryOut) ::= <<
-    $entry.value:{val | $param(entry.key,val,tryOut)$ }$
+paramEntry(entry,tryOut,type) ::= <<
+    $entry.value:{val | $param(entry.key,val,tryOut,type)$ }$
 >>
 
-param(key,param,tryOut) ::= <<
+param(key,param,tryOut,type) ::= <<
     <tr>
         <td>$def(param.displayName,key)$</td>
-        $if(tryOut)$ <td><input></td> $endif$
+        $if(tryOut)$ <td><input name="$type$_$key$"></td> $endif$
         <td>$def(param.type,"STRING")$</td>
         <td>
-            $if (param.enumeration)$ <p>$param.enumeration$</p> $endif$
+            $if (param.enumeration)$ <p>$param.enumeration:{e|$e$,}$</p> $endif$
             $if (param.pattern)$ <p>$param.pattern$</p> $endif$
             $if (param.minLength || param.maxLength)$ <p>$param;format="strLimit"$</p> $endif$
             $if (param.minimum || param.maximum)$ <p>$param;format="intLimit"$</p> $endif$

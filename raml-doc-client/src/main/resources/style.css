@@ -56,7 +56,6 @@ header {
 }
 
 .mimeTitle {
-    /*margin-top: 1em;*/
     font-weight: bold;
 }
 
@@ -68,6 +67,10 @@ header {
 
 .paramBool {
     width: 2em;
+}
+
+.paramDesc {
+    width: 35%;
 }
 
 ul {
@@ -98,6 +101,15 @@ th {
     text-align: left;
 }
 
+table.params input {
+    width: 100%;
+}
+
+table.params textarea{
+    width: 100%;
+    min-height: 10em;
+}
+
 table.params {
     table-layout: fixed;
 }
@@ -105,6 +117,7 @@ table.params {
 table.params td {
     padding: .2em;
     margin: 0;
+    border-bottom: 1px solid #ccc;
 }
 
 td.center {
@@ -154,11 +167,11 @@ td.center {
     background-color: #c5862b;
 }
 
-.border_PUT{
+.border_PUT {
     border: 1px solid #f0e0ca;
 }
 
-.bg_PUT{
+.bg_PUT {
     background-color: #faf5ee;
 }
 
@@ -166,11 +179,11 @@ td.center {
     background-color: #a41e22;
 }
 
-.border_DELETE{
+.border_DELETE {
     border: 1px solid #e8c6c7;
 }
 
-.bg_DELETE{
+.bg_DELETE {
     background-color: #f5e8e8;
 }
 

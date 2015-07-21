@@ -10,16 +10,21 @@ action(action) ::= <<
 
     <div class="actionDetail bg_$action.type$">
         <div class="mimeTitle">Request</div>
-        <div class="desc">
-            $/main/line("Secured by",action.securitySchemes:securityScheme())$
+        <form>
+            <div class="desc">
+                $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
-            $/namedParams/header(tryOut)$
-                $/namedParams/namedParamsElem("Query parameters",action.queryParameters,tryOut)$
-                $/namedParams/namedParamsElem("Headers",action.headers,tryOut)$
-                $/namedParams/namedParamsBody(action.body,tryOut)$
-            $/namedParams/footer()$
-        </div>
+                $/namedParams/header(tryOut)$
+                    $/namedParams/namedParamsElem("Query parameters",action.queryParameters,tryOut,"query")$
+                    $/namedParams/namedParamsElem("Headers",action.headers,tryOut,"header")$
+                    $/namedParams/namedParamsBody(action.body,tryOut)$
+                $/namedParams/footer()$
+            </div>
 
+            $if(tryOut)$
+                <button onclick="rd.tryOut(this); return false;">Try it!</button>
+            $endif$
+        </form>
         $/response/responses(action.responses)$
     </div>
 >>
