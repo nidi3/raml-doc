@@ -20,10 +20,3 @@ res(response) ::= <<
     $/namedParams/namedParamsBody(response.body,false)$
     $/namedParams/footer()$
 >>
-
-body(key,body) ::= <<
-    <div class="mimeTitle">$key$</div>
-
-    <pre class="code">$body.schema;format="schema"$</pre>
-    $/main/line("Example",body.example)$
->>

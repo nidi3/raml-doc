@@ -32,9 +32,7 @@ namedParams(title,params,tryOut) ::= <<
 namedParamsElem(title,params,tryOut) ::= <<
     $if(params)$
         $title(title)$
-        <tr>
-            $params.entrySet:paramEntry(tryOut)$
-        </tr>
+        $params.entrySet:paramEntry(tryOut)$
     $endif$
 >>
 
@@ -58,8 +56,8 @@ mime(key,body,tryOut) ::= <<
         <td></td>
         $if(tryOut)$ <td><input></td> $endif$
         <td colspan="6">
-            <pre class="code">$body.schema;format="schema"$</pre>
-            $/main/line("Example",body.example)$
+            <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
+            $if(body.example)$ <p>Example:</p><pre class="code prettyprint">$body.example;format="js"$ </pre> $endif$
         </td>
     </tr>
     $namedParamsElem("Form parameters",body.formParameters,tryOut)$

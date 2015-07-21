@@ -98,6 +98,10 @@ th {
     text-align: left;
 }
 
+table.params {
+    table-layout: fixed;
+}
+
 table.params td {
     padding: .2em;
     margin: 0;
@@ -185,5 +189,5 @@ td.center {
 .code {
     max-height: 25em;
     overflow: auto;
-    background-color: #ccc;
+    background-color: #fff;
 }

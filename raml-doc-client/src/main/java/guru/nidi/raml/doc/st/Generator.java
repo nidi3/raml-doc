@@ -21,6 +21,7 @@ import org.raml.model.Resource;
 import org.raml.model.SecurityScheme;
 import org.raml.model.parameter.AbstractParam;
 import org.raml.parser.visitor.RamlDocumentBuilder;
+import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
 
@@ -78,6 +79,8 @@ public class Generator {
         }
         copyResource(base, "style.css");
         copyResource(base, "script.js");
+        copyResource(base, "run_prettify.js");
+        copyResource(base, "prettify-default.css");
 
         return new File(target, raml.getTitle());
     }
@@ -114,7 +117,9 @@ public class Generator {
     private void render(ST template, File file) throws IOException {
         file.getParentFile().mkdirs();
         try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file))) {
-            out.write(template.render());
+            final StringWriter sw = new StringWriter();
+            template.write(new NoIndentWriter(sw));
+            out.write(sw.toString());
         }
     }
 

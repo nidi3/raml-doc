@@ -4,10 +4,12 @@ main(raml,template,param,util,relPath,tryOut) ::= <<
     <head>
         <meta charset="utf-8"/>
         <link href="$relPath$/style.css" rel="stylesheet">
+        <link href="$relPath$/prettify-default.css" rel="stylesheet">
     </head>
 
     <body>
     <script src="$relPath$/script.js"></script>
+    <script src="$relPath$/run_prettify.js"></script>
 
     $htmlHead()$
 
