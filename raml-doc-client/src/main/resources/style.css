@@ -105,7 +105,7 @@ table.params input {
     width: 100%;
 }
 
-table.params textarea{
+table.params textarea {
     width: 100%;
     min-height: 10em;
 }
@@ -203,4 +203,13 @@ td.center {
     max-height: 25em;
     overflow: auto;
     background-color: #fff;
+}
+
+.tryData {
+    width: 100%;
+    min-height: 1em;
+    max-height: 25em;
+    overflow: auto;
+    background-color: #fff;
+    font-family: inherit;
 }

@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -33,6 +35,11 @@ public class RamlDocServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(RamlDocServlet.class);
     private final CountDownLatch latch = new CountDownLatch(1);
     private File baseDir;
+    private static final Map<String, String> mimeTypes = new HashMap<String, String>() {{
+        put("html", "text/html");
+        put("css", "text/css");
+        put("js", "text/javascript");
+    }};
 
     @Override
     public void init() throws ServletException {
@@ -41,9 +48,11 @@ public class RamlDocServlet extends HttpServlet {
             public void run() {
                 try {
                     final String location = getInitParameter("ramlLocation");
+                    final boolean tryOut = Boolean.parseBoolean(getInitParameter("tryOut"));
                     final File outputDir = docDir();
                     outputDir.mkdirs();
-                    baseDir = new Generator().generate(location == null ? "api.raml" : location, outputDir);
+                    baseDir = new Generator().tryOut(tryOut).
+                            generate(location == null ? "api.raml" : location, outputDir);
                 } catch (IOException e) {
                     log.error("Could not create RAML documentation", e);
                 } finally {
@@ -69,19 +78,31 @@ public class RamlDocServlet extends HttpServlet {
                 return;
             }
             final File source = new File(baseDir, req.getPathInfo());
-            if (!source.exists()) {
+            if (!source.exists() || !source.isFile()) {
                 final PrintWriter writer = res.getWriter();
                 writer.write("File not found.");
                 writer.flush();
-                res.flushBuffer();
             } else {
+                setContentType(res, source.getName());
                 try (final InputStream in = new FileInputStream(source);
                      final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
                     copy(in, out);
                 }
             }
+            res.flushBuffer();
         } catch (InterruptedException e) {
             //ignore
+        }
+    }
+
+    private void setContentType(HttpServletResponse res, String source) {
+        final int pos = source.lastIndexOf('.');
+        if (pos < source.length()) {
+            final String suffix = source.substring(pos + 1);
+            final String mimeType = mimeTypes.get(suffix);
+            if (mimeType != null) {
+                res.setHeader("Content-Type", mimeType);
+            }
         }
     }
 

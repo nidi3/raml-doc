@@ -18,10 +18,16 @@ var rd = {
             e = e.nextSibling;
         }
     },
+    startsWith: function (s, test) {
+        return s.substring(0, test.length) === test;
+    },
+    rest: function (s, test) {
+        return rd.startsWith(s, test) ? s.substring(test.length) : false;
+    },
     showTrWithId: function (elem, id) {
         var show = null;
         rd.doWithChildren(rd.findParent(elem, 'tbody'), function (tr) {
-            if (tr.nodeName === 'TR' && (tr.className.substring(0, 8) === 'bodyType' || show != null)) {
+            if (tr.nodeName === 'TR' && (rd.startsWith(tr.className, 'bodyType') || show != null)) {
                 if (tr.className) {
                     show = tr.className.substring(9) === id;
                 }
@@ -36,11 +42,72 @@ var rd = {
         //    }
         //});
         var next = rd.findNextSibling(elem, function (elem) {
-            return elem.className && elem.className.substring(0,12) === 'actionDetail';
+            return elem.className && rd.startsWith(elem.className, 'actionDetail');
         });
         next.style.display = next.style.display === 'block' ? 'none' : 'block';
     },
-    tryOut:function(button){
-        var form = rd.findParent(button, 'form');
+    tryOut: function (button, type) {
+        sendRequest(createRequest(), handleResponse);
+
+        function createRequest() {
+            var i, elem, rest,
+                req = {
+                    body: null, query: '', header: {}
+                },
+                form = rd.findParent(button, 'form');
+            for (i = 0; i < form.elements.length; i++) {
+                elem = form.elements[i];
+                if (elem.value) {
+                    if (rest = rd.rest(elem.name, 'query_')) {
+                        req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
+                    } else if (rest = rd.rest(elem.name, 'header_')) {
+                        req.header[rest] = elem.value;
+                    } else if (rd.startsWith(elem.name, 'contentType_true')) {
+                        req.header['Content-Type'] = elem.value;
+                    } else if (rd.startsWith(elem.name, 'body') && rd.findParent(elem, 'tr').style.display === 'table-row') {
+                        req.body = elem.value;
+                    }
+                }
+            }
+            return req;
+        }
+
+        function sendRequest(r, handler) {
+            var h, url = 'http://localhost:8080/mirror?' + r.query,
+                req = new XMLHttpRequest();
+            req.onreadystatechange = function () {
+                if (req.readyState === 4) {
+                    handler(url, req);
+                }
+            };
+            req.open(type, url, true);
+            for (h in r.header) {
+                req.setRequestHeader(h, r.header[h]);
+            }
+            req.send(r.body);
+        }
+
+        function handleResponse(url, req) {
+            rd.doWithChildren(
+                rd.findNextSibling(button, function (e) {
+                    return e.className === 'response';
+                }),
+                function (elem) {
+                    switch (elem.getAttribute && elem.getAttribute('name')) {
+                    case 'requestUrl':
+                        elem.firstChild.nodeValue = url;
+                        break;
+                    case 'responseBody':
+                        elem.firstChild.nodeValue = req.responseText;
+                        break;
+                    case 'responseCode':
+                        elem.firstChild.nodeValue = req.status + ' ' + req.statusText;
+                        break;
+                    case 'responseHeaders':
+                        elem.firstChild.nodeValue = req.getAllResponseHeaders();
+                        break;
+                    }
+                });
+        }
     }
 };

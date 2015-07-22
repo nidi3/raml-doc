@@ -21,11 +21,18 @@ action(action) ::= <<
                 $/namedParams/footer()$
             </div>
 
+            $/response/responses(action.responses)$
+
             $if(tryOut)$
-                <button onclick="rd.tryOut(this); return false;">Try it!</button>
+                <button onclick="rd.tryOut(this,'$action.type$'); return false;">Try it!</button>
+                <div class="response">
+                    Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
+                    Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>
+                    Response Headers <pre name="responseHeaders" class="tryData border_$action.type$"> </pre>
+                    Response Body <pre name="responseBody" class="tryData border_$action.type$"> </pre>
+                </div>
             $endif$
         </form>
-        $/response/responses(action.responses)$
     </div>
 >>
 

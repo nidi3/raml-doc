@@ -41,7 +41,7 @@ namedParamsBody(body,tryOut) ::= <<
         <tr>
             <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
                 <span class="paramTitle">Body</span>
-                <select onchange="rd.showTrWithId(this,this.value)">
+                <select name="contentType_$tryOut$" onchange="rd.showTrWithId(this,this.value)">
                     $body.keys:{key | <option>$key$</option>}$
                 </select>
             </td>
@@ -54,7 +54,7 @@ namedParamsBody(body,tryOut) ::= <<
 mime(key,body,tryOut) ::= <<
     <tr class="bodyType $key$">
         $if(tryOut)$
-            <td colspan="2"><textarea></textarea></td>
+            <td colspan="2"><textarea name="body"></textarea></td>
         $else$
             <td></td>
         $endif$
