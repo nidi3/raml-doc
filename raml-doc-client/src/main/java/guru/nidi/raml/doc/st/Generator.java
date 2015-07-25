@@ -15,12 +15,12 @@
  */
 package guru.nidi.raml.doc.st;
 
+import guru.nidi.raml.loader.RamlLoaders;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
 import org.raml.model.SecurityScheme;
 import org.raml.model.parameter.AbstractParam;
-import org.raml.parser.visitor.RamlDocumentBuilder;
 import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
@@ -52,7 +52,7 @@ public class Generator {
         main.add("raml", raml);
         final Util util = new Util(raml);
         main.add("util", util);
-        main.add("tryOut",tryOut);
+        main.add("tryOut", tryOut);
 
         final File base = new File(target, raml.getTitle());
         base.mkdirs();
@@ -94,7 +94,7 @@ public class Generator {
 
     private Raml loadRaml(String ramlLocation) throws IOException {
         try {
-            return new RamlDocumentBuilder().build(ramlLocation);
+            return RamlLoaders.absolutely().load(ramlLocation);
         } catch (Exception e) {
             throw new IOException("No raml found at location '" + ramlLocation + "'");
         }

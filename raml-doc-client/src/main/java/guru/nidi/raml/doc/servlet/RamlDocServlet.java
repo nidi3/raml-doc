@@ -52,7 +52,7 @@ public class RamlDocServlet extends HttpServlet {
                     final File outputDir = docDir();
                     outputDir.mkdirs();
                     baseDir = new Generator().tryOut(tryOut).
-                            generate(location == null ? "api.raml" : location, outputDir);
+                            generate(location == null ? "classpath://api.raml" : location, outputDir);
                 } catch (IOException e) {
                     log.error("Could not create RAML documentation", e);
                 } finally {
