@@ -100,7 +100,7 @@ public class ServletTest {
         final HttpGet getIndex = new HttpGet("http://localhost:8080/api/index.html");
         final HttpResponse responseIndex = client.execute(getIndex);
         assertEquals(200, responseIndex.getStatusLine().getStatusCode());
-        Thread.sleep(1000000);
+//        Thread.sleep(1000000);
     }
 
 }
