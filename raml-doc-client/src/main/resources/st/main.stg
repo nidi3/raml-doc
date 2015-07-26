@@ -6,6 +6,7 @@ main(raml,template,param,util,relPath,tryOut) ::= <<
         <link href="$relPath$/style.css" rel="stylesheet">
         <link href="$relPath$/prettify-default.css" rel="stylesheet">
         <link href="$relPath$/favicon.ico" rel="icon" type="image/png">
+        <title>API - $raml.title$</title>
     </head>
 
     <body>
