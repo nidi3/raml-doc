@@ -15,6 +15,7 @@ action(action) ::= <<
                 $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
                 $/namedParams/header(tryOut)$
+                    $/namedParams/namedParamsElem("URI parameters",action.resource.resolvedUriParameters,tryOut,"uri")$
                     $/namedParams/namedParamsElem("Query parameters",action.queryParameters,tryOut,"query")$
                     $/namedParams/namedParamsElem("Headers",action.headers,tryOut,"header")$
                     $/namedParams/namedParamsBody(action.body,tryOut)$

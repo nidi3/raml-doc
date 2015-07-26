@@ -35,6 +35,17 @@ var rd = {
             }
         });
     },
+    showBodyWithId:function(elem,id){
+        var show = null;
+        rd.doWithChildren(elem.parentNode, function (div) {
+            if (div.nodeName === 'DIV' && (rd.startsWith(div.className, 'body') || show != null)) {
+                if (div.className) {
+                    show = div.className.substring(5) === id;
+                }
+                div.style.display = show ? 'block' : 'none';
+            }
+        });
+    },
     showActionDetail: function (elem) {
         //rd.doWithChildren(elem.parentNode, function (e) {
         //    if (e.className === 'actionDetail') {

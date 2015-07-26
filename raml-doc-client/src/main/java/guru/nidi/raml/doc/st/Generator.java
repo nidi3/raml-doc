@@ -77,18 +77,18 @@ public class Generator {
                 render(main, file);
             }
         }
-        copyResource(base, "style.css");
-        copyResource(base, "script.js");
-        copyResource(base, "run_prettify.js");
-        copyResource(base, "prettify-default.css");
+
+        copyResource(base, "favicon.ico", "style.css", "script.js", "run_prettify.js", "prettify-default.css");
 
         return new File(target, raml.getTitle());
     }
 
-    private void copyResource(File base, String name) throws IOException {
-        try (final InputStream in = getClass().getResourceAsStream("/" + name);
-             final FileOutputStream out = new FileOutputStream(new File(base, name))) {
-            copy(in, out);
+    private void copyResource(File base, String... names) throws IOException {
+        for (String name : names) {
+            try (final InputStream in = getClass().getResourceAsStream("/static/" + name);
+                 final FileOutputStream out = new FileOutputStream(new File(base, name))) {
+                copy(in, out);
+            }
         }
     }
 

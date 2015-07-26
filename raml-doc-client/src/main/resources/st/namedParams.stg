@@ -4,12 +4,12 @@ header(tryOut) ::= <<
         <tr>
             <th>Name</th>
             $if(tryOut)$ <th>Value</th> $endif$
+            <th class="paramDesc">Description</th>
             <th>Type</th>
             <th>Constraint</th>
             <th class="paramBool">Req</th>
             <th class="paramBool">Rep</th>
             <th>Default</th>
-            <th class="paramDesc">Description</th>
         </tr>
         </thead>
         <tbody>
@@ -41,24 +41,27 @@ namedParamsBody(body,tryOut) ::= <<
         <tr>
             <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
                 <span class="paramTitle">Body</span>
-                <select name="contentType_$tryOut$" onchange="rd.showTrWithId(this,this.value)">
-                    $body.keys:{key | <option>$key$</option>}$
-                </select>
             </td>
         </tr>
-        $body.entrySet:{entry | $mime(entry.key,entry.value,tryOut)$}$
+        $body.entrySet:{entry | $mime(body.keys,entry.key,entry.value,tryOut)$}$
         <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
     $endif$
 >>
 
-mime(key,body,tryOut) ::= <<
+mime(keys,key,body,tryOut) ::= <<
     <tr class="bodyType $key$">
+        <td></td>
         $if(tryOut)$
-            <td colspan="2"><textarea name="body"></textarea></td>
+            <td colspan="2" style="vertical-align:top">
+                <textarea name="body"></textarea>
+                <select name="contentType_$tryOut$" onchange="rd.showTrWithId(this,this.value)">
+                    $keys:{key | <option>$key$</option>}$
+                </select>
+            </td>
         $else$
             <td></td>
         $endif$
-        <td colspan="6">
+        <td colspan="5">
             <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
             $if(body.example)$ <p>Example:</p><pre class="code prettyprint">$body.example;format="js"$ </pre> $endif$
         </td>
@@ -82,6 +85,9 @@ param(key,param,tryOut,type) ::= <<
     <tr>
         <td>$def(param.displayName,key)$</td>
         $if(tryOut)$ <td><input name="$type$_$key$"></td> $endif$
+        <td>$param.description;format="markdown"$
+            $/main/line("Example",param.example)$
+        </td>
         <td>$def(param.type,"STRING")$</td>
         <td>
             $if (param.enumeration)$ <p>$param.enumeration:{e|$e$,}$</p> $endif$
@@ -92,9 +98,6 @@ param(key,param,tryOut,type) ::= <<
         <td class="center">$param.required;format="x"$</td>
         <td class="center">$param.repeat;format="x"$</td>
         <td>$param.defaultValue$</td>
-        <td>$param.description;format="markdown"$
-            $/main/line("Example",param.example)$
-        </td>
     </tr>
 >>
 
