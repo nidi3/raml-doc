@@ -14,6 +14,14 @@ header {
     margin-bottom: 1em;
 }
 
+header a, header a:visited, header a:active, header a:hover {
+    color: #fff;
+}
+
+a, a:visited, a:active, a:hover {
+    color: #888;
+}
+
 .resources {
     width: 14em;
     float: left;
@@ -30,6 +38,7 @@ header {
 }
 
 .desc {
+    margin: 1em;
 }
 
 .paramsTitle {
@@ -69,7 +78,6 @@ header {
 }
 
 .paramDesc {
-    width: 35%;
 }
 
 ul {
@@ -77,6 +85,7 @@ ul {
 }
 
 table.params {
+    font-size: 85%;
     width: 100%;
     border-spacing: 0;
     border-collapse: collapse;
@@ -211,4 +220,15 @@ td.center {
     overflow: auto;
     background-color: #fff;
     font-family: inherit;
+}
+
+button {
+    padding: .7em;
+    border-radius: .6em;
+    border-style: outset;
+    cursor: pointer;
+}
+
+.loader {
+    display: none;
 }

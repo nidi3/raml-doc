@@ -14,18 +14,21 @@ action(action) ::= <<
             <div class="desc">
                 $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
-                $/namedParams/header(tryOut)$
-                    $/namedParams/namedParamsElem("URI parameters",action.resource.resolvedUriParameters,tryOut,"uri")$
-                    $/namedParams/namedParamsElem("Query parameters",action.queryParameters,tryOut,"query")$
-                    $/namedParams/namedParamsElem("Headers",action.headers,tryOut,"header")$
-                    $/namedParams/namedParamsBody(action.body,tryOut)$
+                $/namedParams/header(baseUri)$
+                    $/namedParams/namedParamsElem("URI parameters",action.resource.resolvedUriParameters,baseUri,"uri")$
+                    $/namedParams/namedParamsElem("Query parameters",action.queryParameters,baseUri,"query")$
+                    $/namedParams/namedParamsElem("Headers",action.headers,baseUri,"header")$
+                    $/namedParams/namedParamsBody(action.body,baseUri)$
                 $/namedParams/footer()$
             </div>
 
             $/response/responses(action.responses)$
 
-            $if(tryOut)$
-                <button onclick="rd.tryOut(this,'$action.type$'); return false;">Try it!</button>
+            $if(baseUri)$
+                <button onclick="rd.tryOut(this,'$action.type$','$baseUri$','$action.resource.uri$'); return false;">
+                Try it!
+                </button>
+                <img src="$relPath$/ajax-loader.gif" class="loader"/>
                 <div class="response">
                     Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
                     Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>

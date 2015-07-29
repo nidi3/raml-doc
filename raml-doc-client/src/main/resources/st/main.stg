@@ -1,4 +1,4 @@
-main(raml,template,param,util,relPath,tryOut) ::= <<
+main(raml,template,param,util,relPath,baseUri) ::= <<
     <!DOCTYPE html>
     <html>
     <head>

@@ -15,7 +15,6 @@
  */
 package guru.nidi.raml.doc.st;
 
-import guru.nidi.raml.loader.RamlLoaders;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
@@ -32,15 +31,14 @@ import java.util.Map;
  *
  */
 public class Generator {
-    private boolean tryOut;
+    private String baseUri;
 
-    public Generator tryOut(boolean tryOut) {
-        this.tryOut = tryOut;
+    public Generator tryOut(String baseUri) {
+        this.baseUri = baseUri;
         return this;
     }
 
-    public File generate(String ramlLocation, File target) throws IOException {
-        final Raml raml = loadRaml(ramlLocation);
+    public File generate(Raml raml, File target) throws IOException {
         final STGroupDir group = new STGroupDir("st", '$', '$');
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
         group.registerRenderer(String.class, new StringRenderer(raml));
@@ -52,7 +50,7 @@ public class Generator {
         main.add("raml", raml);
         final Util util = new Util(raml);
         main.add("util", util);
-        main.add("tryOut", tryOut);
+        main.add("baseUri", baseUri);
 
         final File base = new File(target, raml.getTitle());
         base.mkdirs();
@@ -78,7 +76,8 @@ public class Generator {
             }
         }
 
-        copyResource(base, "favicon.ico", "style.css", "script.js", "run_prettify.js", "prettify-default.css");
+        copyResource(base, "favicon.ico","ajax-loader.gif", "style.css",
+                "script.js", "run_prettify.js", "prettify-default.css");
 
         return new File(target, raml.getTitle());
     }
@@ -89,14 +88,6 @@ public class Generator {
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
                 copy(in, out);
             }
-        }
-    }
-
-    private Raml loadRaml(String ramlLocation) throws IOException {
-        try {
-            return RamlLoaders.absolutely().load(ramlLocation);
-        } catch (Exception e) {
-            throw new IOException("No raml found at location '" + ramlLocation + "'");
         }
     }
 
@@ -116,7 +107,7 @@ public class Generator {
 
     private void render(ST template, File file) throws IOException {
         file.getParentFile().mkdirs();
-        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file))) {
+        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "utf-8")) {
             final StringWriter sw = new StringWriter();
             template.write(new NoIndentWriter(sw));
             out.write(sw.toString());

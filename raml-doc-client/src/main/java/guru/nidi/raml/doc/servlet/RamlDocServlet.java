@@ -16,6 +16,8 @@
 package guru.nidi.raml.doc.servlet;
 
 import guru.nidi.raml.doc.st.Generator;
+import guru.nidi.raml.loader.RamlLoaders;
+import org.raml.model.Raml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +53,11 @@ public class RamlDocServlet extends HttpServlet {
                     final boolean tryOut = Boolean.parseBoolean(getInitParameter("tryOut"));
                     final File outputDir = docDir();
                     outputDir.mkdirs();
-                    baseDir = new Generator().tryOut(tryOut).
-                            generate(location == null ? "classpath://api.raml" : location, outputDir);
+                    final String loc = location == null ? "classpath://api.raml" : location;
+                    final Raml raml = loadRaml(loc);
+                    baseDir = new Generator()
+                            .tryOut(tryOut ? getBaseUri(raml) : null)
+                            .generate(raml, outputDir);
                 } catch (IOException e) {
                     log.error("Could not create RAML documentation", e);
                 } finally {
@@ -62,6 +67,37 @@ public class RamlDocServlet extends HttpServlet {
         });
         creator.setDaemon(true);
         creator.start();
+    }
+
+    private String getBaseUri(Raml raml) {
+        final String definedBaseUri = getInitParameter("baseUri");
+        if (definedBaseUri != null) {
+            return definedBaseUri;
+        }
+        String baseUri = raml.getBaseUri().replace("{version}", raml.getVersion());
+        final String baseUriParameters = getInitParameter("baseUriParameters");
+        if (baseUriParameters != null) {
+            for (final String param : baseUriParameters.split(",")) {
+                final String[] keyValue = param.split("=");
+                if (keyValue.length != 2) {
+                    throw new IllegalArgumentException("baseUriParameters must be of the form 'key1=value1,key2=value2,...' but is '" + baseUriParameters + "'");
+                }
+                baseUri = baseUri.replace("{" + keyValue[0] + "}", keyValue[1]);
+            }
+        }
+        if (baseUri.contains("{")) {
+            throw new IllegalArgumentException("Unresolved baseUri: '" + baseUri + "'. Use 'baseUri' or 'baseUriParameters' init-param to specify it.");
+        }
+        return baseUri;
+    }
+
+
+    private Raml loadRaml(String ramlLocation) throws IOException {
+        try {
+            return RamlLoaders.absolutely().load(ramlLocation);
+        } catch (Exception e) {
+            throw new IOException("No raml found at location '" + ramlLocation + "'");
+        }
     }
 
     private File docDir() {
@@ -79,9 +115,7 @@ public class RamlDocServlet extends HttpServlet {
             }
             final File source = new File(baseDir, req.getPathInfo());
             if (!source.exists() || !source.isFile()) {
-                final PrintWriter writer = res.getWriter();
-                writer.write("File not found.");
-                writer.flush();
+                res.sendError(HttpServletResponse.SC_NOT_FOUND);
             } else {
                 setContentType(res, source.getName());
                 try (final InputStream in = new FileInputStream(source);

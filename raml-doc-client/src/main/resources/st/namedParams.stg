@@ -1,9 +1,9 @@
-header(tryOut) ::= <<
+header(baseUri) ::= <<
     <table class="params">
         <thead>
         <tr>
             <th>Name</th>
-            $if(tryOut)$ <th>Value</th> $endif$
+            $if(baseUri)$ <th>Value</th> $endif$
             <th class="paramDesc">Description</th>
             <th>Type</th>
             <th>Constraint</th>
@@ -20,41 +20,41 @@ footer() ::= <<
     </table>
 >>
 
-namedParams(title,params,tryOut,type) ::= <<
+namedParams(title,params,baseUri,type) ::= <<
     $if(params)$
         <div class="paramsTitle">$title$</div>
-            $header(tryOut)$
-            $params.entrySet:paramEntry(tryOut,type)$
+            $header(baseUri)$
+            $params.entrySet:paramEntry(baseUri,type)$
             $footer()$
     $endif$
 >>
 
-namedParamsElem(title,params,tryOut,type) ::= <<
+namedParamsElem(title,params,baseUri,type) ::= <<
     $if(params)$
-        $title(title,tryOut)$
-        $params.entrySet:paramEntry(tryOut,type)$
+        $title(title,baseUri)$
+        $params.entrySet:paramEntry(baseUri,type)$
     $endif$
 >>
 
-namedParamsBody(body,tryOut) ::= <<
+namedParamsBody(body,baseUri) ::= <<
     $if(body)$
         <tr>
-            <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
+            <td colspan="$if(baseUri)$ 8 $else$ 7 $endif$">
                 <span class="paramTitle">Body</span>
             </td>
         </tr>
-        $body.entrySet:{entry | $mime(body.keys,entry.key,entry.value,tryOut)$}$
+        $body.entrySet:{entry | $mime(body.keys,entry.key,entry.value,baseUri)$}$
         <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
     $endif$
 >>
 
-mime(keys,key,body,tryOut) ::= <<
+mime(keys,key,body,baseUri) ::= <<
     <tr class="bodyType $key$">
         <td></td>
-        $if(tryOut)$
+        $if(baseUri)$
             <td colspan="2" style="vertical-align:top">
                 <textarea name="body"></textarea>
-                <select name="contentType_$tryOut$" onchange="rd.showTrWithId(this,this.value)">
+                <select name="contentType_$baseUri$" onchange="rd.showTrWithId(this,this.value)">
                     $keys:{key | <option>$key$</option>}$
                 </select>
             </td>
@@ -66,25 +66,25 @@ mime(keys,key,body,tryOut) ::= <<
             $if(body.example)$ <p>Example:</p><pre class="code prettyprint">$body.example;format="js"$ </pre> $endif$
         </td>
     </tr>
-    $namedParamsElem("Form parameters",body.formParameters,tryOut,"form")$
+    $namedParamsElem("Form parameters",body.formParameters,baseUri,"form")$
 >>
 
-title(title,tryOut) ::= <<
+title(title,baseUri) ::= <<
     <tr>
-        <td colspan="$if(tryOut)$ 8 $else$ 7 $endif$">
+        <td colspan="$if(baseUri)$ 8 $else$ 7 $endif$">
             <span class="paramTitle">$title$</span>
         </td>
     </tr>
 >>
 
-paramEntry(entry,tryOut,type) ::= <<
-    $entry.value:{val | $param(entry.key,val,tryOut,type)$ }$
+paramEntry(entry,baseUri,type) ::= <<
+    $entry.value:{val | $param(entry.key,val,baseUri,type)$ }$
 >>
 
-param(key,param,tryOut,type) ::= <<
+param(key,param,baseUri,type) ::= <<
     <tr>
         <td>$def(param.displayName,key)$</td>
-        $if(tryOut)$ <td><input name="$type$_$key$"></td> $endif$
+        $if(baseUri)$ <td><input name="$type$_$key$"></td> $endif$
         <td>$param.description;format="markdown"$
             $/main/line("Example",param.example)$
         </td>

@@ -35,7 +35,7 @@ var rd = {
             }
         });
     },
-    showBodyWithId:function(elem,id){
+    showBodyWithId: function (elem, id) {
         var show = null;
         rd.doWithChildren(elem.parentNode, function (div) {
             if (div.nodeName === 'DIV' && (rd.startsWith(div.className, 'body') || show != null)) {
@@ -57,8 +57,9 @@ var rd = {
         });
         next.style.display = next.style.display === 'block' ? 'none' : 'block';
     },
-    tryOut: function (button, type) {
-        sendRequest(createRequest(), handleResponse);
+    tryOut: function (button, type, baseUri,path) {
+        showLoader(true);
+        sendRequest(baseUri+path, createRequest(), handleResponse);
 
         function createRequest() {
             var i, elem, rest,
@@ -73,7 +74,7 @@ var rd = {
                         req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
                     } else if (rest = rd.rest(elem.name, 'header_')) {
                         req.header[rest] = elem.value;
-                    } else if (rd.startsWith(elem.name, 'contentType_true')) {
+                    } else if (rd.startsWith(elem.name, 'contentType_http')) {
                         req.header['Content-Type'] = elem.value;
                     } else if (rd.startsWith(elem.name, 'body') && rd.findParent(elem, 'tr').style.display === 'table-row') {
                         req.body = elem.value;
@@ -83,19 +84,43 @@ var rd = {
             return req;
         }
 
-        function sendRequest(r, handler) {
-            var h, url = 'http://localhost:8080/mirror?' + r.query,
+        function showLoader(show){
+            var loader = rd.findNextSibling(button, function (e) {
+                return e.className === 'loader';
+            });
+            loader.style.display=show?'inline':'none';
+        }
+
+        function hideLoader(){
+            showLoader(false);
+        }
+
+        function sendRequest(uri, r, handler) {
+            var h, url = interpretUri(uri) + '?' + r.query,
                 req = new XMLHttpRequest();
             req.onreadystatechange = function () {
                 if (req.readyState === 4) {
                     handler(url, req);
                 }
             };
+            req.addEventListener("load", hideLoader, false);
+            req.addEventListener("error", hideLoader, false);
+            req.addEventListener("abort", hideLoader, false);
             req.open(type, url, true);
             for (h in r.header) {
                 req.setRequestHeader(h, r.header[h]);
             }
             req.send(r.body);
+        }
+
+        function interpretUri(uri) {
+            var href = window.location.href,
+                hostPos = href.indexOf('://'),
+                pathPos = href.indexOf('/', hostPos + 3),
+                endPathPos = href.indexOf('/resource/'),
+                host = href.substring(hostPos + 3, pathPos),
+                path = href.substring(pathPos + 1, endPathPos);
+            return uri.replace('$host', host).replace('$path', path);
         }
 
         function handleResponse(url, req) {

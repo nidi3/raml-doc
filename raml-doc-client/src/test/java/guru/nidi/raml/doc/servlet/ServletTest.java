@@ -67,14 +67,17 @@ public class ServletTest {
         });
         ((Host) ctx.getParent()).setAppBase("");
 
-        final RamlDocServlet servlet = new RamlDocServlet();
-        servlet.init(new TestServletConfig("ramlDoc")
-                .withInitParameter("ramlLocation", "classpath://basic.raml")
-                .withInitParameter("tryOut", "true"));
-        Tomcat.addServlet(ctx, "app", servlet);
+        final Wrapper wrapper = ctx.createWrapper();
+        wrapper.setServletClass(RamlDocServlet.class.getName());
+        wrapper.setName("app");
+        wrapper.addInitParameter("ramlLocation", "classpath://basic.raml");
+        wrapper.addInitParameter("tryOut", "true");
+        wrapper.addInitParameter("baseUriParameters", "host=$host/$path/..,path=mirror");
+        ctx.addChild(wrapper);
         ctx.addServletMapping("/api/*", "app");
+
         Tomcat.addServlet(ctx, "mirror", new MirrorServlet());
-        ctx.addServletMapping("/mirror/*", "mirror");
+        ctx.addServletMapping("/mirror/v1/*", "mirror");
 
         tomcat.start();
         Server server = tomcat.getServer();
