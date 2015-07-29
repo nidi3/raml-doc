@@ -15,6 +15,8 @@ package guru.nidi.raml.doc;/*
  */
 
 import guru.nidi.raml.doc.st.Generator;
+import guru.nidi.raml.loader.RamlLoaders;
+import org.raml.model.Raml;
 
 import java.io.File;
 
@@ -28,7 +30,8 @@ public class Main {
             System.exit(1);
         }
         try {
-            new Generator().generate(args[0], new File("."));
+            final Raml raml = RamlLoaders.absolutely().load(args[0]);
+            new Generator().generate(raml, new File("."));
         } catch (Exception e) {
             System.out.println("Problem generating doc");
             e.printStackTrace();
