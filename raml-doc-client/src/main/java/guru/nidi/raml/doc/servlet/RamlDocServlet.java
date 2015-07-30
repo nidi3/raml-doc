@@ -45,37 +45,69 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        final Thread creator = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final String location = getInitParameter("ramlLocation");
-                    final boolean tryOut = Boolean.parseBoolean(getInitParameter("tryOut"));
-                    final File outputDir = docDir();
-                    outputDir.mkdirs();
-                    final String loc = location == null ? "classpath://api.raml" : location;
-                    final Raml raml = loadRaml(loc);
-                    baseDir = new Generator()
-                            .tryOut(tryOut ? getBaseUri(raml) : null)
-                            .generate(raml, outputDir);
-                } catch (IOException e) {
-                    log.error("Could not create RAML documentation", e);
-                } finally {
-                    latch.countDown();
+        if (enabled()) {
+            final Thread creator = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final File outputDir = docDir();
+                        outputDir.mkdirs();
+                        final Raml raml = loadRaml(getRamlLocation());
+                        baseDir = new Generator()
+                                .tryOut(tryOut() ? getBaseUri(raml) : null)
+                                .generate(raml, outputDir);
+                    } catch (IOException e) {
+                        log.error("Could not create RAML documentation", e);
+                    } finally {
+                        latch.countDown();
+                    }
                 }
-            }
-        });
-        creator.setDaemon(true);
-        creator.start();
+            });
+            creator.setDaemon(true);
+            creator.start();
+        }
     }
 
-    private String getBaseUri(Raml raml) {
-        final String definedBaseUri = getInitParameter("baseUri");
+    protected boolean enabled() {
+        return true;
+    }
+
+    protected String ramlLocation() {
+        return getInitParameter("ramlLocation");
+    }
+
+    protected boolean tryOut() {
+        return Boolean.parseBoolean(getInitParameter("tryOut"));
+    }
+
+    protected String baseUri() {
+        return getInitParameter("baseUri");
+    }
+
+    protected String baseUriParameters() {
+        return getInitParameter("baseUriParameters");
+    }
+
+    protected String getRamlLocation() {
+        final String location = ramlLocation();
+        return location == null ? "classpath://api.raml" : location;
+    }
+
+    protected Raml loadRaml(String ramlLocation) throws IOException {
+        try {
+            return RamlLoaders.absolutely().load(ramlLocation);
+        } catch (Exception e) {
+            throw new IOException("No raml found at location '" + ramlLocation + "'");
+        }
+    }
+
+    protected String getBaseUri(Raml raml) {
+        final String definedBaseUri = baseUri();
         if (definedBaseUri != null) {
             return definedBaseUri;
         }
         String baseUri = raml.getBaseUri().replace("{version}", raml.getVersion());
-        final String baseUriParameters = getInitParameter("baseUriParameters");
+        final String baseUriParameters = baseUriParameters();
         if (baseUriParameters != null) {
             for (final String param : baseUriParameters.split(",")) {
                 final String[] keyValue = param.split("=");
@@ -91,15 +123,6 @@ public class RamlDocServlet extends HttpServlet {
         return baseUri;
     }
 
-
-    private Raml loadRaml(String ramlLocation) throws IOException {
-        try {
-            return RamlLoaders.absolutely().load(ramlLocation);
-        } catch (Exception e) {
-            throw new IOException("No raml found at location '" + ramlLocation + "'");
-        }
-    }
-
     private File docDir() {
         final File tempDir = new File(System.getProperty("java.io.tmpdir"));
         return new File(tempDir, "raml-doc/" + getServletName());
@@ -107,6 +130,10 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        if (!enabled()) {
+            super.doGet(req, res);
+            return;
+        }
         try {
             latch.await();
             if (req.getPathInfo() == null) {
