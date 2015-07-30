@@ -15,9 +15,7 @@
  */
 package guru.nidi.raml.doc.servlet;
 
-import guru.nidi.raml.doc.st.Generator;
-import guru.nidi.raml.loader.RamlLoaders;
-import org.raml.model.Raml;
+import guru.nidi.raml.doc.GeneratorConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +48,10 @@ public class RamlDocServlet extends HttpServlet {
                 @Override
                 public void run() {
                     try {
-                        final File outputDir = docDir();
-                        outputDir.mkdirs();
-                        final Raml raml = loadRaml(getRamlLocation());
-                        baseDir = new Generator()
-                                .tryOut(tryOut() ? getBaseUri(raml) : null)
-                                .generate(raml, outputDir);
+                        final GeneratorConfig config = createGeneratorConfig();
+                        config.loadRaml();
+                        baseDir = config.getEffectiveTarget();
+                        config.generate();
                     } catch (IOException e) {
                         log.error("Could not create RAML documentation", e);
                     } finally {
@@ -88,39 +84,13 @@ public class RamlDocServlet extends HttpServlet {
         return getInitParameter("baseUriParameters");
     }
 
+    protected GeneratorConfig createGeneratorConfig() {
+        return new GeneratorConfig(getRamlLocation(), docDir(), tryOut(), baseUri(), baseUriParameters());
+    }
+
     protected String getRamlLocation() {
         final String location = ramlLocation();
         return location == null ? "classpath://api.raml" : location;
-    }
-
-    protected Raml loadRaml(String ramlLocation) throws IOException {
-        try {
-            return RamlLoaders.absolutely().load(ramlLocation);
-        } catch (Exception e) {
-            throw new IOException("No raml found at location '" + ramlLocation + "'");
-        }
-    }
-
-    protected String getBaseUri(Raml raml) {
-        final String definedBaseUri = baseUri();
-        if (definedBaseUri != null) {
-            return definedBaseUri;
-        }
-        String baseUri = raml.getBaseUri().replace("{version}", raml.getVersion());
-        final String baseUriParameters = baseUriParameters();
-        if (baseUriParameters != null) {
-            for (final String param : baseUriParameters.split(",")) {
-                final String[] keyValue = param.split("=");
-                if (keyValue.length != 2) {
-                    throw new IllegalArgumentException("baseUriParameters must be of the form 'key1=value1,key2=value2,...' but is '" + baseUriParameters + "'");
-                }
-                baseUri = baseUri.replace("{" + keyValue[0] + "}", keyValue[1]);
-            }
-        }
-        if (baseUri.contains("{")) {
-            throw new IllegalArgumentException("Unresolved baseUri: '" + baseUri + "'. Use 'baseUri' or 'baseUriParameters' init-param to specify it.");
-        }
-        return baseUri;
     }
 
     private File docDir() {

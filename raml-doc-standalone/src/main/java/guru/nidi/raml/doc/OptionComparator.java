@@ -1,4 +1,4 @@
-package guru.nidi.raml.doc;/*
+/*
  * Copyright (C) 2015 Stefan Niederhauser (nidin@gmx.ch)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,25 +13,24 @@ package guru.nidi.raml.doc;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package guru.nidi.raml.doc;
 
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.Option;
+
+import java.util.Comparator;
 
 /**
  *
  */
-public class Main {
-    public static void main(String[] args) {
-        try {
-            final GeneratorConfig config = new OptionParser().parse(args);
-            config.loadRaml().generate();
-        } catch (ParseException e) {
-            new OptionParser().showHelp();
-            System.exit(1);
-        } catch (Exception e) {
-            System.err.println("Problem generating RAML documentation.");
-            e.printStackTrace();
-            System.exit(1);
-        }
+class OptionComparator implements Comparator<Option> {
+    private final String options;
+
+    public OptionComparator(String options) {
+        this.options = options;
     }
 
+    @Override
+    public int compare(Option o1, Option o2) {
+        return options.indexOf(o1.getOpt().charAt(0)) - options.indexOf(o2.getOpt().charAt(0));
+    }
 }

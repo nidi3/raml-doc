@@ -57,9 +57,9 @@ var rd = {
         });
         next.style.display = next.style.display === 'block' ? 'none' : 'block';
     },
-    tryOut: function (button, type, baseUri,path) {
+    tryOut: function (button, type, baseUri, path) {
         showLoader(true);
-        sendRequest(baseUri+path, createRequest(), handleResponse);
+        sendRequest(baseUri + path, createRequest(), handleResponse);
 
         function createRequest() {
             var i, elem, rest,
@@ -84,14 +84,14 @@ var rd = {
             return req;
         }
 
-        function showLoader(show){
+        function showLoader(show) {
             var loader = rd.findNextSibling(button, function (e) {
                 return e.className === 'loader';
             });
-            loader.style.display=show?'inline':'none';
+            loader.style.display = show ? 'inline' : 'none';
         }
 
-        function hideLoader(){
+        function hideLoader() {
             showLoader(false);
         }
 
@@ -110,7 +110,11 @@ var rd = {
             for (h in r.header) {
                 req.setRequestHeader(h, r.header[h]);
             }
-            req.send(r.body);
+            try {
+                req.send(r.body);
+            } catch (e) {
+                alert('Could not send request: ' + e);
+            }
         }
 
         function interpretUri(uri) {

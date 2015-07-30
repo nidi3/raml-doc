@@ -38,7 +38,7 @@ public class Generator {
         return this;
     }
 
-    public File generate(Raml raml, File target) throws IOException {
+    public void generate(Raml raml, File target) throws IOException {
         final STGroupDir group = new STGroupDir("st", '$', '$');
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
         group.registerRenderer(String.class, new StringRenderer(raml));
@@ -52,17 +52,16 @@ public class Generator {
         main.add("util", util);
         main.add("baseUri", baseUri);
 
-        final File base = new File(target, raml.getTitle());
-        base.mkdirs();
+        target.mkdirs();
         main.add("template", "/main/doc");
         main.add("relPath", ".");
-        render(main, new File(base, "index.html"));
+        render(main, new File(target, "index.html"));
 
         set(main, "template", "/resource/resource");
         for (Resource resource : util.getAllResources()) {
             set(main, "param", resource);
             set(main, "relPath", depth(resource.getUri()));
-            final File file = new File(base, "resource/" + resource.getUri() + ".html");
+            final File file = new File(target, "resource/" + resource.getUri() + ".html");
             render(main, file);
         }
 
@@ -71,15 +70,13 @@ public class Generator {
             for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
                 set(main, "param", entry.getValue());
                 set(main, "relPath", "../.");
-                final File file = new File(base, "security-scheme/" + entry.getKey() + ".html");
+                final File file = new File(target, "security-scheme/" + entry.getKey() + ".html");
                 render(main, file);
             }
         }
 
-        copyResource(base, "favicon.ico","ajax-loader.gif", "style.css",
+        copyResource(target, "favicon.ico","ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "prettify-default.css");
-
-        return new File(target, raml.getTitle());
     }
 
     private void copyResource(File base, String... names) throws IOException {
