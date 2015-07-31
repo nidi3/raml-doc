@@ -15,6 +15,7 @@
  */
 package guru.nidi.raml.doc.st;
 
+import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
@@ -25,6 +26,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.InputStreamReader;
 import java.util.Locale;
+
+import static org.pegdown.Extensions.HARDWRAPS;
+import static org.pegdown.Extensions.TABLES;
 
 /**
  *
@@ -37,7 +41,7 @@ class StringRenderer implements AttributeRenderer {
 
     public StringRenderer(Raml raml) {
         this.raml = raml;
-        processor = new PegDownProcessor();
+        processor = new PegDownProcessor(TABLES);
         engine = new ScriptEngineManager().getEngineByExtension("js");
         invocable = (Invocable) engine;
         try {
@@ -82,7 +86,7 @@ class StringRenderer implements AttributeRenderer {
 
     private String js(String s) {
         try {
-            return ((String) invocable.invokeFunction("js_beautify", s)).replace("<","&lt;");
+            return ((String) invocable.invokeFunction("js_beautify", s)).replace("<", "&lt;");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

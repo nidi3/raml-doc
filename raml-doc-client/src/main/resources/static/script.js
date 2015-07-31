@@ -59,12 +59,12 @@ var rd = {
     },
     tryOut: function (button, type, baseUri, path) {
         showLoader(true);
-        sendRequest(baseUri + path, createRequest(), handleResponse);
+        sendRequest(createRequest(baseUri + path), handleResponse);
 
-        function createRequest() {
+        function createRequest(uri) {
             var i, elem, rest,
                 req = {
-                    body: null, query: '', header: {}
+                    uri: uri, body: null, query: '', header: {}
                 },
                 form = rd.findParent(button, 'form');
             for (i = 0; i < form.elements.length; i++) {
@@ -74,6 +74,8 @@ var rd = {
                         req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
                     } else if (rest = rd.rest(elem.name, 'header_')) {
                         req.header[rest] = elem.value;
+                    } else if (rest = rd.rest(elem.name, 'uri_')) {
+                        req.uri = req.uri.replace('{' + rest + '}', elem.value);
                     } else if (rd.startsWith(elem.name, 'contentType_http')) {
                         req.header['Content-Type'] = elem.value;
                     } else if (rd.startsWith(elem.name, 'body') && rd.findParent(elem, 'tr').style.display === 'table-row') {
@@ -95,8 +97,8 @@ var rd = {
             showLoader(false);
         }
 
-        function sendRequest(uri, r, handler) {
-            var h, url = interpretUri(uri) + '?' + r.query,
+        function sendRequest(r, handler) {
+            var h, url = interpretUri(r.uri) + '?' + r.query,
                 req = new XMLHttpRequest();
             req.onreadystatechange = function () {
                 if (req.readyState === 4) {

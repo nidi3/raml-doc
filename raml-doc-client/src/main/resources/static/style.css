@@ -81,7 +81,7 @@ a, a:visited, a:active, a:hover {
 }
 
 ul {
-    list-style-type: none;
+    padding-left: 2em;
 }
 
 table.params {
@@ -211,6 +211,10 @@ td.center {
     max-height: 25em;
     overflow: auto;
     background-color: #fff;
+}
+
+code {
+    white-space: pre;
 }
 
 .tryData {
