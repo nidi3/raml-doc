@@ -19,10 +19,12 @@ import guru.nidi.loader.basic.CachingLoaderInterceptor;
 import guru.nidi.loader.basic.InterceptingLoader;
 import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.loader.use.raml.RamlLoad;
+import guru.nidi.raml.doc.st.Feature;
 import guru.nidi.raml.doc.st.Generator;
 import org.raml.model.Raml;
 
 import java.io.*;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -34,37 +36,17 @@ import java.util.zip.ZipOutputStream;
 public class GeneratorConfig {
     private final String ramlLocation;
     private final File target;
-    private final boolean tryOut;
+    private final EnumSet<Feature> features;
     private final String baseUri;
     private final String baseUriParameters;
     private Raml raml;
 
-    public GeneratorConfig(String ramlLocation, File target, boolean tryOut, String baseUri, String baseUriParameters) {
+    public GeneratorConfig(String ramlLocation, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters) {
         this.ramlLocation = ramlLocation;
         this.target = target;
-        this.tryOut = tryOut;
+        this.features = features;
         this.baseUri = baseUri;
         this.baseUriParameters = baseUriParameters;
-    }
-
-    public String getRamlLocation() {
-        return ramlLocation;
-    }
-
-    public File getTarget() {
-        return target;
-    }
-
-    public boolean isTryOut() {
-        return tryOut;
-    }
-
-    public String getBaseUri() {
-        return baseUri;
-    }
-
-    public String getBaseUriParameters() {
-        return baseUriParameters;
     }
 
     public String getBaseUri(Raml raml) {
@@ -101,7 +83,8 @@ public class GeneratorConfig {
 
     public void generate() throws IOException {
         new Generator()
-                .tryOut(tryOut ? getBaseUri(raml) : null)
+                .features(features)
+                .baseUri(getBaseUri(raml))
                 .generate(raml, getEffectiveTarget());
     }
 

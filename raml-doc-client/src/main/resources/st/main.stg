@@ -1,4 +1,4 @@
-main(raml,template,param,util,relPath,baseUri) ::= <<
+main(raml,template,param,util,relPath,baseUri,download) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
@@ -26,7 +26,7 @@ htmlHead() ::= <<
         <h1><a href="$relPath$/index.html">$raml.title$</a></h1>
         <p>Version $raml.version$</p>
         <p class="left">$raml;format="baseUri"$</p>
-        <a class="right" href="$relPath$/$raml.title$.zip">Download RAML</a>
+        $if(download)$ <a class="right" href="$relPath$/$raml.title$.zip">Download RAML</a> $endif$
         <div class="clear"/>
     </header>
 >>

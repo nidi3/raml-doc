@@ -15,10 +15,12 @@
  */
 package guru.nidi.raml.doc;
 
+import guru.nidi.raml.doc.st.Feature;
 import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import static org.apache.commons.cli.OptionBuilder.withDescription;
@@ -29,7 +31,12 @@ import static org.apache.commons.cli.OptionBuilder.withDescription;
 public class OptionParser {
     public GeneratorConfig parse(String[] args) throws ParseException {
         final CommandLine cmd = new BasicParser().parse(createOptions(), expandArgs(args));
-        return new GeneratorConfig(cmd.getOptionValue('r'), parseTarget(cmd.getOptionValue('t')), cmd.hasOption('i'), cmd.getOptionValue('b'), cmd.getOptionValue('p'));
+        return new GeneratorConfig(
+                cmd.getOptionValue('r'),
+                parseTarget(cmd.getOptionValue('t')),
+                parseFeatures(cmd.getOptionValue('f')),
+                cmd.getOptionValue('b'),
+                cmd.getOptionValue('p'));
     }
 
 
@@ -40,6 +47,10 @@ public class OptionParser {
         return new File(t);
     }
 
+    private EnumSet<Feature> parseFeatures(String s) {
+        return Feature.parse(s);
+    }
+
     @SuppressWarnings("static-access")
     protected Options createOptions() {
         return new Options()
@@ -48,9 +59,9 @@ public class OptionParser {
                         "[user:pass@]http://, [user:pass@]https://,\n" +
                         "[token@]github://user/project/file, user:pass@apiportal://").isRequired(true).withArgName("URL").hasArg(true).create('r'))
                 .addOption(withDescription("Target directory to write the output\nDefault: current directory").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
-                .addOption(withDescription("Enable interactive try out\nDefault: true").isRequired(false).hasArg(false).create('i'))
+                .addOption(withDescription("Enable features\nComma separated list of these features: download,tryout\nDefault: download,tryout").isRequired(false).hasArg(true).create('f'))
                 .addOption(withDescription("The base URI to use\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
-                .addOption(withDescription("Base URI parameters\nFormat parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'));
+                .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'));
     }
 
     public void showHelp() {

@@ -16,6 +16,7 @@
 package guru.nidi.raml.doc.servlet;
 
 import guru.nidi.raml.doc.GeneratorConfig;
+import guru.nidi.raml.doc.st.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -43,7 +45,7 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        if (enabled()) {
+        if (features().contains(Feature.ONLINE)) {
             final Thread creator = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -64,16 +66,12 @@ public class RamlDocServlet extends HttpServlet {
         }
     }
 
-    protected boolean enabled() {
-        return true;
-    }
-
     protected String ramlLocation() {
         return getInitParameter("ramlLocation");
     }
 
-    protected boolean tryOut() {
-        return Boolean.parseBoolean(getInitParameter("tryOut"));
+    protected EnumSet<Feature> features() {
+        return Feature.parse(getInitParameter("features"));
     }
 
     protected String baseUri() {
@@ -85,7 +83,7 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocation(), docDir(), tryOut(), baseUri(), baseUriParameters());
+        return new GeneratorConfig(getRamlLocation(), docDir(), features(), baseUri(), baseUriParameters());
     }
 
     protected String getRamlLocation() {
@@ -100,7 +98,7 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (!enabled()) {
+        if (!features().contains(Feature.ONLINE)) {
             super.doGet(req, res);
             return;
         }

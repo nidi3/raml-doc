@@ -36,7 +36,7 @@ public class GeneratorTest {
     @Test
     public void basic() throws Exception {
         final SchemaTree tree = new SchemaLoader().get(URI.create("file:///" + new File("src/test/resources/schema.json").getAbsolutePath()));
-        new Generator().tryOut("http://localhost:8080").generate(new RamlLoad(new FileLoader(new File("src/test/resources"))).load("basic.raml"), new File("target/basicTryOut"));
+        new Generator().baseUri("http://localhost:8080").generate(new RamlLoad(new FileLoader(new File("src/test/resources"))).load("basic.raml"), new File("target/basicTryOut"));
         new Generator().generate(new RamlLoad(new FileLoader(new File("src/test/resources"))).load("basic.raml"), new File("target/basic"));
 //        new Generator().tryOut(false).generate("file:src/test/resources/GaiaNewListServices.raml", new File("target"));
     }

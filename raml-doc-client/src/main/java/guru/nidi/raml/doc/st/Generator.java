@@ -25,15 +25,22 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
 
 import java.io.*;
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
  *
  */
 public class Generator {
+    private EnumSet<Feature> features;
     private String baseUri;
 
-    public Generator tryOut(String baseUri) {
+    public Generator features(EnumSet<Feature> features) {
+        this.features = features;
+        return this;
+    }
+
+    public Generator baseUri(String baseUri) {
         this.baseUri = baseUri;
         return this;
     }
@@ -50,7 +57,8 @@ public class Generator {
         main.add("raml", raml);
         final Util util = new Util(raml);
         main.add("util", util);
-        main.add("baseUri", baseUri);
+        main.add("baseUri", features.contains(Feature.TRYOUT) ? baseUri : null);
+        main.add("download", features.contains(Feature.DOWNLOAD));
 
         target.mkdirs();
         main.add("template", "/main/doc");
@@ -75,7 +83,7 @@ public class Generator {
             }
         }
 
-        copyResource(target, "favicon.ico","ajax-loader.gif", "style.css",
+        copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "prettify-default.css");
     }
 
