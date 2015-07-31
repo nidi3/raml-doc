@@ -25,7 +25,9 @@ htmlHead() ::= <<
     <header>
         <h1><a href="$relPath$/index.html">$raml.title$</a></h1>
         <p>Version $raml.version$</p>
-        <p>$raml;format="baseUri"$</p>
+        <p class="left">$raml;format="baseUri"$</p>
+        <a class="right" href="$relPath$/$raml.title$.zip">Download RAML</a>
+        <div class="clear"/>
     </header>
 >>
 

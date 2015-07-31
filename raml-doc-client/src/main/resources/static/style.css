@@ -236,3 +236,15 @@ button {
 .loader {
     display: none;
 }
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}

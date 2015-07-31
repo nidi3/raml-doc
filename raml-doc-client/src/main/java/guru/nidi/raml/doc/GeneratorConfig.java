@@ -25,6 +25,8 @@ import org.raml.model.Raml;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  *
@@ -89,7 +91,8 @@ public class GeneratorConfig {
         try {
             final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
             raml = new RamlLoad(new InterceptingLoader(new UriLoader(), sli)).load(ramlLocation);
-            sli.writeData(new File(getEffectiveTarget(), "raml"));
+//            sli.writeDataToFiles(new File(getEffectiveTarget(), "raml"));
+            sli.writeDataToZip(new File(getEffectiveTarget(), raml.getTitle() + ".zip"));
             return this;
         } catch (Exception e) {
             throw new IOException("Problem loading RAML from '" + ramlLocation + "'", e);
@@ -115,16 +118,33 @@ public class GeneratorConfig {
             this.data.put(pos < 0 ? name : name.substring(pos + 3), data);
         }
 
-        public void writeData(File target) throws IOException {
-            target.mkdirs();
+        public void writeDataToFiles(File dir) throws IOException {
+            dir.mkdirs();
             for (Map.Entry<String, byte[]> d : data.entrySet()) {
                 try (final InputStream in = new ByteArrayInputStream(d.getValue());
-                     final OutputStream out = new FileOutputStream(new File(target, d.getKey()))) {
+                     final OutputStream out = new FileOutputStream(new File(dir, d.getKey()))) {
                     byte[] buf = new byte[10000];
                     int read;
                     while ((read = in.read(buf)) > 0) {
                         out.write(buf, 0, read);
                     }
+                }
+            }
+        }
+
+        public void writeDataToZip(File file) throws IOException {
+            file.getParentFile().mkdirs();
+            try (final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file))) {
+                for (Map.Entry<String, byte[]> d : data.entrySet()) {
+                    out.putNextEntry(new ZipEntry(d.getKey()));
+                    try (final InputStream in = new ByteArrayInputStream(d.getValue())) {
+                        byte[] buf = new byte[10000];
+                        int read;
+                        while ((read = in.read(buf)) > 0) {
+                            out.write(buf, 0, read);
+                        }
+                    }
+                    out.closeEntry();
                 }
             }
         }
