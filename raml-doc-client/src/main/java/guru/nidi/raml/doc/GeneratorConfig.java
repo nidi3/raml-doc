@@ -15,12 +15,16 @@
  */
 package guru.nidi.raml.doc;
 
+import guru.nidi.loader.basic.CachingLoaderInterceptor;
+import guru.nidi.loader.basic.InterceptingLoader;
+import guru.nidi.loader.basic.UriLoader;
+import guru.nidi.loader.use.raml.RamlLoad;
 import guru.nidi.raml.doc.st.Generator;
-import guru.nidi.raml.loader.RamlLoaders;
 import org.raml.model.Raml;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -83,10 +87,12 @@ public class GeneratorConfig {
 
     public GeneratorConfig loadRaml() throws IOException {
         try {
-            raml = RamlLoaders.absolutely().load(ramlLocation);
+            final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
+            raml = new RamlLoad(new InterceptingLoader(new UriLoader(), sli)).load(ramlLocation);
+            sli.writeData(new File(getEffectiveTarget(), "raml"));
             return this;
         } catch (Exception e) {
-            throw new IOException("No raml found at location '" + ramlLocation + "'");
+            throw new IOException("Problem loading RAML from '" + ramlLocation + "'", e);
         }
     }
 
@@ -96,8 +102,31 @@ public class GeneratorConfig {
                 .generate(raml, getEffectiveTarget());
     }
 
-    public File getEffectiveTarget() throws IOException {
+    public File getEffectiveTarget() {
         return new File(target, raml.getTitle());
     }
 
+    private static class SavingLoaderInterceptor extends CachingLoaderInterceptor {
+        private final Map<String, byte[]> data = new HashMap<>();
+
+        @Override
+        protected void processLoaded(String name, byte[] data) {
+            final int pos = name.indexOf("://");
+            this.data.put(pos < 0 ? name : name.substring(pos + 3), data);
+        }
+
+        public void writeData(File target) throws IOException {
+            target.mkdirs();
+            for (Map.Entry<String, byte[]> d : data.entrySet()) {
+                try (final InputStream in = new ByteArrayInputStream(d.getValue());
+                     final OutputStream out = new FileOutputStream(new File(target, d.getKey()))) {
+                    byte[] buf = new byte[10000];
+                    int read;
+                    while ((read = in.read(buf)) > 0) {
+                        out.write(buf, 0, read);
+                    }
+                }
+            }
+        }
+    }
 }
