@@ -32,7 +32,7 @@ import java.util.Map;
  *
  */
 public class Generator {
-    private EnumSet<Feature> features;
+    private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
     private String baseUri;
 
     public Generator features(EnumSet<Feature> features) {
