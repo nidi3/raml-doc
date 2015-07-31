@@ -44,10 +44,9 @@ The available config parameters are the following:
 
 Name | Value
 -----|-------
-ramlLocation | Where the RAML is located, protocols like file:// classpath:// http:// are supported.
+ramlLocation | Where the RAML is located, protocols like `file://`, `classpath://`, `http://` are supported.
 tryOut | Enable sending requests to the server to interactively test the API.
 baseUri | The URL the test requests should be sent to (overrides the baseUri setting in the RAML file).
-baseUriParameters | Set the parameter values of the baseUri in the RAML file. The format is `parameter=value,...`. 
-Special values are `$host` and `$path` which are replaced by the actual host and path of the running servlet.
+baseUriParameters | Set the parameter values of the baseUri in the RAML file. The format is `parameter=value,...`. Special values are `$host` and `$path` which are replaced by the actual host and path of the running servlet.
 
 Another possibility is to subclass RamlDocServlet and override the configuration methods.
