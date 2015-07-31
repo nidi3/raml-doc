@@ -22,14 +22,6 @@ Add this to web.xml
         <param-name>ramlLocation</param-name>
         <param-value>classpath://api/myRaml.raml</param-value>
     </init-param>
-    <init-param>
-        <param-name>tryOut</param-name>
-        <param-value>true</param-value>
-    </init-param>
-    <init-param>
-        <param-name>baseUriParameters</param-name>
-        <param-value>host=$host,path=$path/..</param-value>
-    </init-param>
 </servlet>
 
 <servlet-mapping>
