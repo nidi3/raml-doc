@@ -76,7 +76,7 @@ public class Generator {
         set(main, "template", "/securityScheme/securityScheme");
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
             for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
-                set(main, "param", entry.getValue());
+                set(main, "param", entry);
                 set(main, "relPath", "../.");
                 final File file = new File(target, "security-scheme/" + entry.getKey() + ".html");
                 render(main, file);

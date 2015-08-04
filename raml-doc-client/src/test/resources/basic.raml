@@ -27,6 +27,11 @@ traits:
       headers:
         ah:
 securitySchemes:
+  - simple:
+      description: sdl fjdsdshsdkhjsa klfjh kjdh kjhc kjyhc djkshcöls dhcöds akjchas kjcadsöl chasl
+      describedBy:
+        queryParameters:
+          userId:
   - oauth_1_0:
       description: OAuth 1.0 continues to be supported for all API requests, but OAuth 2.0 is now preferred.
       type: OAuth 1.0
@@ -52,7 +57,7 @@ documentation:
 
 /nix:
   description: nix
-  securedBy: [oauth_1_0]
+  securedBy: [oauth_1_0,simple]
   get:
 /data:
   displayName: TheData

@@ -25,7 +25,7 @@ action(action) ::= <<
             $/response/responses(action.responses)$
 
             $if(baseUri)$
-                <button onclick="rd.tryOut(this,'$action.type$','$baseUri$','$action.resource.uri$'); return false;">
+                <button onclick="rd.tryOut(this,'$action.type$','$baseUri$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
                 Try it!
                 </button>
                 <img src="$relPath$/ajax-loader.gif" class="loader"/>
@@ -44,5 +44,6 @@ securityScheme(ss) ::= <<
     <a href="$relPath$/security-scheme/$ss.name$.html">
         $ss.name$
     </a>
+    &nbsp;
 >>
 

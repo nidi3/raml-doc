@@ -23,8 +23,13 @@ main(raml,template,param,util,relPath,baseUri,download) ::= <<
 
 htmlHead() ::= <<
     <header>
+        <div class="right">
+            <button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
+            <script>rd.initGlobalSecData(document.currentScript);</script>
+        </div>
         <h1><a href="$relPath$/index.html">$raml.title$</a></h1>
         <p>Version $raml.version$</p>
+        <div class="clear"/>
         <p class="left">$raml;format="baseUri"$</p>
         $if(download)$ <a class="right" href="$relPath$/$raml.title$.zip">Download RAML</a> $endif$
         <div class="clear"/>

@@ -57,33 +57,46 @@ var rd = {
         });
         next.style.display = next.style.display === 'block' ? 'none' : 'block';
     },
-    tryOut: function (button, type, baseUri, path) {
+    tryOut: function (button, type, baseUri, path, securitySchemes) {
         showLoader(true);
-        sendRequest(createRequest(baseUri + path), handleResponse);
+        sendRequest(createRequest(baseUri + path, securitySchemes), handleResponse);
 
-        function createRequest(uri) {
-            var i, elem, rest,
+        function createRequest(uri, securitySchemes) {
+            var i, prop,
                 req = {
                     uri: uri, body: null, query: '', header: {}
                 },
-                form = rd.findParent(button, 'form');
-            for (i = 0; i < form.elements.length; i++) {
-                elem = form.elements[i];
-                if (elem.value) {
-                    if (rest = rd.rest(elem.name, 'query_')) {
-                        req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
-                    } else if (rest = rd.rest(elem.name, 'header_')) {
-                        req.header[rest] = elem.value;
-                    } else if (rest = rd.rest(elem.name, 'uri_')) {
-                        req.uri = req.uri.replace('{' + rest + '}', elem.value);
-                    } else if (rd.startsWith(elem.name, 'contentType_http')) {
-                        req.header['Content-Type'] = elem.value;
-                    } else if (rd.startsWith(elem.name, 'body') && rd.findParent(elem, 'tr').style.display === 'table-row') {
-                        req.body = elem.value;
+                form = rd.findParent(button, 'form'),
+                creds = sessionStorage.getItem('creds');
+            if (creds) {
+                creds = JSON.parse(creds);
+                if (securitySchemes.indexOf(creds.name + ',') >= 0) {
+                    for (prop in creds.data) {
+                        setRequestValue(req, {name: prop, value: creds.data[prop]});
                     }
                 }
             }
+            for (i = 0; i < form.elements.length; i++) {
+                setRequestValue(req, form.elements[i]);
+            }
             return req;
+        }
+
+        function setRequestValue(req, elem) {
+            var rest;
+            if (elem.value) {
+                if (rest = rd.rest(elem.name, 'query_')) {
+                    req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
+                } else if (rest = rd.rest(elem.name, 'header_')) {
+                    req.header[rest] = elem.value;
+                } else if (rest = rd.rest(elem.name, 'uri_')) {
+                    req.uri = req.uri.replace('{' + rest + '}', elem.value);
+                } else if (rd.startsWith(elem.name, 'contentType_http')) {
+                    req.header['Content-Type'] = elem.value;
+                } else if (rd.startsWith(elem.name, 'body') && rd.findParent(elem, 'tr').style.display === 'table-row') {
+                    req.body = elem.value;
+                }
+            }
         }
 
         function showLoader(show) {
@@ -100,6 +113,7 @@ var rd = {
         function sendRequest(r, handler) {
             var h, url = interpretUri(r.uri) + '?' + r.query,
                 req = new XMLHttpRequest();
+            url = url.substring(0, url.length - 1);
             req.onreadystatechange = function () {
                 if (req.readyState === 4) {
                     handler(url, req);
@@ -151,5 +165,51 @@ var rd = {
                     }
                 });
         }
+    },
+    login: function (button, name) {
+        var i, elem, data = {},
+            form = rd.findParent(button, 'form');
+        for (i = 0; i < form.elements.length; i++) {
+            elem = form.elements[i];
+            data[elem.name] = elem.value;
+        }
+        sessionStorage.setItem('creds', JSON.stringify({name: name, data: data}));
+        rd.initSecData(button);
+    },
+    logout: function (button, global) {
+        sessionStorage.removeItem('creds');
+        if (global) {
+            rd.initGlobalSecData(button);
+        } else {
+            rd.initSecData(button);
+        }
+    },
+    initSecData: function (script) {
+        var i, elem,
+            form = rd.findParent(script, 'form'),
+            data = sessionStorage.getItem('creds');
+
+        if (data) {
+            data = JSON.parse(data).data;
+        }
+        for (i = 0; i < form.elements.length; i++) {
+            elem = form.elements[i];
+            if (elem.name === 'login') {
+                elem.style.display = data ? 'none' : 'inline';
+            } else if (elem.name === 'logout') {
+                elem.style.display = data ? 'inline' : 'none';
+            }
+            if (data) {
+                elem.value = data[elem.name];
+            }
+        }
+    },
+    initGlobalSecData: function (script) {
+        var data = JSON.parse(sessionStorage.getItem('creds'));
+        rd.doWithChildren(rd.findParent(script, 'div'), function (elem) {
+            if (elem.name === 'logout') {
+                elem.style.display = data ? 'inline' : 'none';
+            }
+        });
     }
 };

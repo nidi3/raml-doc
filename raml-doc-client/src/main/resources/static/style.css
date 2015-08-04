@@ -103,6 +103,11 @@ thead tr {
     padding: .5em;
 }
 
+.securityDetail {
+    padding: .5em;
+    background-color: #ffe5ff;
+}
+
 th {
     padding: .2em;
     border-bottom: 1px solid black;
