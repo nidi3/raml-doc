@@ -1,6 +1,12 @@
-securityScheme(entry) ::= "$secScheme(entry.key,entry.value)$"
+securityScheme(entry) ::= <<
+    $/resource/resourceLinks()$
+    <div class="content">
+        $secScheme(entry.key,entry.value)$
+    </div>
+>>
 
 secScheme(name,scheme) ::= <<
+
     <div class="mainTitle">$name$</div>
 
     <div class="desc">

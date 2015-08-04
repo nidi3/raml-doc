@@ -23,17 +23,23 @@ a, a:visited, a:active, a:hover {
 }
 
 .resources {
-    width: 14em;
+    width: 12em;
     float: left;
     padding-left: 1em;
+    overflow: auto;
 }
 
 .resources li {
+    list-style-type: none;
     line-height: 150%;
 }
 
+.resources ul {
+    padding-left: 0;
+}
+
 .content {
-    margin-left: 15em;
+    margin-left: 13em;
     padding-right: 1em;
 }
 

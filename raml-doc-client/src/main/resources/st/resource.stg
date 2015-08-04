@@ -15,11 +15,14 @@ resourceLink(res) ::= <<
 >>
 
 resource(res) ::= <<
-    <div class="mainTitle">$res.uri$ ($res.displayName$)</div>
+    $/resource/resourceLinks()$
+    <div class="content">
+        <div class="mainTitle">$res.uri$ ($res.displayName$)</div>
 
-    <div class="desc">
-        $res.description;format="markdown"$
+        <div class="desc">
+            $res.description;format="markdown"$
 
-        $res.actions.values:/action/action()$
+            $res.actions.values:/action/action()$
+        </div>
     </div>
 >>
