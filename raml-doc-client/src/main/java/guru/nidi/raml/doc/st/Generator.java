@@ -25,15 +25,22 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  */
 public class Generator {
+    private final File target;
     private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
     private String baseUri;
+
+    public Generator(File target) {
+        this.target = target;
+    }
 
     public Generator features(EnumSet<Feature> features) {
         this.features = features;
@@ -45,9 +52,18 @@ public class Generator {
         return this;
     }
 
-    public void generate(Raml raml, File target) throws IOException {
+    public File getTarget(Raml raml) {
+        return new File(target, raml.getTitle());
+    }
+
+    public void generate(Raml raml) throws IOException {
+        generate(raml, Collections.singletonList(raml));
+    }
+
+    public void generate(Raml raml, List<Raml> ramls) throws IOException {
         final STGroupDir group = new STGroupDir("st", '$', '$');
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
+        group.registerModelAdaptor(Raml.class, new RamlModelAdaptor());
         group.registerRenderer(String.class, new StringRenderer(raml));
         group.registerRenderer(Boolean.class, new BooleanRenderer());
         group.registerRenderer(AbstractParam.class, new ParamRenderer());
@@ -55,18 +71,25 @@ public class Generator {
         group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
         final ST main = group.getInstanceOf("main/main");
         main.add("raml", raml);
-        final Util util = new Util(raml);
-        main.add("util", util);
+        main.add("ramls", ramls);
         main.add("baseUri", features.contains(Feature.TRYOUT) ? baseUri : null);
         main.add("download", features.contains(Feature.DOWNLOAD));
 
+        copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
+                "script.js", "run_prettify.js", "prettify-default.css");
+
+        main.add("template", "/main/docMain");
+        main.add("relPath", "./bla");
+        render(main, new File(target, "index.html"));
+
+        final File target = getTarget(raml);
         target.mkdirs();
         main.add("template", "/main/doc");
         main.add("relPath", ".");
         render(main, new File(target, "index.html"));
 
         set(main, "template", "/resource/resource");
-        for (Resource resource : util.getAllResources()) {
+        for (Resource resource : new RamlModelAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
             set(main, "relPath", depth(resource.getUri()));
             final File file = new File(target, "resource/" + resource.getUri() + ".html");
@@ -83,8 +106,6 @@ public class Generator {
             }
         }
 
-        copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
-                "script.js", "run_prettify.js", "prettify-default.css");
     }
 
     private void copyResource(File base, String... names) throws IOException {

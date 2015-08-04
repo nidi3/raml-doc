@@ -35,13 +35,13 @@ import java.util.concurrent.CountDownLatch;
  */
 public class RamlDocServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(RamlDocServlet.class);
-    private final CountDownLatch latch = new CountDownLatch(1);
-    private File baseDir;
     private static final Map<String, String> mimeTypes = new HashMap<String, String>() {{
         put("html", "text/html");
         put("css", "text/css");
         put("js", "text/javascript");
     }};
+
+    private final CountDownLatch latch = new CountDownLatch(1);
 
     @Override
     public void init() throws ServletException {
@@ -50,10 +50,7 @@ public class RamlDocServlet extends HttpServlet {
                 @Override
                 public void run() {
                     try {
-                        final GeneratorConfig config = createGeneratorConfig();
-                        config.loadRaml();
-                        baseDir = config.getEffectiveTarget();
-                        config.generate();
+                        createGeneratorConfig().generate();
                     } catch (IOException e) {
                         log.error("Could not create RAML documentation", e);
                     } finally {
@@ -66,8 +63,8 @@ public class RamlDocServlet extends HttpServlet {
         }
     }
 
-    protected String ramlLocation() {
-        return getInitParameter("ramlLocation");
+    protected String ramlLocations() {
+        return getInitParameter("ramlLocations");
     }
 
     protected EnumSet<Feature> features() {
@@ -83,12 +80,12 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocation(), docDir(), features(), baseUri(), baseUriParameters());
+        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters());
     }
 
-    protected String getRamlLocation() {
-        final String location = ramlLocation();
-        return location == null ? "classpath://api.raml" : location;
+    protected String getRamlLocations() {
+        final String locations = ramlLocations();
+        return locations == null ? "classpath://api.raml" : locations;
     }
 
     private File docDir() {
@@ -108,7 +105,7 @@ public class RamlDocServlet extends HttpServlet {
                 res.sendRedirect(req.getRequestURL().append("/index.html").toString());
                 return;
             }
-            final File source = new File(baseDir, req.getPathInfo());
+            final File source = new File(docDir(), req.getPathInfo());
             if (!source.exists() || !source.isFile()) {
                 res.sendError(HttpServletResponse.SC_NOT_FOUND);
             } else {

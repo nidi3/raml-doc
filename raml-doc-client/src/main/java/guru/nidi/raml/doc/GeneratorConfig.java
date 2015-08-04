@@ -24,9 +24,7 @@ import guru.nidi.raml.doc.st.Generator;
 import org.raml.model.Raml;
 
 import java.io.*;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -34,15 +32,14 @@ import java.util.zip.ZipOutputStream;
  *
  */
 public class GeneratorConfig {
-    private final String ramlLocation;
+    private final String ramlLocations;
     private final File target;
     private final EnumSet<Feature> features;
     private final String baseUri;
     private final String baseUriParameters;
-    private Raml raml;
 
-    public GeneratorConfig(String ramlLocation, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters) {
-        this.ramlLocation = ramlLocation;
+    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters) {
+        this.ramlLocations = ramlLocations;
         this.target = target;
         this.features = features;
         this.baseUri = baseUri;
@@ -69,28 +66,32 @@ public class GeneratorConfig {
         return baseUri;
     }
 
-    public GeneratorConfig loadRaml() throws IOException {
-        try {
-            final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
-            raml = new RamlLoad(new InterceptingLoader(new UriLoader(), sli)).load(ramlLocation);
+    private List<Raml> loadRamls(Generator generator) throws IOException {
+        final List<Raml> ramls = new ArrayList<>();
+        for (String loc : ramlLocations.split(",")) {
+            try {
+                final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
+                final Raml raml = new RamlLoad(new InterceptingLoader(new UriLoader(), sli)).load(loc);
+                ramls.add(raml);
 //            sli.writeDataToFiles(new File(getEffectiveTarget(), "raml"));
-            sli.writeDataToZip(new File(getEffectiveTarget(), raml.getTitle() + ".zip"));
-            return this;
-        } catch (Exception e) {
-            throw new IOException("Problem loading RAML from '" + ramlLocation + "'", e);
+                sli.writeDataToZip(new File(generator.getTarget(raml), raml.getTitle() + ".zip"));
+            } catch (Exception e) {
+                throw new IOException("Problem loading RAML from '" + loc + "'", e);
+            }
         }
+        return ramls;
     }
 
     public void generate() throws IOException {
-        new Generator()
-                .features(features)
-                .baseUri(getBaseUri(raml))
-                .generate(raml, getEffectiveTarget());
+        final Generator generator = new Generator(target).features(this.features);
+        final List<Raml> ramls = loadRamls(generator);
+        for (final Raml raml : ramls) {
+            generator
+                    .baseUri(getBaseUri(raml))
+                    .generate(raml,ramls);
+        }
     }
 
-    public File getEffectiveTarget() {
-        return new File(target, raml.getTitle());
-    }
 
     private static class SavingLoaderInterceptor extends CachingLoaderInterceptor {
         private final Map<String, byte[]> data = new HashMap<>();

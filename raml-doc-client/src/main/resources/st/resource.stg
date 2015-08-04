@@ -1,17 +1,24 @@
 resourceLinks() ::= <<
     <div class="resources">
-        $util.allResources:/resource/resourceLink()$
+        $ramls:/resource/ramlResourceLink()$
     </div>
 >>
 
-resourceLink(res) ::= <<
+ramlResourceLink(raml) ::= <<
+    <a href="$relPath$/../$raml.title$/index.html">
+        $raml.title$
+    </a>
     <ul>
-        <li>
-        <a href="$relPath$/resource$res.uri$.html">
+        $raml.allResources:/resource/resourceLink(raml.title)$
+    </ul>
+>>
+
+resourceLink(res,link) ::= <<
+    <li>
+        <a href="$relPath$/../$link$/resource$res.uri$.html">
             $res.uri$ ($res.displayName$)
         </a>
-        </li>
-    </ul>
+    </li>
 >>
 
 resource(res) ::= <<

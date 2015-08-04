@@ -35,7 +35,7 @@ a, a:visited, a:active, a:hover {
 }
 
 .resources ul {
-    padding-left: 0;
+    padding-left: 1em;
 }
 
 .content {

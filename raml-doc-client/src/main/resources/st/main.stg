@@ -1,17 +1,17 @@
-main(raml,template,param,util,relPath,baseUri,download) ::= <<
+main(raml,ramls,template,param,util,relPath,baseUri,download) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8"/>
-        <link href="$relPath$/style.css" rel="stylesheet">
-        <link href="$relPath$/prettify-default.css" rel="stylesheet">
-        <link href="$relPath$/favicon.ico" rel="icon" type="image/png">
+        <link href="$relPath$/../style.css" rel="stylesheet">
+        <link href="$relPath$/../prettify-default.css" rel="stylesheet">
+        <link href="$relPath$/../favicon.ico" rel="icon" type="image/png">
         <title>API - $raml.title$</title>
     </head>
 
     <body>
-    <script src="$relPath$/script.js"></script>
-    <script src="$relPath$/run_prettify.js"></script>
+    <script src="$relPath$/../script.js"></script>
+    <script src="$relPath$/../run_prettify.js"></script>
 
     $htmlHead()$
 
@@ -47,6 +47,10 @@ doc(nix) ::= <<
     <div class="content">
         $raml.documentation:ramlDoc()$
     </div>
+>>
+
+docMain(nix) ::= <<
+    $/resource/resourceLinks()$
 >>
 
 line(title,value) ::= <<

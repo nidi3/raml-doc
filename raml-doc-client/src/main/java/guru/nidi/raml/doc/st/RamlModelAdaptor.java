@@ -17,6 +17,10 @@ package guru.nidi.raml.doc.st;
 
 import org.raml.model.Raml;
 import org.raml.model.Resource;
+import org.stringtemplate.v4.Interpreter;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.misc.ObjectModelAdaptor;
+import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +28,16 @@ import java.util.List;
 /**
  *
  */
-class Util {
-    private final Raml raml;
-
-    public Util(Raml raml) {
-        this.raml = raml;
+class RamlModelAdaptor extends ObjectModelAdaptor {
+    @Override
+    public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
+        if ("allResources".equals(propertyName)) {
+            return getAllResources((Raml) o);
+        }
+        return super.getProperty(interp, self, o, property, propertyName);
     }
 
-    public List<Resource> getAllResources() {
+    public List<Resource> getAllResources(Raml raml) {
         final List<Resource> res = new ArrayList<>();
         for (Resource r : raml.getResources().values()) {
             res.add(r);
@@ -46,6 +52,5 @@ class Util {
             addSubResources(r, res);
         }
     }
-
 
 }
