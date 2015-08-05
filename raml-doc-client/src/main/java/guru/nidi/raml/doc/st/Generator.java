@@ -80,6 +80,7 @@ public class Generator {
         main.add("baseUri", features.contains(Feature.TRYOUT) ? baseUri : null);
         main.add("download", features.contains(Feature.DOWNLOAD));
 
+        target.mkdirs();
         copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "prettify-default.css");
 
