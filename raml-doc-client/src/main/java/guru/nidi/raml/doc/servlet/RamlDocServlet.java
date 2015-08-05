@@ -71,6 +71,10 @@ public class RamlDocServlet extends HttpServlet {
         return Feature.parse(getInitParameter("features"));
     }
 
+    protected String parentTitle() {
+        return getInitParameter("parentTitle");
+    }
+
     protected String baseUri() {
         return getInitParameter("baseUri");
     }
@@ -80,7 +84,7 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters());
+        return new GeneratorConfig(getRamlLocations(), docDir(), features(), parentTitle(), baseUri(), baseUriParameters());
     }
 
     protected String getRamlLocations() {

@@ -27,6 +27,9 @@ class RamlRenderer implements AttributeRenderer {
     @Override
     public String toString(Object o, String formatString, Locale locale) {
         final Raml raml = (Raml) o;
+        if (raml.getBaseUri() == null) {
+            return "";
+        }
         switch (formatString) {
             case "baseUri":
                 if (raml.getProtocols() == null || raml.getProtocols().isEmpty()) {

@@ -35,13 +35,15 @@ public class GeneratorConfig {
     private final String ramlLocations;
     private final File target;
     private final EnumSet<Feature> features;
+    private final String parentTitle;
     private final String baseUri;
     private final String baseUriParameters;
 
-    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters) {
+    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String parentTitle, String baseUri, String baseUriParameters) {
         this.ramlLocations = ramlLocations;
         this.target = target;
         this.features = features;
+        this.parentTitle = parentTitle;
         this.baseUri = baseUri;
         this.baseUriParameters = baseUriParameters;
     }
@@ -87,8 +89,9 @@ public class GeneratorConfig {
         final List<Raml> ramls = loadRamls(generator);
         for (final Raml raml : ramls) {
             generator
+                    .parentTitle(parentTitle)
                     .baseUri(getBaseUri(raml))
-                    .generate(raml,ramls);
+                    .generate(raml, ramls);
         }
     }
 

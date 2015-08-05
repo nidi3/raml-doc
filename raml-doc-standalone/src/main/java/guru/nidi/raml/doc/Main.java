@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             final GeneratorConfig config = new OptionParser().parse(args);
-            config.loadRaml().generate();
+            config.generate();
         } catch (ParseException e) {
             new OptionParser().showHelp();
             System.exit(1);

@@ -37,6 +37,7 @@ public class Generator {
     private final File target;
     private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
     private String baseUri;
+    private String parentTitle;
 
     public Generator(File target) {
         this.target = target;
@@ -49,6 +50,11 @@ public class Generator {
 
     public Generator baseUri(String baseUri) {
         this.baseUri = baseUri;
+        return this;
+    }
+
+    public Generator parentTitle(String parentTitle) {
+        this.parentTitle = parentTitle;
         return this;
     }
 
@@ -70,7 +76,6 @@ public class Generator {
         group.registerRenderer(Raml.class, new RamlRenderer());
         group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
         final ST main = group.getInstanceOf("main/main");
-        main.add("raml", raml);
         main.add("ramls", ramls);
         main.add("baseUri", features.contains(Feature.TRYOUT) ? baseUri : null);
         main.add("download", features.contains(Feature.DOWNLOAD));
@@ -78,14 +83,18 @@ public class Generator {
         copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "prettify-default.css");
 
+        final Raml parent = new Raml();
+        parent.setTitle(parentTitle == null ? ramls.get(0).getTitle() : parentTitle);
+        main.add("raml", parent);
         main.add("template", "/main/docMain");
         main.add("relPath", "./bla");
         render(main, new File(target, "index.html"));
 
         final File target = getTarget(raml);
         target.mkdirs();
-        main.add("template", "/main/doc");
-        main.add("relPath", ".");
+        set(main, "raml", raml);
+        set(main, "template", "/main/doc");
+        set(main, "relPath", ".");
         render(main, new File(target, "index.html"));
 
         set(main, "template", "/resource/resource");
