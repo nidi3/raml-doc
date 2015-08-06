@@ -25,10 +25,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -46,6 +43,10 @@ public class Generator {
     public Generator features(EnumSet<Feature> features) {
         this.features = features;
         return this;
+    }
+
+    public Generator features(Feature... features) {
+        return features(EnumSet.copyOf(Arrays.asList(features)));
     }
 
     public Generator baseUri(String baseUri) {
@@ -69,15 +70,19 @@ public class Generator {
     public void generate(Raml raml, List<Raml> ramls) throws IOException {
         final STGroupDir group = new STGroupDir("st", '$', '$');
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
-        group.registerModelAdaptor(Raml.class, new RamlModelAdaptor());
+        group.registerModelAdaptor(Raml.class, new RamlAdaptor());
+        group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
+        group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
+
         group.registerRenderer(String.class, new StringRenderer(raml));
         group.registerRenderer(Boolean.class, new BooleanRenderer());
         group.registerRenderer(AbstractParam.class, new ParamRenderer());
         group.registerRenderer(Raml.class, new RamlRenderer());
-        group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
         final ST main = group.getInstanceOf("main/main");
         main.add("ramls", ramls);
-        main.add("baseUri", features.contains(Feature.TRYOUT) ? baseUri : null);
+
+        final String realBaseUri = baseUri != null ? baseUri : raml.getBaseUri();
+        main.add("baseUri", features.contains(Feature.TRYOUT) ? realBaseUri : null);
         main.add("download", features.contains(Feature.DOWNLOAD));
 
         target.mkdirs();
@@ -99,7 +104,7 @@ public class Generator {
         render(main, new File(target, "index.html"));
 
         set(main, "template", "/resource/resource");
-        for (Resource resource : new RamlModelAdaptor().getAllResources(raml)) {
+        for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
             set(main, "relPath", depth(resource.getUri()));
             final File file = new File(target, "resource/" + resource.getUri() + ".html");

@@ -140,7 +140,7 @@ var rd = {
                 endPathPos = href.indexOf('/resource/'),
                 host = href.substring(hostPos + 3, pathPos),
                 path = href.substring(pathPos + 1, endPathPos);
-            return uri.replace('$host', host).replace('$path', path);
+            return uri.replace('$host', host).replace('$path', path+'/../..');
         }
 
         function handleResponse(url, req) {

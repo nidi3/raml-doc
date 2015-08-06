@@ -78,7 +78,7 @@ public class OptionParser {
     }
 
     protected OptionComparator optionComparator() {
-        return new OptionComparator("rtimbp");
+        return new OptionComparator("rtfmbp");
     }
 
     protected String[] expandArgs(String[] args) {

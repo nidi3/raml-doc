@@ -19,6 +19,7 @@ import com.github.fge.jsonschema.core.load.SchemaLoader;
 import com.github.fge.jsonschema.core.tree.SchemaTree;
 import guru.nidi.loader.basic.FileLoader;
 import guru.nidi.loader.use.raml.RamlLoad;
+import guru.nidi.raml.doc.st.Feature;
 import guru.nidi.raml.doc.st.Generator;
 import org.junit.Test;
 

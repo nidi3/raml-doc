@@ -25,9 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -45,6 +43,10 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        final List<String> unknown = unknownParameters();
+        if (!unknown.isEmpty()) {
+            log.warn("Unknown init-parameters: " + unknown);
+        }
         if (features().contains(Feature.ONLINE)) {
             final Thread creator = new Thread(new Runnable() {
                 @Override
@@ -61,6 +63,22 @@ public class RamlDocServlet extends HttpServlet {
             creator.setDaemon(true);
             creator.start();
         }
+    }
+
+    protected List<String> knownParameters() {
+        return Arrays.asList("ramlLocations", "features", "parentTitle", "baseUri", "baseUriParameters");
+    }
+
+    protected List<String> unknownParameters() {
+        final List<String> res = new ArrayList<>();
+        final Enumeration<String> names = getInitParameterNames();
+        while (names.hasMoreElements()) {
+            final String name = names.nextElement();
+            if (!knownParameters().contains(name)) {
+                res.add(name);
+            }
+        }
+        return res;
     }
 
     protected String ramlLocations() {

@@ -16,7 +16,7 @@ ramlResourceLink(raml) ::= <<
 resourceLink(res,link) ::= <<
     <li>
         <a href="$relPath$/../$link$/resource$res.uri$.html">
-            $res.uri$ ($res.displayName$)
+            $res.uri$
         </a>
     </li>
 >>
@@ -24,7 +24,7 @@ resourceLink(res,link) ::= <<
 resource(res) ::= <<
     $/resource/resourceLinks()$
     <div class="content">
-        <div class="mainTitle">$res.uri$ ($res.displayName$)</div>
+        <div class="mainTitle">$res.uri$</div>
 
         <div class="desc">
             $res.description;format="markdown"$

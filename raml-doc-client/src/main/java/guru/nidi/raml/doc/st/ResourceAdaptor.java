@@ -15,41 +15,34 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.raml.model.Raml;
 import org.raml.model.Resource;
+import org.raml.model.parameter.UriParameter;
 import org.stringtemplate.v4.Interpreter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  */
-class RamlModelAdaptor extends ObjectModelAdaptor {
+class ResourceAdaptor extends ObjectModelAdaptor {
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        if ("allResources".equals(propertyName)) {
-            return getAllResources((Raml) o);
+        if ("resolvedUriParameters".equals(propertyName)) {
+            final Map<String, UriParameter> params = new HashMap<>();
+            getAllResources((Resource) o, params);
+            return params;
         }
         return super.getProperty(interp, self, o, property, propertyName);
     }
 
-    public List<Resource> getAllResources(Raml raml) {
-        final List<Resource> res = new ArrayList<>();
-        for (Resource r : raml.getResources().values()) {
-            res.add(r);
-            addSubResources(r, res);
-        }
-        return res;
-    }
-
-    private void addSubResources(Resource resource, List<Resource> res) {
-        for (Resource r : resource.getResources().values()) {
-            res.add(r);
-            addSubResources(r, res);
+    public void getAllResources(Resource resource, Map<String, UriParameter> res) {
+        res.putAll(resource.getUriParameters());
+        if (resource.getParentResource() != null) {
+            getAllResources(resource.getParentResource(), res);
         }
     }
 

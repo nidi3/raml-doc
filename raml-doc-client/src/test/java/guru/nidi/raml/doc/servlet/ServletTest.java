@@ -72,7 +72,7 @@ public class ServletTest {
         wrapper.setName("app");
         wrapper.addInitParameter("ramlLocations", "classpath://basic.raml,classpath://second.raml");
         wrapper.addInitParameter("features", "online,tryout,download");
-        wrapper.addInitParameter("baseUriParameters", "host=$host/$path/../..,path=mirror");
+        wrapper.addInitParameter("baseUriParameters", "host=$host/$path,path=mirror");
         wrapper.addInitParameter("parentTitle", "API suite");
         ctx.addChild(wrapper);
         ctx.addServletMapping("/api/*", "app");

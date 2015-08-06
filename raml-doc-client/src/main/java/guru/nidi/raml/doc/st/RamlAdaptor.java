@@ -15,41 +15,42 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.raml.model.Action;
 import org.raml.model.Raml;
-import org.raml.model.SecurityReference;
+import org.raml.model.Resource;
 import org.stringtemplate.v4.Interpreter;
-import org.stringtemplate.v4.ModelAdaptor;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  */
-class ActionAdaptor extends ObjectModelAdaptor {
-    private final Raml raml;
-
-    ActionAdaptor(Raml raml) {
-        this.raml = raml;
-    }
-
+class RamlAdaptor extends ObjectModelAdaptor {
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        if ("securitySchemes".equals(propertyName)) {
-            final Action a = (Action) o;
-            if (a.getSecuredBy() != null && !a.getSecuredBy().isEmpty()) {
-                return a.getSecuredBy();
-            }
-            if (a.getResource().getSecuredBy() != null && !a.getResource().getSecuredBy().isEmpty()) {
-                return a.getResource().getSecuredBy();
-            }
-            if (raml.getSecuredBy() != null && !raml.getSecuredBy().isEmpty()) {
-                return raml.getSecuredBy();
-            }
+        if ("allResources".equals(propertyName)) {
+            return getAllResources((Raml) o);
         }
         return super.getProperty(interp, self, o, property, propertyName);
     }
+
+    public List<Resource> getAllResources(Raml raml) {
+        final List<Resource> res = new ArrayList<>();
+        for (Resource r : raml.getResources().values()) {
+            res.add(r);
+            addSubResources(r, res);
+        }
+        return res;
+    }
+
+    private void addSubResources(Resource resource, List<Resource> res) {
+        for (Resource r : resource.getResources().values()) {
+            res.add(r);
+            addSubResources(r, res);
+        }
+    }
+
 }
