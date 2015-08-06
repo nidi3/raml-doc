@@ -56,7 +56,7 @@ public class OptionParser {
     protected Options createOptions() {
         return new Options()
                 .addOption(withDescription("The RAML resource\n" +
-                        "Format: classpath://, file://,\n" +
+                        "Format: filename,\n" +
                         "[user:pass@]http://, [user:pass@]https://,\n" +
                         "[token@]github://user/project/file, user:pass@apiportal://").isRequired(true).withArgName("URL").hasArg(true).create('r'))
                 .addOption(withDescription("Target directory to write the output\nDefault: current directory").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
