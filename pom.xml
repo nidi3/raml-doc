@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>guru.nidi.maven.plugins</groupId>
                 <artifactId>tools-maven-plugin</artifactId>
-                <version>1.0.10-SNAPSHOT</version>
+                <version>1.0.10</version>
                 <executions>
                     <execution>
                         <goals>
