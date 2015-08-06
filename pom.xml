@@ -31,11 +31,28 @@
         <tag>HEAD</tag>
     </scm>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>guru.nidi.maven.plugins</groupId>
+                <artifactId>tools-maven-plugin</artifactId>
+                <version>1.0.10-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>backport7to6</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>guru.nidi.raml</groupId>
             <artifactId>raml-loader</artifactId>
-            <version>0.0.4</version>
+            <version>0.0.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>
