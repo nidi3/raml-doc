@@ -25,6 +25,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import static org.pegdown.Extensions.HARDWRAPS;
@@ -46,8 +47,9 @@ class StringRenderer implements AttributeRenderer {
         invocable = (Invocable) engine;
         try {
             engine.eval("var window=this;");
-            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/beautify.js")));
-        } catch (ScriptException e) {
+            //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
+            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/beautify.js"),"utf-8"));
+        } catch (ScriptException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }

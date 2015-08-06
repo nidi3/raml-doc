@@ -112,7 +112,8 @@ public class RamlDocServlet extends HttpServlet {
 
     private File docDir() {
         final File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        return new File(tempDir, "raml-doc/" + getServletName());
+        final String contextPath = getServletContext().getContextPath();
+        return new File(tempDir, "raml-doc/" + (contextPath.length() == 0 ? "_ROOT" : contextPath));
     }
 
     @Override

@@ -589,7 +589,7 @@
         }
 
         function get_token(offset) {
-            var index = token_pos + (offset || 0);
+            var index = token_pos + (offset | 0);
             return (index < 0 || index >= tokens.length) ? null : tokens[index];
         }
 
@@ -1517,7 +1517,7 @@
         this.type = type;
         this.text = text;
         this.comments_before = [];
-        this.newlines = newlines || 0;
+        this.newlines = newlines | 0;
         this.wanted_newline = newlines > 0;
         this.whitespace_before = whitespace_before || '';
         this.parent = null;
