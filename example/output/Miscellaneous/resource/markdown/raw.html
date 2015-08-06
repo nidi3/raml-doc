@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<link href="../.././../style.css" rel="stylesheet">
+<link href="../.././../prettify-default.css" rel="stylesheet">
+<link href="../.././../favicon.ico" rel="icon" type="image/png">
+<title>API - Miscellaneous</title>
+</head>
+
+<body>
+<script src="../.././../script.js"></script>
+<script src="../.././../run_prettify.js"></script>
+
+<header>
+<div class="right">
+<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
+<script>rd.initGlobalSecData(document.currentScript);</script>
+</div>
+<h1><a href="../.././index.html">Miscellaneous</a></h1>
+<p>Version v1</p>
+<div class="clear"/>
+<p class="left">https:/api.github.com</p>
+ <a class="right" href="../.././Miscellaneous.zip">Download RAML</a> 
+<div class="clear"/>
+</header>
+
+<div class="resources">
+<a href="../.././../Miscellaneous/index.html">
+Miscellaneous
+</a>
+<ul>
+<li>
+<a href="../.././../Miscellaneous/resource/emojis.html">
+/emojis
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/gitignore/templates.html">
+/gitignore/templates
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html">
+/gitignore/templates/{language}
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/markdown.html">
+/markdown
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/markdown/raw.html">
+/markdown/raw
+</a>
+</li>
+</ul><a href="../.././../Search/index.html">
+Search
+</a>
+<ul>
+<li>
+<a href="../.././../Search/resource/search/repositories.html">
+/search/repositories
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/code.html">
+/search/code
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/issues.html">
+/search/issues
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/users.html">
+/search/users
+</a>
+</li>
+</ul><a href="../.././../Users/index.html">
+Users
+</a>
+<ul>
+<li>
+<a href="../.././../Users/resource/users.html">
+/users
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}.html">
+/users/{username}
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/followers.html">
+/users/{username}/followers
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/following.html">
+/users/{username}/following
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/following/{target_user}.html">
+/users/{username}/following/{target_user}
+</a>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="mainTitle">/markdown/raw</div>
+
+<div class="desc">
+<p>Render a Markdown document in raw mode</p><p>The raw API is not JSON-based. It takes a Markdown document as plaintext (text/plain or text/x-markdown) and renders it as plain Markdown without a repository context (just like a README.md file is rendered – this is the simplest way to preview a readme online).</p>
+
+<div class="actionHeader bg_POST border_POST" onclick="rd.showActionDetail(this)">
+<div class="badge badge_POST">
+POST
+</div>
+<div class="actionDesc">
+</div>
+</div>
+
+<div class="actionDetail bg_POST">
+<div class="mimeTitle">Request</div>
+<form>
+<div class="desc">
+
+<table class="params">
+<thead>
+<tr>
+<th>Name</th>
+ <th>Value</th> 
+<th class="paramDesc">Description</th>
+<th>Type</th>
+<th>Constraint</th>
+<th class="paramBool">Req</th>
+<th class="paramBool">Rep</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan=" 8 ">
+<span class="paramTitle">Body</span>
+</td>
+</tr>
+<tr class="bodyType text/plain">
+<td></td>
+<td colspan="2" style="vertical-align:top">
+<textarea name="body"></textarea>
+<select name="contentType_https:/api.github.com" onchange="rd.showTrWithId(this,this.value)">
+<option>text/plain</option><option>text/x-markdown</option>
+</select>
+</td>
+<td colspan="5">
+<pre class="code prettyprint"></pre>
+</td>
+</tr>
+<tr class="bodyType text/x-markdown">
+<td></td>
+<td colspan="2" style="vertical-align:top">
+<textarea name="body"></textarea>
+<select name="contentType_https:/api.github.com" onchange="rd.showTrWithId(this,this.value)">
+<option>text/plain</option><option>text/x-markdown</option>
+</select>
+</td>
+<td colspan="5">
+<pre class="code prettyprint"></pre>
+</td>
+</tr>
+
+<script>rd.showTrWithId(document.currentScript,'text/plain');</script>
+
+</tbody>
+</table>
+</div>
+
+<div class="bodyTitle">Responses</div>
+<div class="desc">
+<table class="params">
+<thead>
+<tr>
+<th>Code</th>
+<th class="paramDesc">Description</th>
+<th>Headers</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td></td>
+<td></td>
+<td>
+<div class="body application/json">
+<pre class="code prettyprint"></pre>
+</div>
+<select name="contentType_false" onchange="rd.showBodyWithId(this,this.value)">
+<option>application/json</option>
+</select>
+<script>rd.showBodyWithId(document.currentScript,'application/json');</script>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<button onclick="rd.tryOut(this,'POST','https:/api.github.com','/markdown/raw',''); return false;">
+Try it!
+</button>
+<img src="../.././../ajax-loader.gif" class="loader"/>
+<div class="response">
+Request URL <pre name="requestUrl" class="tryData border_POST"> </pre>
+Response Code <pre name="responseCode" class="tryData border_POST"> </pre>
+Response Headers <pre name="responseHeaders" class="tryData border_POST"> </pre>
+Response Body <pre name="responseBody" class="tryData border_POST"> </pre>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+</body>
+</html>

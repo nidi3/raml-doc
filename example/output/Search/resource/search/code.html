@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<link href="../.././../style.css" rel="stylesheet">
+<link href="../.././../prettify-default.css" rel="stylesheet">
+<link href="../.././../favicon.ico" rel="icon" type="image/png">
+<title>API - Search</title>
+</head>
+
+<body>
+<script src="../.././../script.js"></script>
+<script src="../.././../run_prettify.js"></script>
+
+<header>
+<div class="right">
+<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
+<script>rd.initGlobalSecData(document.currentScript);</script>
+</div>
+<h1><a href="../.././index.html">Search</a></h1>
+<p>Version v1</p>
+<div class="clear"/>
+<p class="left">https:/api.github.com</p>
+ <a class="right" href="../.././Search.zip">Download RAML</a> 
+<div class="clear"/>
+</header>
+
+<div class="resources">
+<a href="../.././../Miscellaneous/index.html">
+Miscellaneous
+</a>
+<ul>
+<li>
+<a href="../.././../Miscellaneous/resource/emojis.html">
+/emojis
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/gitignore/templates.html">
+/gitignore/templates
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html">
+/gitignore/templates/{language}
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/markdown.html">
+/markdown
+</a>
+</li><li>
+<a href="../.././../Miscellaneous/resource/markdown/raw.html">
+/markdown/raw
+</a>
+</li>
+</ul><a href="../.././../Search/index.html">
+Search
+</a>
+<ul>
+<li>
+<a href="../.././../Search/resource/search/repositories.html">
+/search/repositories
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/code.html">
+/search/code
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/issues.html">
+/search/issues
+</a>
+</li><li>
+<a href="../.././../Search/resource/search/users.html">
+/search/users
+</a>
+</li>
+</ul><a href="../.././../Users/index.html">
+Users
+</a>
+<ul>
+<li>
+<a href="../.././../Users/resource/users.html">
+/users
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}.html">
+/users/{username}
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/followers.html">
+/users/{username}/followers
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/following.html">
+/users/{username}/following
+</a>
+</li><li>
+<a href="../.././../Users/resource/users/{username}/following/{target_user}.html">
+/users/{username}/following/{target_user}
+</a>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="mainTitle">/search/code</div>
+
+<div class="desc">
+<h2>Search code</h2><p>Find file contents via various criteria. (This method returns up to 100 results per page.)</p><h3>Considerations for code search</h3><p>Due to the complexity of searching code, there are a few restrictions on how searches are performed:</p>
+<ul>
+  <li>Only the default branch is considered. In most cases, this will be the master branch.</li>
+  <li>Only files smaller than 384 KB are searchable.</li>
+  <li>You must always include at least one search term when searching source code. For example, searching for language:go is not valid, while amazing language:go is.</li>
+</ul><p>The <code>q</code> search term can also contain any combination of the supported code search qualifiers as described by the in-browser code search documentation and search syntax documentation:</p>
+<ul>
+  <li><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to the file contents (file), the file path (path), or both.</li>
+  <li><code>language</code> Searches code based on the language it’s written in.</li>
+  <li><code>fork</code> Specifies that code from forked repositories should be searched (true). Repository forks will not be searchable unless the fork has more stars than the parent repository.</li>
+  <li><code>size</code> Finds files that match a certain size (in bytes).</li>
+  <li><code>path</code> Specifies the path prefix that the resulting file must be under.</li>
+  <li><code>filename</code> Matches files by a substring of the filename.</li>
+  <li><code>extension</code> Matches files with a certain extension after a dot.</li>
+  <li><code>user</code> or <code>repo</code> Limits searches to a specific user or repository.</li>
+</ul>
+
+<div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">
+<div class="badge badge_GET">
+GET
+</div>
+<div class="actionDesc">
+</div>
+</div>
+
+<div class="actionDetail bg_GET">
+<div class="mimeTitle">Request</div>
+<form>
+<div class="desc">
+
+<table class="params">
+<thead>
+<tr>
+<th>Name</th>
+ <th>Value</th> 
+<th class="paramDesc">Description</th>
+<th>Type</th>
+<th>Constraint</th>
+<th class="paramBool">Req</th>
+<th class="paramBool">Rep</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan=" 8 ">
+<span class="paramTitle">Query parameters</span>
+</td>
+</tr>
+<tr>
+<td> q </td>
+ <td><input name="query_q"></td> 
+<td><p>The search terms.</p>
+<p> Example: addClass+in:file+language:js+repo:jquery/jquery </p>
+
+</td>
+<td> STRING </td>
+<td>
+</td>
+<td class="center"></td>
+<td class="center"></td>
+<td></td>
+</tr> <tr>
+<td> sort </td>
+ <td><input name="query_sort"></td> 
+<td><p>The sort field. Can only be <code>indexed</code>, which indicates how recently a file has been indexed by the GitHub search infrastructure. Default: results are sorted by best match.</p>
+</td>
+<td> STRING </td>
+<td>
+</td>
+<td class="center"></td>
+<td class="center"></td>
+<td></td>
+</tr> <tr>
+<td> order </td>
+ <td><input name="query_order"></td> 
+<td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p>
+</td>
+<td> STRING </td>
+<td>
+</td>
+<td class="center"></td>
+<td class="center"></td>
+<td>desc</td>
+</tr> 
+
+</tbody>
+</table>
+</div>
+
+<div class="bodyTitle">Responses</div>
+<div class="desc">
+<table class="params">
+<thead>
+<tr>
+<th>Code</th>
+<th class="paramDesc">Description</th>
+<th>Headers</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td></td>
+<td></td>
+<td>
+<div class="body application/json">
+<pre class="code prettyprint"></pre>
+ <p>Example:</p><pre class="code prettyprint">{
+    "total_count": 7,
+    "incomplete_results": false,
+    "items": [{
+        "name": "classes.js",
+        "path": "src/attributes/classes.js",
+        "sha": "d7212f9dee2dcc18f084d7df8f417b80846ded5a",
+        "url": "https://api.github.com/repositories/167174/contents/src/attributes/classes.js?ref=825ac3773694e0cd23ee74895fd5aeb535b27da4",
+        "git_url": "https://api.github.com/repositories/167174/git/blobs/d7212f9dee2dcc18f084d7df8f417b80846ded5a",
+        "html_url": "https://github.com/jquery/jquery/blob/825ac3773694e0cd23ee74895fd5aeb535b27da4/src/attributes/classes.js",
+        "repository": {
+            "id": 167174,
+            "name": "jquery",
+            "full_name": "jquery/jquery",
+            "owner": {
+                "login": "jquery",
+                "id": 70142,
+                "avatar_url": "https://0.gravatar.com/avatar/6906f317a4733f4379b06c32229ef02f?d=https%3A%2F%2Fidenticons.github.com%2Ff426f04f2f9813718fb806b30e0093de.png",
+                "gravatar_id": "",
+                "url": "https://api.github.com/users/jquery",
+                "html_url": "https://github.com/jquery",
+                "followers_url": "https://api.github.com/users/jquery/followers",
+                "following_url": "https://api.github.com/users/jquery/following{/other_user}",
+                "gists_url": "https://api.github.com/users/jquery/gists{/gist_id}",
+                "starred_url": "https://api.github.com/users/jquery/starred{/owner}{/repo}",
+                "subscriptions_url": "https://api.github.com/users/jquery/subscriptions",
+                "organizations_url": "https://api.github.com/users/jquery/orgs",
+                "repos_url": "https://api.github.com/users/jquery/repos",
+                "events_url": "https://api.github.com/users/jquery/events{/privacy}",
+                "received_events_url": "https://api.github.com/users/jquery/received_events",
+                "type": "Organization",
+                "site_admin": false
+            },
+            "private": false,
+            "html_url": "https://github.com/jquery/jquery",
+            "description": "jQuery JavaScript Library",
+            "fork": false,
+            "url": "https://api.github.com/repos/jquery/jquery",
+            "forks_url": "https://api.github.com/repos/jquery/jquery/forks",
+            "keys_url": "https://api.github.com/repos/jquery/jquery/keys{/key_id}",
+            "collaborators_url": "https://api.github.com/repos/jquery/jquery/collaborators{/collaborator}",
+            "teams_url": "https://api.github.com/repos/jquery/jquery/teams",
+            "hooks_url": "https://api.github.com/repos/jquery/jquery/hooks",
+            "issue_events_url": "https://api.github.com/repos/jquery/jquery/issues/events{/number}",
+            "events_url": "https://api.github.com/repos/jquery/jquery/events",
+            "assignees_url": "https://api.github.com/repos/jquery/jquery/assignees{/user}",
+            "branches_url": "https://api.github.com/repos/jquery/jquery/branches{/branch}",
+            "tags_url": "https://api.github.com/repos/jquery/jquery/tags",
+            "blobs_url": "https://api.github.com/repos/jquery/jquery/git/blobs{/sha}",
+            "git_tags_url": "https://api.github.com/repos/jquery/jquery/git/tags{/sha}",
+            "git_refs_url": "https://api.github.com/repos/jquery/jquery/git/refs{/sha}",
+            "trees_url": "https://api.github.com/repos/jquery/jquery/git/trees{/sha}",
+            "statuses_url": "https://api.github.com/repos/jquery/jquery/statuses/{sha}",
+            "languages_url": "https://api.github.com/repos/jquery/jquery/languages",
+            "stargazers_url": "https://api.github.com/repos/jquery/jquery/stargazers",
+            "contributors_url": "https://api.github.com/repos/jquery/jquery/contributors",
+            "subscribers_url": "https://api.github.com/repos/jquery/jquery/subscribers",
+            "subscription_url": "https://api.github.com/repos/jquery/jquery/subscription",
+            "commits_url": "https://api.github.com/repos/jquery/jquery/commits{/sha}",
+            "git_commits_url": "https://api.github.com/repos/jquery/jquery/git/commits{/sha}",
+            "comments_url": "https://api.github.com/repos/jquery/jquery/comments{/number}",
+            "issue_comment_url": "https://api.github.com/repos/jquery/jquery/issues/comments/{number}",
+            "contents_url": "https://api.github.com/repos/jquery/jquery/contents/{+path}",
+            "compare_url": "https://api.github.com/repos/jquery/jquery/compare/{base}...{head}",
+            "merges_url": "https://api.github.com/repos/jquery/jquery/merges",
+            "archive_url": "https://api.github.com/repos/jquery/jquery/{archive_format}{/ref}",
+            "downloads_url": "https://api.github.com/repos/jquery/jquery/downloads",
+            "issues_url": "https://api.github.com/repos/jquery/jquery/issues{/number}",
+            "pulls_url": "https://api.github.com/repos/jquery/jquery/pulls{/number}",
+            "milestones_url": "https://api.github.com/repos/jquery/jquery/milestones{/number}",
+            "notifications_url": "https://api.github.com/repos/jquery/jquery/notifications{?since,all,participating}",
+            "labels_url": "https://api.github.com/repos/jquery/jquery/labels{/name}"
+        },
+        "score": 0.5269679
+    }]
+} </pre> 
+</div>
+<select name="contentType_false" onchange="rd.showBodyWithId(this,this.value)">
+<option>application/json</option>
+</select>
+<script>rd.showBodyWithId(document.currentScript,'application/json');</script>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<button onclick="rd.tryOut(this,'GET','https:/api.github.com','/search/code',''); return false;">
+Try it!
+</button>
+<img src="../.././../ajax-loader.gif" class="loader"/>
+<div class="response">
+Request URL <pre name="requestUrl" class="tryData border_GET"> </pre>
+Response Code <pre name="responseCode" class="tryData border_GET"> </pre>
+Response Headers <pre name="responseHeaders" class="tryData border_GET"> </pre>
+Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+</body>
+</html>

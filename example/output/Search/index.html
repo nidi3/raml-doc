@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<link href="./../style.css" rel="stylesheet">
+<link href="./../prettify-default.css" rel="stylesheet">
+<link href="./../favicon.ico" rel="icon" type="image/png">
+<title>API - Search</title>
+</head>
+
+<body>
+<script src="./../script.js"></script>
+<script src="./../run_prettify.js"></script>
+
+<header>
+<div class="right">
+<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
+<script>rd.initGlobalSecData(document.currentScript);</script>
+</div>
+<h1><a href="./index.html">Search</a></h1>
+<p>Version v1</p>
+<div class="clear"/>
+<p class="left">https:/api.github.com</p>
+ <a class="right" href="./Search.zip">Download RAML</a> 
+<div class="clear"/>
+</header>
+
+<div class="resources">
+<a href="./../Miscellaneous/index.html">
+Miscellaneous
+</a>
+<ul>
+<li>
+<a href="./../Miscellaneous/resource/emojis.html">
+/emojis
+</a>
+</li><li>
+<a href="./../Miscellaneous/resource/gitignore/templates.html">
+/gitignore/templates
+</a>
+</li><li>
+<a href="./../Miscellaneous/resource/gitignore/templates/{language}.html">
+/gitignore/templates/{language}
+</a>
+</li><li>
+<a href="./../Miscellaneous/resource/markdown.html">
+/markdown
+</a>
+</li><li>
+<a href="./../Miscellaneous/resource/markdown/raw.html">
+/markdown/raw
+</a>
+</li>
+</ul><a href="./../Search/index.html">
+Search
+</a>
+<ul>
+<li>
+<a href="./../Search/resource/search/repositories.html">
+/search/repositories
+</a>
+</li><li>
+<a href="./../Search/resource/search/code.html">
+/search/code
+</a>
+</li><li>
+<a href="./../Search/resource/search/issues.html">
+/search/issues
+</a>
+</li><li>
+<a href="./../Search/resource/search/users.html">
+/search/users
+</a>
+</li>
+</ul><a href="./../Users/index.html">
+Users
+</a>
+<ul>
+<li>
+<a href="./../Users/resource/users.html">
+/users
+</a>
+</li><li>
+<a href="./../Users/resource/users/{username}.html">
+/users/{username}
+</a>
+</li><li>
+<a href="./../Users/resource/users/{username}/followers.html">
+/users/{username}/followers
+</a>
+</li><li>
+<a href="./../Users/resource/users/{username}/following.html">
+/users/{username}/following
+</a>
+</li><li>
+<a href="./../Users/resource/users/{username}/following/{target_user}.html">
+/users/{username}/following/{target_user}
+</a>
+</li>
+</ul>
+</div>
+<div class="content">
+<h2>About the Search API</h2>
+<p>The Search API is optimized to help you find the specific item you’re looking for (e.g., a specific user, a specific file in a repository, etc.). Think of it the way you think of performing a search on Google. It’s designed to help you find the one result you’re looking for (or maybe the few results you’re looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub Search API provides <strong>up to 1,000 results for each search.</strong></p><h3>Ranking search results</h3><p>Unless another sort option is provided as a query parameter, results are sorted by best match, as indicated by the <code>score</code> field for each item returned. This is a computed value representing the relevance of an item relative to the other items in the result set. Multiple factors are combined to boost the most relevant item to the top of the result list.</p><h3>Rate limit</h3><p>The Search API has a custom rate limit. For requests using <a href="https://developer.github.com/v3/#authentication">Basic Authentication</a>, <a href="https://developer.github.com/v3/#authentication">OAuth</a>, or <a href="https://developer.github.com/v3/#increasing-the-unauthenticated-rate-limit-for-oauth-applications">client ID and secret</a>, you can make up to 30 requests per minute. For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.</p><p>See the <a href="https://developer.github.com/v3/#rate-limiting">rate limit documentation</a> for details on determining your current rate limit status.</p><h3>Timeouts and incomplete results</h3><p>To keep the Search API fast for everyone, we limit how long any individual query can run. For queries that <a href="https://developer.github.com/changes/2014-04-07-understanding-search-results-and-potential-timeouts/">exceed the time limit</a>, the API returns the matches that were already found prior to the timeout, and the response has the <code>incomplete_results</code> property set to <code>true</code>. Reaching a timeout does not necessarily mean that search results are incomplete. More results might have been found, but also might not.</p>
+</div>
+
+</body>
+</html>

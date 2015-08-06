@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<link href="../../../.././../style.css" rel="stylesheet">
+<link href="../../../.././../prettify-default.css" rel="stylesheet">
+<link href="../../../.././../favicon.ico" rel="icon" type="image/png">
+<title>API - Users</title>
+</head>
+
+<body>
+<script src="../../../.././../script.js"></script>
+<script src="../../../.././../run_prettify.js"></script>
+
+<header>
+<div class="right">
+<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
+<script>rd.initGlobalSecData(document.currentScript);</script>
+</div>
+<h1><a href="../../../.././index.html">Users</a></h1>
+<p>Version v1</p>
+<div class="clear"/>
+<p class="left">https:/api.github.com</p>
+ <a class="right" href="../../../.././Users.zip">Download RAML</a> 
+<div class="clear"/>
+</header>
+
+<div class="resources">
+<a href="../../../.././../Miscellaneous/index.html">
+Miscellaneous
+</a>
+<ul>
+<li>
+<a href="../../../.././../Miscellaneous/resource/emojis.html">
+/emojis
+</a>
+</li><li>
+<a href="../../../.././../Miscellaneous/resource/gitignore/templates.html">
+/gitignore/templates
+</a>
+</li><li>
+<a href="../../../.././../Miscellaneous/resource/gitignore/templates/{language}.html">
+/gitignore/templates/{language}
+</a>
+</li><li>
+<a href="../../../.././../Miscellaneous/resource/markdown.html">
+/markdown
+</a>
+</li><li>
+<a href="../../../.././../Miscellaneous/resource/markdown/raw.html">
+/markdown/raw
+</a>
+</li>
+</ul><a href="../../../.././../Search/index.html">
+Search
+</a>
+<ul>
+<li>
+<a href="../../../.././../Search/resource/search/repositories.html">
+/search/repositories
+</a>
+</li><li>
+<a href="../../../.././../Search/resource/search/code.html">
+/search/code
+</a>
+</li><li>
+<a href="../../../.././../Search/resource/search/issues.html">
+/search/issues
+</a>
+</li><li>
+<a href="../../../.././../Search/resource/search/users.html">
+/search/users
+</a>
+</li>
+</ul><a href="../../../.././../Users/index.html">
+Users
+</a>
+<ul>
+<li>
+<a href="../../../.././../Users/resource/users.html">
+/users
+</a>
+</li><li>
+<a href="../../../.././../Users/resource/users/{username}.html">
+/users/{username}
+</a>
+</li><li>
+<a href="../../../.././../Users/resource/users/{username}/followers.html">
+/users/{username}/followers
+</a>
+</li><li>
+<a href="../../../.././../Users/resource/users/{username}/following.html">
+/users/{username}/following
+</a>
+</li><li>
+<a href="../../../.././../Users/resource/users/{username}/following/{target_user}.html">
+/users/{username}/following/{target_user}
+</a>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="mainTitle">/users/{username}/following/{target_user}</div>
+
+<div class="desc">
+<p>Check if one user follows another</p>
+
+<div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">
+<div class="badge badge_GET">
+GET
+</div>
+<div class="actionDesc">
+</div>
+</div>
+
+<div class="actionDetail bg_GET">
+<div class="mimeTitle">Request</div>
+<form>
+<div class="desc">
+
+<table class="params">
+<thead>
+<tr>
+<th>Name</th>
+ <th>Value</th> 
+<th class="paramDesc">Description</th>
+<th>Type</th>
+<th>Constraint</th>
+<th class="paramBool">Req</th>
+<th class="paramBool">Rep</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan=" 8 ">
+<span class="paramTitle">URI parameters</span>
+</td>
+</tr>
+<tr>
+<td> username </td>
+ <td><input name="uri_username"></td> 
+<td>
+</td>
+<td> STRING </td>
+<td>
+</td>
+<td class="center">X</td>
+<td class="center"></td>
+<td></td>
+</tr> <tr>
+<td> target_user </td>
+ <td><input name="uri_target_user"></td> 
+<td>
+</td>
+<td> STRING </td>
+<td>
+</td>
+<td class="center">X</td>
+<td class="center"></td>
+<td></td>
+</tr> 
+
+</tbody>
+</table>
+</div>
+
+<div class="bodyTitle">Responses</div>
+<div class="desc">
+<table class="params">
+<thead>
+<tr>
+<th>Code</th>
+<th class="paramDesc">Description</th>
+<th>Headers</th>
+<th>Body</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>204</td>
+<td><p>user follows target user</p></td>
+<td></td>
+<td>
+</td>
+</tr><tr>
+<td>404</td>
+<td><p>user does not follow target user</p></td>
+<td></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<button onclick="rd.tryOut(this,'GET','https:/api.github.com','/users/{username}/following/{target_user}',''); return false;">
+Try it!
+</button>
+<img src="../../../.././../ajax-loader.gif" class="loader"/>
+<div class="response">
+Request URL <pre name="requestUrl" class="tryData border_GET"> </pre>
+Response Code <pre name="responseCode" class="tryData border_GET"> </pre>
+Response Headers <pre name="responseHeaders" class="tryData border_GET"> </pre>
+Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+</body>
+</html>
