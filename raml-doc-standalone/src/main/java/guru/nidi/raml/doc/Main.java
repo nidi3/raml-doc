@@ -1,4 +1,5 @@
-package guru.nidi.raml.doc;/*
+package guru.nidi.raml.doc;
+/*
  * Copyright (C) 2015 Stefan Niederhauser (nidin@gmx.ch)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

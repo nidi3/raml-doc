@@ -16,6 +16,7 @@
 package guru.nidi.raml.doc;
 
 import guru.nidi.loader.basic.CachingLoaderInterceptor;
+import guru.nidi.loader.basic.FileLoader;
 import guru.nidi.loader.basic.InterceptingLoader;
 import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.loader.use.raml.RamlLoad;
@@ -73,7 +74,7 @@ public class GeneratorConfig {
         for (String loc : ramlLocations.split(",")) {
             try {
                 final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
-                final Raml raml = new RamlLoad(new InterceptingLoader(new UriLoader(), sli)).load(loc);
+                final Raml raml = new RamlLoad(new InterceptingLoader(new UriLoader(new FileLoader(new File("."))), sli)).load(loc);
                 ramls.add(raml);
 //            sli.writeDataToFiles(new File(getEffectiveTarget(), "raml"));
                 sli.writeDataToZip(new File(generator.getTarget(raml), raml.getTitle() + ".zip"));
