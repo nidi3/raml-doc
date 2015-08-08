@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>guru.nidi.maven.plugins</groupId>
                 <artifactId>tools-maven-plugin</artifactId>
-                <version>1.0.10</version>
+                <version>1.0.13</version>
                 <executions>
                     <execution>
                         <goals>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>guru.nidi.raml</groupId>
             <artifactId>raml-loader</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <version>0.0.5</version>
         </dependency>
 
         <dependency>
