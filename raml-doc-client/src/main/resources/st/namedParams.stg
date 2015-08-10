@@ -5,7 +5,8 @@ header(baseUri) ::= <<
             <th>Name</th>
             $if(baseUri)$ <th>Value</th> $endif$
             <th class="paramDesc">Description</th>
-            <th>Type</th>
+            <th>Example</th>
+            <th class="paramType">Type</th>
             <th>Constraint</th>
             <th class="paramBool">Req</th>
             <th class="paramBool">Rep</th>
@@ -39,7 +40,7 @@ namedParamsElem(title,params,baseUri,type) ::= <<
 namedParamsBody(body,baseUri) ::= <<
     $if(body)$
         <tr>
-            <td colspan="$if(baseUri)$ 8 $else$ 7 $endif$">
+            <td colspan="$if(baseUri)$ 9 $else$ 8 $endif$">
                 <span class="paramTitle">Body</span>
             </td>
         </tr>
@@ -61,9 +62,17 @@ mime(keys,key,body,baseUri) ::= <<
         $else$
             <td></td>
         $endif$
-        <td colspan="5">
-            <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
-            $if(body.example)$ <p>Example:</p><pre class="code prettyprint">$body.example;format="js"$ </pre> $endif$
+        <td></td>
+        <td colspan="5" style="vertical-align: top">
+            <span class="active" onclick="rd.showModel(this,true)">model</span> |
+            <span class="inactive" onclick="rd.showModel(this,false)">example</span>
+            <div class="model">
+                <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
+            </div>
+            <div class="example" onclick="rd.useExample(this)">
+                <div class="rawExample">$body.example;format="js"$</div>
+                <pre class="code prettyprint">$body.example;format="js"$</pre>
+            </div>
         </td>
     </tr>
     $namedParamsElem("Form parameters",body.formParameters,baseUri,"form")$
@@ -71,7 +80,7 @@ mime(keys,key,body,baseUri) ::= <<
 
 title(title,baseUri) ::= <<
     <tr>
-        <td colspan="$if(baseUri)$ 8 $else$ 7 $endif$">
+        <td colspan="$if(baseUri)$ 9 $else$ 8 $endif$">
             <span class="paramTitle">$title$</span>
         </td>
     </tr>
@@ -85,9 +94,8 @@ param(key,param,baseUri,type) ::= <<
     <tr>
         <td>$def(param.displayName,key)$</td>
         $if(baseUri)$ <td><input name="$type$_$key$"></td> $endif$
-        <td>$param.description;format="markdown"$
-            $/main/line("Example",param.example)$
-        </td>
+        <td>$param.description;format="markdown"$</td>
+        <td>$param.example$</td>
         <td>$def(param.type,"STRING")$</td>
         <td>
             $if (param.enumeration)$ <p>$param.enumeration:{e|$e$,}$</p> $endif$

@@ -86,6 +86,10 @@ a, a:visited, a:active, a:hover {
 .paramDesc {
 }
 
+.paramType{
+    width: 5em;
+}
+
 ul {
     padding-left: 2em;
 }
@@ -258,4 +262,21 @@ button {
 
 .clear {
     clear: both;
+}
+
+.example {
+    display: none;
+    cursor: pointer;
+}
+
+.active:hover, .inactive:hover {
+    text-decoration: underline;
+
+}
+.active, .inactive {
+    cursor: pointer;
+}
+
+.active {
+    font-weight: bolder;
 }
