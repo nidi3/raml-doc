@@ -7,32 +7,37 @@ var rd = (function () {
     }
 
     function findNextSibling(elem, pred) {
-        if (elem) {
-            do {
-                elem = elem.nextSibling;
-            } while (elem && !pred(elem));
+        while (elem && !pred(elem)) {
+            elem = elem.nextSibling;
         }
         return elem;
     }
 
+    function doWithChildren(elem, action) {
+        var e = elem.firstChild;
+        while (e) {
+            action(e);
+            e = e.nextSibling;
+        }
+    }
+
+    function startsWith(s, test) {
+        return s.substring(0, test.length) === test;
+    }
+
+    function rest(s, test) {
+        return startsWith(s, test) ? s.substring(test.length) : false;
+    }
+
+    function hasClass(node, clazz) {
+        return node.className && node.className.indexOf(clazz) >= 0;
+    }
+
     return {
-        doWithChildren: function (elem, action) {
-            var e = elem.firstChild;
-            while (e) {
-                action(e);
-                e = e.nextSibling;
-            }
-        },
-        startsWith: function (s, test) {
-            return s.substring(0, test.length) === test;
-        },
-        rest: function (s, test) {
-            return rd.startsWith(s, test) ? s.substring(test.length) : false;
-        },
         showTrWithId: function (elem, id) {
             var show = null;
-            rd.doWithChildren(findParent(elem, 'tbody'), function (tr) {
-                if (tr.nodeName === 'TR' && (rd.startsWith(tr.className, 'bodyType') || show != null)) {
+            doWithChildren(findParent(elem, 'tbody'), function (tr) {
+                if (tr.nodeName === 'TR' && (hasClass(tr, 'bodyType') || show != null)) {
                     if (tr.className) {
                         show = tr.className.substring(9) === id;
                     }
@@ -42,8 +47,8 @@ var rd = (function () {
         },
         showBodyWithId: function (elem, id) {
             var show = null;
-            rd.doWithChildren(elem.parentNode, function (div) {
-                if (div.nodeName === 'DIV' && (rd.startsWith(div.className, 'body') || show != null)) {
+            doWithChildren(elem.parentNode, function (div) {
+                if (div.nodeName === 'DIV' && (hasClass(div, 'body') || show != null)) {
                     if (div.className) {
                         show = div.className.substring(5) === id;
                     }
@@ -52,13 +57,13 @@ var rd = (function () {
             });
         },
         showActionDetail: function (elem) {
-            //rd.doWithChildren(elem.parentNode, function (e) {
-            //    if (e.className === 'actionDetail') {
+            //doWithChildren(elem.parentNode, function (e) {
+            //    if (hasClass(e, 'actionDetail')) {
             //        e.style.display = 'none';
             //    }
             //});
             var next = findNextSibling(elem, function (elem) {
-                return elem.className && rd.startsWith(elem.className, 'actionDetail');
+                return elem.className && hasClass(elem, 'actionDetail');
             });
             next.style.display = next.style.display === 'block' ? 'none' : 'block';
         },
@@ -88,17 +93,17 @@ var rd = (function () {
             }
 
             function setRequestValue(req, elem) {
-                var rest;
+                var r;
                 if (elem.value) {
-                    if (rest = rd.rest(elem.name, 'query_')) {
-                        req.query += encodeURIComponent(rest) + '=' + encodeURIComponent(elem.value) + '&';
-                    } else if (rest = rd.rest(elem.name, 'header_')) {
-                        req.header[rest] = elem.value;
-                    } else if (rest = rd.rest(elem.name, 'uri_')) {
-                        req.uri = req.uri.replace('{' + rest + '}', elem.value);
-                    } else if (rd.startsWith(elem.name, 'contentType_http')) {
+                    if (r = rest(elem.name, 'query_')) {
+                        req.query += encodeURIComponent(r) + '=' + encodeURIComponent(elem.value) + '&';
+                    } else if (r = rest(elem.name, 'header_')) {
+                        req.header[r] = elem.value;
+                    } else if (r = rest(elem.name, 'uri_')) {
+                        req.uri = req.uri.replace('{' + r + '}', elem.value);
+                    } else if (startsWith(elem.name, 'contentType_http')) {
                         req.header['Content-Type'] = elem.value;
-                    } else if (rd.startsWith(elem.name, 'body') && findParent(elem, 'tr').style.display === 'table-row') {
+                    } else if (startsWith(elem.name, 'body') && findParent(elem, 'tr').style.display === 'table-row') {
                         req.body = elem.value;
                     }
                 }
@@ -106,7 +111,7 @@ var rd = (function () {
 
             function showLoader(show) {
                 var loader = findNextSibling(button, function (e) {
-                    return e.className === 'loader';
+                    return hasClass(e, 'loader');
                 });
                 loader.style.display = show ? 'inline' : 'none';
             }
@@ -149,9 +154,9 @@ var rd = (function () {
             }
 
             function handleResponse(url, req) {
-                rd.doWithChildren(
+                doWithChildren(
                     findNextSibling(button, function (e) {
-                        return e.className === 'response';
+                        return hasClass(e, 'response');
                     }),
                     function (elem) {
                         switch (elem.getAttribute && elem.getAttribute('name')) {
@@ -211,7 +216,7 @@ var rd = (function () {
         },
         initGlobalSecData: function (script) {
             var data = JSON.parse(sessionStorage.getItem('creds'));
-            rd.doWithChildren(findParent(script, 'div'), function (elem) {
+            doWithChildren(findParent(script, 'div'), function (elem) {
                 if (elem.name === 'logout') {
                     elem.style.display = data ? 'inline' : 'none';
                 }
@@ -219,26 +224,27 @@ var rd = (function () {
         },
         showModel: function (span, model) {
             span.className = 'active';
-            rd.doWithChildren(span.parentNode, function (e) {
+            doWithChildren(span.parentNode, function (e) {
                 if (e.nodeName === 'SPAN' && e !== span) {
                     e.className = 'inactive';
                 }
-                if (e.className === 'model') {
+                if (hasClass(e, 'model')) {
                     e.style.display = model ? 'block' : 'none';
                 }
-                if (e.className === 'example') {
+                if (hasClass(e, 'example')) {
                     e.style.display = model ? 'none' : 'block';
                 }
             });
         },
         useExample: function (div) {
-            var input, code = findNextSibling(div.firstChild, function (e) {
-                return e.className === 'rawExample';
-            }).firstChild.nodeValue;
-            rd.doWithChildren(findParent(div, 'tr'), function (e) {
+            var input, code, rawExample = findNextSibling(div.firstChild, function (e) {
+                return hasClass(e, 'rawExample');
+            });
+            code = (rawExample ? rawExample : div).firstChild.nodeValue;
+            doWithChildren(findParent(div, 'tr'), function (e) {
                 if (e.nodeName === 'TD') {
                     input = findNextSibling(e.firstChild, function (e) {
-                        return e.nodeName === 'TEXTAREA';
+                        return e.nodeName === 'TEXTAREA' || e.nodeName === 'INPUT';
                     });
                     if (input) {
                         input.value = code;

@@ -83,9 +83,6 @@ a, a:visited, a:active, a:hover {
     width: 2em;
 }
 
-.paramDesc {
-}
-
 .paramType{
     width: 5em;
 }
@@ -101,15 +98,7 @@ table.params {
     border-collapse: collapse;
 }
 
-thead tr {
-}
-
-.bodyType {
-    display: none;
-}
-
 .actionDetail {
-    display: none;
     padding: .5em;
 }
 
@@ -248,10 +237,6 @@ button {
     cursor: pointer;
 }
 
-.loader {
-    display: none;
-}
-
 .left {
     float: left;
 }
@@ -264,16 +249,15 @@ button {
     clear: both;
 }
 
-.example {
+.invisible {
     display: none;
-    cursor: pointer;
 }
 
 .active:hover, .inactive:hover {
     text-decoration: underline;
 
 }
-.active, .inactive {
+.active, .inactive, .example {
     cursor: pointer;
 }
 

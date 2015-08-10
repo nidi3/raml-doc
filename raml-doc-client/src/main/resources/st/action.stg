@@ -8,7 +8,7 @@ action(action) ::= <<
         </div>
     </div>
 
-    <div class="actionDetail bg_$action.type$">
+    <div class="actionDetail invisible bg_$action.type$">
         <div class="mimeTitle">Request</div>
         <form>
             <div class="desc">
@@ -28,7 +28,7 @@ action(action) ::= <<
                 <button onclick="rd.tryOut(this,'$action.type$','$baseUri$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
                 Try it!
                 </button>
-                <img src="$relPath$/../ajax-loader.gif" class="loader"/>
+                <img src="$relPath$/../ajax-loader.gif" class="invisible"/>
                 <div class="response">
                     Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
                     Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>

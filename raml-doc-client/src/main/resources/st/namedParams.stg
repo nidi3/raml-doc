@@ -50,7 +50,7 @@ namedParamsBody(body,baseUri) ::= <<
 >>
 
 mime(keys,key,body,baseUri) ::= <<
-    <tr class="bodyType $key$">
+    <tr class="invisible $key$">
         <td></td>
         $if(baseUri)$
             <td colspan="2" style="vertical-align:top">
@@ -69,7 +69,7 @@ mime(keys,key,body,baseUri) ::= <<
             <div class="model">
                 <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
             </div>
-            <div class="example" onclick="rd.useExample(this)">
+            <div class="example invisible" onclick="rd.useExample(this)">
                 <div class="rawExample">$body.example;format="js"$</div>
                 <pre class="code prettyprint">$body.example;format="js"$</pre>
             </div>
@@ -95,7 +95,7 @@ param(key,param,baseUri,type) ::= <<
         <td>$def(param.displayName,key)$</td>
         $if(baseUri)$ <td><input name="$type$_$key$"></td> $endif$
         <td>$param.description;format="markdown"$</td>
-        <td>$param.example$</td>
+        <td onclick="rd.useExample(this)" class="example">$param.example$</td>
         <td>$def(param.type,"STRING")$</td>
         <td>
             $if (param.enumeration)$ <p>$param.enumeration:{e|$e$,}$</p> $endif$
