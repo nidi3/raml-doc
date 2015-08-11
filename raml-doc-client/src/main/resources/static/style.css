@@ -115,10 +115,12 @@ th {
 
 table.params input {
     width: 100%;
+    box-sizing: border-box;
 }
 
 table.params textarea {
     width: 100%;
+    box-sizing: border-box;
     min-height: 10em;
 }
 
