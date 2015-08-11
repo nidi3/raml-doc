@@ -55,7 +55,7 @@ resEntry(key,value) ::= <<
 
 body(key,value) ::= <<
     <div class="body $key$">
-        <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
+        $if(value.schema)$ <pre class="code prettyprint">$value.schema;format="schema,js"$</pre> $endif$
         $if(value.example)$ <p>Example:</p><pre class="code prettyprint">$value.example;format="js"$ </pre> $endif$
     </div>
 >>

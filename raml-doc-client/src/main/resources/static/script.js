@@ -169,7 +169,11 @@ var rd = (function () {
                             elem.firstChild.nodeValue = url;
                             break;
                         case 'responseBody':
-                            elem.firstChild.nodeValue = req.responseText;
+                            if (isJson(req.getResponseHeader('Content-Type'))) {
+                                elem.innerHTML = PR.prettyPrintOne(js_beautify(req.responseText));
+                            } else {
+                                elem.firstChild.nodeValue = req.responseText;
+                            }
                             break;
                         case 'responseCode':
                             elem.firstChild.nodeValue = req.status + ' ' + req.statusText;
@@ -179,6 +183,13 @@ var rd = (function () {
                             break;
                         }
                     });
+            }
+
+            function isJson(mimeType) {
+                mimeType = mimeType || '';
+                var pos = mimeType.indexOf(';');
+                mimeType = pos >= 0 ? mimeType.substring(0, pos) : mimeType;
+                return mimeType === 'application/json' || mimeType.substring(mimeType.length - 5) === '+json';
             }
         },
         login: function (button, name) {

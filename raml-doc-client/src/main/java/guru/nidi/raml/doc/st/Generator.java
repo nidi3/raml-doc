@@ -87,7 +87,7 @@ public class Generator {
 
         target.mkdirs();
         copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
-                "script.js", "run_prettify.js", "prettify-default.css");
+                "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
 
         final Raml parent = new Raml();
         parent.setTitle(parentTitle == null ? ramls.get(0).getTitle() : parentTitle);

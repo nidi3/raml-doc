@@ -15,7 +15,7 @@ ramlResourceLink(raml) ::= <<
 
 resourceLink(res,link) ::= <<
     <li>
-        <a href="$relPath$/../$link$/resource$res.uri$.html">
+        <a href="$relPath$/../$link$/resource$res.uri$.html" title="$res.uri$">
             $res.uri$
         </a>
     </li>

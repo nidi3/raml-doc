@@ -49,7 +49,7 @@ public class GeneratorTest {
     public void beautify() throws ScriptException {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
         final Object eval2 = engine.eval("var window=this;");
-        final Object eval = engine.eval(new InputStreamReader(getClass().getResourceAsStream("/beautify.js")));
+        final Object eval = engine.eval(new InputStreamReader(getClass().getResourceAsStream("/static/beautify.js")));
         String s = "if (\"this_is\" == /an_example/) {of_beautifer();} else {var a = b ? (c % d) : e[f];}";
         final Object eval1 = engine.eval("print(js_beautify('" + s + "'));");
     }

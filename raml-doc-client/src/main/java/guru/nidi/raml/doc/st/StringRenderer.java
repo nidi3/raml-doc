@@ -48,7 +48,7 @@ class StringRenderer implements AttributeRenderer {
         try {
             engine.eval("var window=this;");
             //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
-            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/beautify.js"),"utf-8"));
+            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/static/beautify.js"),"utf-8"));
         } catch (ScriptException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
