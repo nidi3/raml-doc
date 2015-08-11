@@ -11,6 +11,7 @@
 <body>
 <script src=".././../script.js"></script>
 <script src=".././../run_prettify.js"></script>
+<script src=".././../beautify.js"></script>
 
 <header>
 <div class="right">
@@ -31,23 +32,23 @@ Miscellaneous
 </a>
 <ul>
 <li>
-<a href=".././../Miscellaneous/resource/emojis.html">
+<a href=".././../Miscellaneous/resource/emojis.html" title="/emojis">
 /emojis
 </a>
 </li><li>
-<a href=".././../Miscellaneous/resource/gitignore/templates.html">
+<a href=".././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates">
 /gitignore/templates
 </a>
 </li><li>
-<a href=".././../Miscellaneous/resource/gitignore/templates/{language}.html">
+<a href=".././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}">
 /gitignore/templates/{language}
 </a>
 </li><li>
-<a href=".././../Miscellaneous/resource/markdown.html">
+<a href=".././../Miscellaneous/resource/markdown.html" title="/markdown">
 /markdown
 </a>
 </li><li>
-<a href=".././../Miscellaneous/resource/markdown/raw.html">
+<a href=".././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw">
 /markdown/raw
 </a>
 </li>
@@ -56,19 +57,19 @@ Search
 </a>
 <ul>
 <li>
-<a href=".././../Search/resource/search/repositories.html">
+<a href=".././../Search/resource/search/repositories.html" title="/search/repositories">
 /search/repositories
 </a>
 </li><li>
-<a href=".././../Search/resource/search/code.html">
+<a href=".././../Search/resource/search/code.html" title="/search/code">
 /search/code
 </a>
 </li><li>
-<a href=".././../Search/resource/search/issues.html">
+<a href=".././../Search/resource/search/issues.html" title="/search/issues">
 /search/issues
 </a>
 </li><li>
-<a href=".././../Search/resource/search/users.html">
+<a href=".././../Search/resource/search/users.html" title="/search/users">
 /search/users
 </a>
 </li>
@@ -77,23 +78,23 @@ Users
 </a>
 <ul>
 <li>
-<a href=".././../Users/resource/users.html">
+<a href=".././../Users/resource/users.html" title="/users">
 /users
 </a>
 </li><li>
-<a href=".././../Users/resource/users/{username}.html">
+<a href=".././../Users/resource/users/{username}.html" title="/users/{username}">
 /users/{username}
 </a>
 </li><li>
-<a href=".././../Users/resource/users/{username}/followers.html">
+<a href=".././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers">
 /users/{username}/followers
 </a>
 </li><li>
-<a href=".././../Users/resource/users/{username}/following.html">
+<a href=".././../Users/resource/users/{username}/following.html" title="/users/{username}/following">
 /users/{username}/following
 </a>
 </li><li>
-<a href=".././../Users/resource/users/{username}/following/{target_user}.html">
+<a href=".././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}">
 /users/{username}/following/{target_user}
 </a>
 </li>
@@ -113,7 +114,7 @@ GET
 </div>
 </div>
 
-<div class="actionDetail bg_GET">
+<div class="actionDetail invisible bg_GET">
 <div class="mimeTitle">Request</div>
 <form>
 <div class="desc">
@@ -124,7 +125,8 @@ GET
 <th>Name</th>
  <th>Value</th> 
 <th class="paramDesc">Description</th>
-<th>Type</th>
+<th>Example</th>
+<th class="paramType">Type</th>
 <th>Constraint</th>
 <th class="paramBool">Req</th>
 <th class="paramBool">Rep</th>
@@ -133,15 +135,15 @@ GET
 </thead>
 <tbody>
 <tr>
-<td colspan=" 8 ">
+<td colspan=" 9 ">
 <span class="paramTitle">Query parameters</span>
 </td>
 </tr>
 <tr>
 <td> since </td>
  <td><input name="query_since"></td> 
-<td><p>The integer ID of the last User that you’ve seen.</p>
-</td>
+<td><p>The integer ID of the last User that you’ve seen.</p></td>
+<td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
 <td>
 </td>
@@ -172,7 +174,6 @@ GET
 <td></td>
 <td>
 <div class="body application/json">
-<pre class="code prettyprint"></pre>
  <p>Example:</p><pre class="code prettyprint">[{
     "login": "octocat",
     "id": 1,
@@ -206,7 +207,7 @@ GET
 <button onclick="rd.tryOut(this,'GET','https:/api.github.com','/users',''); return false;">
 Try it!
 </button>
-<img src=".././../ajax-loader.gif" class="loader"/>
+<img src=".././../ajax-loader.gif" class="invisible loader"/>
 <div class="response">
 Request URL <pre name="requestUrl" class="tryData border_GET"> </pre>
 Response Code <pre name="responseCode" class="tryData border_GET"> </pre>

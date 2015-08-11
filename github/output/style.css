@@ -83,7 +83,8 @@ a, a:visited, a:active, a:hover {
     width: 2em;
 }
 
-.paramDesc {
+.paramType{
+    width: 5em;
 }
 
 ul {
@@ -97,15 +98,7 @@ table.params {
     border-collapse: collapse;
 }
 
-thead tr {
-}
-
-.bodyType {
-    display: none;
-}
-
 .actionDetail {
-    display: none;
     padding: .5em;
 }
 
@@ -134,6 +127,7 @@ table.params {
 }
 
 table.params td {
+    overflow: auto;
     padding: .2em;
     margin: 0;
     border-bottom: 1px solid #ccc;
@@ -244,10 +238,6 @@ button {
     cursor: pointer;
 }
 
-.loader {
-    display: none;
-}
-
 .left {
     float: left;
 }
@@ -258,4 +248,20 @@ button {
 
 .clear {
     clear: both;
+}
+
+.invisible {
+    display: none;
+}
+
+.active:hover, .inactive:hover {
+    text-decoration: underline;
+
+}
+.active, .inactive, .example {
+    cursor: pointer;
+}
+
+.active {
+    font-weight: bolder;
 }
