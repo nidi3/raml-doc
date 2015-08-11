@@ -38,9 +38,7 @@ var rd = (function () {
             var show = null;
             doWithChildren(findParent(elem, 'tbody'), function (tr) {
                 if (tr.nodeName === 'TR' && (hasClass(tr, 'bodyType') || show != null)) {
-                    if (tr.className) {
-                        show = tr.className.substring(9) === id;
-                    }
+                    show = hasClass(tr, id);
                     tr.style.display = show ? 'table-row' : 'none';
                 }
             });
@@ -49,9 +47,7 @@ var rd = (function () {
             var show = null;
             doWithChildren(elem.parentNode, function (div) {
                 if (div.nodeName === 'DIV' && (hasClass(div, 'body') || show != null)) {
-                    if (div.className) {
-                        show = div.className.substring(5) === id;
-                    }
+                    show = hasClass(div, id);
                     div.style.display = show ? 'block' : 'none';
                 }
             });
@@ -63,7 +59,7 @@ var rd = (function () {
             //    }
             //});
             var next = findNextSibling(elem, function (elem) {
-                return elem.className && hasClass(elem, 'actionDetail');
+                return hasClass(elem, 'actionDetail');
             });
             next.style.display = next.style.display === 'block' ? 'none' : 'block';
         },
@@ -121,9 +117,8 @@ var rd = (function () {
             }
 
             function sendRequest(r, handler) {
-                var h, url = interpretUri(r.uri) + '?' + r.query,
+                var h, url = normalize(interpretUri(r.uri) + '?' + r.query),
                     req = new XMLHttpRequest();
-                url = url.substring(0, url.length - 1);
                 req.onreadystatechange = function () {
                     if (req.readyState === 4) {
                         handler(url, req);
@@ -141,6 +136,16 @@ var rd = (function () {
                 } catch (e) {
                     alert('Could not send request: ' + e);
                 }
+            }
+
+            function normalize(path) {
+                var len;
+                path = path.replace(/\/\.\//g, '/').replace(/[?&]$/, '');
+                do {
+                    len = path.length;
+                    path = path.replace(/\/[^\/]+\/\.\.\//, '/');
+                } while (path.length != len);
+                return path;
             }
 
             function interpretUri(uri) {

@@ -50,7 +50,7 @@ namedParamsBody(body,baseUri) ::= <<
 >>
 
 mime(keys,key,body,baseUri) ::= <<
-    <tr class="invisible $key$">
+    <tr class="bodyType invisible $key$">
         <td></td>
         $if(baseUri)$
             <td colspan="2" style="vertical-align:top">
@@ -70,7 +70,7 @@ mime(keys,key,body,baseUri) ::= <<
                 <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
             </div>
             <div class="example invisible" onclick="rd.useExample(this)">
-                <div class="rawExample">$body.example;format="js"$</div>
+                <div class="invisible rawExample">$body.example;format="js"$</div>
                 <pre class="code prettyprint">$body.example;format="js"$</pre>
             </div>
         </td>
