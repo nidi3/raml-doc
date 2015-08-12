@@ -23,6 +23,7 @@ import org.raml.model.parameter.AbstractParam;
 import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
+import org.stringtemplate.v4.compiler.CompiledST;
 
 import java.io.*;
 import java.util.*;
@@ -127,10 +128,9 @@ public class Generator {
         try {
             return new STGroupDir(path, '$', '$');
         } catch (IllegalArgumentException e) {
-            return new STGroupDir(path + "/", '$', '$');
+            return new TrailingSlashSTGroupDir(path, '$', '$');
         }
     }
-
 
     private void copyResource(File base, String... names) throws IOException {
         for (String name : names) {
@@ -172,4 +172,16 @@ public class Generator {
         }
     }
 
+    //websphere classloader needs a trailing / to find directories on the classpath
+    //-> add it, and remove it to load files
+    private static class TrailingSlashSTGroupDir extends STGroupDir {
+        public TrailingSlashSTGroupDir(String dirName, char delimiterStartChar, char delimiterStopChar) {
+            super(dirName + "/", delimiterStartChar, delimiterStopChar);
+        }
+
+        @Override
+        protected CompiledST load(String name) {
+            return super.load(name.substring(1));
+        }
+    }
 }
