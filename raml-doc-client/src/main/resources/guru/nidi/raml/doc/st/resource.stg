@@ -24,7 +24,7 @@ resourceLink(res,link) ::= <<
 resource(res) ::= <<
     $/resource/resourceLinks()$
     <div class="content">
-        <div class="mainTitle">$res.uri$</div>
+        <div class="title mainTitle">$res.uri$</div>
 
         <div class="desc">
             $res.description;format="markdown"$

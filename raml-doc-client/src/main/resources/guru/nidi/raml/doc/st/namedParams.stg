@@ -23,7 +23,7 @@ footer() ::= <<
 
 namedParams(title,params,baseUri,type) ::= <<
     $if(params)$
-        <div class="paramsTitle">$title$</div>
+        <div class="title">$title$</div>
             $header(baseUri)$
             $params.entrySet:paramEntry(baseUri,type)$
             $footer()$
@@ -41,7 +41,7 @@ namedParamsBody(body,baseUri) ::= <<
     $if(body)$
         <tr>
             <td>
-                <span class="paramTitle">Body</span>
+                <span class="title">Body</span>
             </td>
             <td colspan="$if(baseUri)$ 2 $else$ 1 $endif$">
                 <select class="request contentType" onchange="rd.showTrWithId(this,this.value)">
@@ -88,7 +88,7 @@ schemaExample(value) ::= <<
 title(title,baseUri) ::= <<
     <tr>
         <td colspan="$if(baseUri)$ 9 $else$ 8 $endif$">
-            <span class="paramTitle">$title$</span>
+            <span class="title">$title$</span>
         </td>
     </tr>
 >>

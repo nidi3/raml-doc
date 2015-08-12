@@ -9,7 +9,7 @@ action(action) ::= <<
     </div>
 
     <div class="actionDetail invisible bg_$action.type$">
-        <div class="mimeTitle">Request</div>
+        <div class="title">Request</div>
         <form>
             <div class="desc">
                 $/main/line("Secured by",action.securitySchemes:securityScheme())$

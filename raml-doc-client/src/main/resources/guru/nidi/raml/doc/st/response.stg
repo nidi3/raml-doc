@@ -1,5 +1,5 @@
 responses(map) ::= <<
-    <div class="bodyTitle">Responses</div>
+    <div class="title">Responses</div>
     <div class="desc">
         $header()$
         $map.entrySet:{entry | $resEntry(entry.key,entry.value)$}$
@@ -8,7 +8,7 @@ responses(map) ::= <<
 >>
 
 response(key,res) ::= <<
-    <div class="mimeTitle">$key$</div>
+    <div class="title">$key$</div>
     $res(res)$
 >>
 

@@ -47,9 +47,13 @@ a, a:visited, a:active, a:hover {
     margin: 1em;
 }
 
-.paramsTitle {
+.title {
     margin-top: 1em;
     font-weight: bold;
+}
+
+.mainTitle {
+    font-size: 125%;
 }
 
 .actionHeader {
@@ -57,26 +61,6 @@ a, a:visited, a:active, a:hover {
     min-height: 1.8em;
     cursor: pointer;
     padding: .5em;
-}
-
-.paramTitle {
-    margin-top: 1em;
-    font-weight: bold;
-}
-
-.bodyTitle {
-    margin-top: 1em;
-    font-weight: bold;
-}
-
-.mimeTitle {
-    font-weight: bold;
-}
-
-.mainTitle {
-    margin-top: 1em;
-    font-weight: bold;
-    font-size: 125%;
 }
 
 .paramBool {
@@ -259,7 +243,6 @@ button {
 
 .active:hover, .inactive:hover {
     text-decoration: underline;
-
 }
 
 .active, .inactive, .example {

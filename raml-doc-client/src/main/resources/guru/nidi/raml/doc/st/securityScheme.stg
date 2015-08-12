@@ -7,7 +7,7 @@ securityScheme(entry) ::= <<
 
 secScheme(name,scheme) ::= <<
 
-    <div class="mainTitle">$name$</div>
+    <div class="title mainTitle">$name$</div>
 
     <div class="desc">
         $scheme.description;format="markdown"$
@@ -27,7 +27,7 @@ secScheme(name,scheme) ::= <<
                 <script>rd.initSecData(document.currentScript);</script>
             </form>
 
-            <div class="mimeTitle">Settings</div>
+            <div class="title">Settings</div>
             $/main/line("Request token URI",scheme.settings.requestTokenUri)$
             $/main/line("Authorization URI",scheme.settings.authorizationUri)$
             $/main/line("Token credentials URI",scheme.settings.tokenCredentialsUri)$
