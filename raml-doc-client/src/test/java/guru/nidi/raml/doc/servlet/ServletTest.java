@@ -70,7 +70,7 @@ public class ServletTest {
         final Wrapper wrapper = ctx.createWrapper();
         wrapper.setServletClass(RamlDocServlet.class.getName());
         wrapper.setName("app");
-        wrapper.addInitParameter("ramlLocations", "classpath://basic.raml,classpath://second.raml");
+        wrapper.addInitParameter("ramlLocations", "classpath://data/basic.raml,classpath://data/second.raml");
         wrapper.addInitParameter("features", "online,tryout,download");
         wrapper.addInitParameter("baseUriParameters", "host=$host/$path,path=mirror");
         wrapper.addInitParameter("parentTitle", "API suite");

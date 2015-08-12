@@ -7,6 +7,7 @@ version: v1
 schemas:
   - refSchema: !include schema.json
     subSchema: !include sub/sub.json
+    superSchema: !include ../super.json
     inlineSchema: |
       {"type":"string"}
 resourceTypes:
