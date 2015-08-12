@@ -15,8 +15,6 @@
  */
 package guru.nidi.raml.doc;
 
-import com.github.fge.jsonschema.core.load.SchemaLoader;
-import com.github.fge.jsonschema.core.tree.SchemaTree;
 import guru.nidi.loader.basic.FileLoader;
 import guru.nidi.loader.use.raml.RamlLoad;
 import guru.nidi.raml.doc.st.Generator;
@@ -27,7 +25,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.net.URI;
 
 /**
  *
@@ -35,7 +32,6 @@ import java.net.URI;
 public class GeneratorTest {
     @Test
     public void basic() throws Exception {
-        final SchemaTree tree = new SchemaLoader().get(URI.create("file:///" + new File("src/test/resources/schema.json").getAbsolutePath()));
         new Generator(new File("target/basicTryOut"))
                 .baseUri("http://localhost:8080")
                 .generate(new RamlLoad(new FileLoader(new File("src/test/resources/data"))).load("basic.raml"));
