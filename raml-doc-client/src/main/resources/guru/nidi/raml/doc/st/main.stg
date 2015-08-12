@@ -1,18 +1,18 @@
-main(raml,ramls,template,param,util,relPath,baseUri,download) ::= <<
+main(raml,ramls,template,param,util,relPath,basePath,baseUri,download) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8"/>
-        <link href="$relPath$/../style.css" rel="stylesheet">
-        <link href="$relPath$/../prettify-default.css" rel="stylesheet">
-        <link href="$relPath$/../favicon.ico" rel="icon" type="image/png">
+        <link href="$basePath$/style.css" rel="stylesheet">
+        <link href="$basePath$/prettify-default.css" rel="stylesheet">
+        <link href="$basePath$/favicon.ico" rel="icon" type="image/png">
         <title>API - $raml.title$</title>
     </head>
 
     <body>
-    <script src="$relPath$/../script.js"></script>
-    <script src="$relPath$/../run_prettify.js"></script>
-    <script src="$relPath$/../beautify.js"></script>
+    <script src="$basePath$/script.js"></script>
+    <script src="$basePath$/run_prettify.js"></script>
+    <script src="$basePath$/beautify.js"></script>
 
     $htmlHead()$
 

@@ -28,7 +28,7 @@ action(action) ::= <<
                 <button onclick="rd.tryOut(this,'$action.type$','$baseUri$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
                 Try it!
                 </button>
-                <img src="$relPath$/../ajax-loader.gif" class="invisible loader"/>
+                <img src="$basePath$/ajax-loader.gif" class="invisible loader"/>
                 <div class="invisible response">
                     Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
                     Request Headers <pre name="requestHeaders" class="tryData border_$action.type$"> </pre>

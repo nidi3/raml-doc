@@ -93,35 +93,33 @@ public class Generator {
         final Raml parent = new Raml();
         parent.setTitle(parentTitle == null ? ramls.get(0).getTitle() : parentTitle);
         main.add("raml", parent);
-        main.add("template", "/main/docMain");
-        main.add("relPath", "./bla");
-        render(main, new File(target, "index.html"));
+        render(main, "/main/docMain", ".", ".", new File(target, "index.html"));
 
         final File target = getTarget(raml);
         target.mkdirs();
         set(main, "raml", raml);
-        set(main, "template", "/main/doc");
-        set(main, "relPath", ".");
-        render(main, new File(target, "index.html"));
+        render(main, "/main/doc", "..", ".", new File(target, "index.html"));
 
-        set(main, "template", "/resource/resource");
         for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
-            set(main, "relPath", depth(resource.getUri()));
             final File file = new File(target, "resource/" + resource.getUri() + ".html");
-            render(main, file);
+            render(main, "/resource/resource", "../" + depth(resource.getUri()), depth(resource.getUri()), file);
         }
 
-        set(main, "template", "/securityScheme/securityScheme");
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
             for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
                 set(main, "param", entry);
-                set(main, "relPath", "../.");
                 final File file = new File(target, "security-scheme/" + entry.getKey() + ".html");
-                render(main, file);
+                render(main, "/securityScheme/securityScheme", "../..", "..", file);
             }
         }
+    }
 
+    private void render(ST template, String sub, String basePath, String relPath, File target) throws IOException {
+        set(template, "template", sub);
+        set(template, "basePath", basePath);
+        set(template, "relPath", relPath);
+        render(template, target);
     }
 
     private STGroupDir loadGroupDir(String path) {
@@ -152,7 +150,7 @@ public class Generator {
         while ((pos = s.indexOf('/', pos + 1)) >= 0) {
             res += "../";
         }
-        return res + ".";
+        return res+".";
     }
 
     private void render(ST template, File file) throws IOException {

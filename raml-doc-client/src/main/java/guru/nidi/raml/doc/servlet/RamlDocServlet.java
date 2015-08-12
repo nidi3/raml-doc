@@ -129,6 +129,10 @@ public class RamlDocServlet extends HttpServlet {
                 res.sendRedirect(req.getRequestURL().append("/index.html").toString());
                 return;
             }
+            if (req.getPathInfo().length() == 1) {
+                res.sendRedirect(req.getRequestURL().append("index.html").toString());
+                return;
+            }
             final File source = new File(docDir(), req.getPathInfo());
             if (!source.exists() || !source.isFile()) {
                 res.sendError(HttpServletResponse.SC_NOT_FOUND);
