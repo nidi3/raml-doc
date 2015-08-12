@@ -53,7 +53,7 @@ public class RamlDocServlet extends HttpServlet {
                 public void run() {
                     try {
                         createGeneratorConfig().generate();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         log.error("Could not create RAML documentation", e);
                     } finally {
                         latch.countDown();
@@ -113,7 +113,8 @@ public class RamlDocServlet extends HttpServlet {
     private File docDir() {
         final File tempDir = new File(System.getProperty("java.io.tmpdir"));
         final String contextPath = getServletContext().getContextPath();
-        return new File(tempDir, "raml-doc/" + (contextPath.length() == 0 ? "_ROOT" : contextPath));
+        final boolean isEmpty = contextPath.length() == 0 || contextPath.length() == 1;
+        return new File(tempDir, "raml-doc" + (isEmpty ? "/_ROOT" : contextPath));
     }
 
     @Override

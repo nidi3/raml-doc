@@ -15,7 +15,6 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
@@ -28,7 +27,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
-import static org.pegdown.Extensions.HARDWRAPS;
 import static org.pegdown.Extensions.TABLES;
 
 /**
@@ -48,7 +46,7 @@ class StringRenderer implements AttributeRenderer {
         try {
             engine.eval("var window=this;");
             //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
-            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/static/beautify.js"),"utf-8"));
+            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js"),"utf-8"));
         } catch (ScriptException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

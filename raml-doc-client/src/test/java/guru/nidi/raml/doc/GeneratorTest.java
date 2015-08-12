@@ -19,7 +19,6 @@ import com.github.fge.jsonschema.core.load.SchemaLoader;
 import com.github.fge.jsonschema.core.tree.SchemaTree;
 import guru.nidi.loader.basic.FileLoader;
 import guru.nidi.loader.use.raml.RamlLoad;
-import guru.nidi.raml.doc.st.Feature;
 import guru.nidi.raml.doc.st.Generator;
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class GeneratorTest {
     public void beautify() throws ScriptException {
         final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
         final Object eval2 = engine.eval("var window=this;");
-        final Object eval = engine.eval(new InputStreamReader(getClass().getResourceAsStream("/static/beautify.js")));
+        final Object eval = engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js")));
         String s = "if (\"this_is\" == /an_example/) {of_beautifer();} else {var a = b ? (c % d) : e[f];}";
         final Object eval1 = engine.eval("print(js_beautify('" + s + "'));");
     }

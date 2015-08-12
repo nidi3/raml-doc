@@ -68,7 +68,7 @@ public class Generator {
     }
 
     public void generate(Raml raml, List<Raml> ramls) throws IOException {
-        final STGroupDir group = new STGroupDir("st", '$', '$');
+        final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st");
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
         group.registerModelAdaptor(Raml.class, new RamlAdaptor());
         group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
@@ -123,9 +123,18 @@ public class Generator {
 
     }
 
+    private STGroupDir loadGroupDir(String path) {
+        try {
+            return new STGroupDir(path, '$', '$');
+        } catch (IllegalArgumentException e) {
+            return new STGroupDir(path + "/", '$', '$');
+        }
+    }
+
+
     private void copyResource(File base, String... names) throws IOException {
         for (String name : names) {
-            try (final InputStream in = getClass().getResourceAsStream("/static/" + name);
+            try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
                 copy(in, out);
             }
