@@ -2,16 +2,16 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<link href="../.././../style.css" rel="stylesheet">
-<link href="../.././../prettify-default.css" rel="stylesheet">
-<link href="../.././../favicon.ico" rel="icon" type="image/png">
+<link href="../../.././style.css" rel="stylesheet">
+<link href="../../.././prettify-default.css" rel="stylesheet">
+<link href="../../.././favicon.ico" rel="icon" type="image/png">
 <title>API - Miscellaneous</title>
 </head>
 
 <body>
-<script src="../.././../script.js"></script>
-<script src="../.././../run_prettify.js"></script>
-<script src="../.././../beautify.js"></script>
+<script src="../../.././script.js"></script>
+<script src="../../.././run_prettify.js"></script>
+<script src="../../.././beautify.js"></script>
 
 <header>
 <div class="right">
@@ -27,81 +27,81 @@
 </header>
 
 <div class="resources">
-<a href="../.././../Miscellaneous/index.html">
+<a href="../../.././Miscellaneous/index.html">
 Miscellaneous
 </a>
 <ul>
 <li>
-<a href="../.././../Miscellaneous/resource/emojis.html" title="/emojis">
+<a href="../../.././Miscellaneous/resource/emojis.html" title="/emojis">
 /emojis
 </a>
 </li><li>
-<a href="../.././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates">
+<a href="../../.././Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates">
 /gitignore/templates
 </a>
 </li><li>
-<a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}">
+<a href="../../.././Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}">
 /gitignore/templates/{language}
 </a>
 </li><li>
-<a href="../.././../Miscellaneous/resource/markdown.html" title="/markdown">
+<a href="../../.././Miscellaneous/resource/markdown.html" title="/markdown">
 /markdown
 </a>
 </li><li>
-<a href="../.././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw">
+<a href="../../.././Miscellaneous/resource/markdown/raw.html" title="/markdown/raw">
 /markdown/raw
 </a>
 </li>
-</ul><a href="../.././../Search/index.html">
+</ul><a href="../../.././Search/index.html">
 Search
 </a>
 <ul>
 <li>
-<a href="../.././../Search/resource/search/repositories.html" title="/search/repositories">
+<a href="../../.././Search/resource/search/repositories.html" title="/search/repositories">
 /search/repositories
 </a>
 </li><li>
-<a href="../.././../Search/resource/search/code.html" title="/search/code">
+<a href="../../.././Search/resource/search/code.html" title="/search/code">
 /search/code
 </a>
 </li><li>
-<a href="../.././../Search/resource/search/issues.html" title="/search/issues">
+<a href="../../.././Search/resource/search/issues.html" title="/search/issues">
 /search/issues
 </a>
 </li><li>
-<a href="../.././../Search/resource/search/users.html" title="/search/users">
+<a href="../../.././Search/resource/search/users.html" title="/search/users">
 /search/users
 </a>
 </li>
-</ul><a href="../.././../Users/index.html">
+</ul><a href="../../.././Users/index.html">
 Users
 </a>
 <ul>
 <li>
-<a href="../.././../Users/resource/users.html" title="/users">
+<a href="../../.././Users/resource/users.html" title="/users">
 /users
 </a>
 </li><li>
-<a href="../.././../Users/resource/users/{username}.html" title="/users/{username}">
+<a href="../../.././Users/resource/users/{username}.html" title="/users/{username}">
 /users/{username}
 </a>
 </li><li>
-<a href="../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers">
+<a href="../../.././Users/resource/users/{username}/followers.html" title="/users/{username}/followers">
 /users/{username}/followers
 </a>
 </li><li>
-<a href="../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following">
+<a href="../../.././Users/resource/users/{username}/following.html" title="/users/{username}/following">
 /users/{username}/following
 </a>
 </li><li>
-<a href="../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}">
+<a href="../../.././Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}">
 /users/{username}/following/{target_user}
 </a>
 </li>
 </ul>
 </div>
 <div class="content">
-<div class="mainTitle">/markdown/raw</div>
+<div class="title mainTitle">/markdown/raw</div>
 
 <div class="desc">
 <p>Render a Markdown document in raw mode</p><p>The raw API is not JSON-based. It takes a Markdown document as plaintext (text/plain or text/x-markdown) and renders it as plain Markdown without a repository context (just like a README.md file is rendered – this is the simplest way to preview a readme online).</p>
@@ -115,7 +115,7 @@ POST
 </div>
 
 <div class="actionDetail invisible bg_POST">
-<div class="mimeTitle">Request</div>
+<div class="title">Request</div>
 <form>
 <div class="desc">
 
@@ -135,17 +135,20 @@ POST
 </thead>
 <tbody>
 <tr>
-<td colspan=" 9 ">
-<span class="paramTitle">Body</span>
+<td>
+<span class="title">Body</span>
 </td>
+<td colspan=" 2 ">
+<select class="request contentType" onchange="rd.showTrWithId(this,this.value)">
+<option>text/plain</option><option>text/x-markdown</option>
+</select>
+</td>
+<td colspan="6"></td>
 </tr>
 <tr class="bodyType invisible text/plain">
 <td></td>
 <td colspan="2" style="vertical-align:top">
 <textarea name="body"></textarea>
-<select name="contentType_https://api.github.com" onchange="rd.showTrWithId(this,this.value)">
-<option>text/plain</option><option>text/x-markdown</option>
-</select>
 </td>
 <td></td>
 <td colspan="5" style="vertical-align: top">
@@ -164,9 +167,6 @@ POST
 <td></td>
 <td colspan="2" style="vertical-align:top">
 <textarea name="body"></textarea>
-<select name="contentType_https://api.github.com" onchange="rd.showTrWithId(this,this.value)">
-<option>text/plain</option><option>text/x-markdown</option>
-</select>
 </td>
 <td></td>
 <td colspan="5" style="vertical-align: top">
@@ -188,7 +188,7 @@ POST
 </table>
 </div>
 
-<div class="bodyTitle">Responses</div>
+<div class="title">Responses</div>
 <div class="desc">
 <table class="params">
 <thead>
@@ -205,11 +205,21 @@ POST
 <td></td>
 <td></td>
 <td>
-<div class="body application/json">
-</div>
-<select name="contentType_false" onchange="rd.showBodyWithId(this,this.value)">
+<select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
 <option>application/json</option>
 </select>
+<br/><br/>
+<div class="body application/json">
+<span class="active" onclick="rd.showModel(this,true)">model</span> |
+<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<div class="model">
+<pre class="code prettyprint"></pre>
+</div>
+<div class="example invisible" onclick="rd.useExample(this)">
+<div class="invisible rawExample"></div>
+<pre class="code prettyprint"></pre>
+</div>
+</div>
 <script>rd.showBodyWithId(document.currentScript,'application/json');</script>
 </td>
 </tr>
@@ -220,9 +230,11 @@ POST
 <button onclick="rd.tryOut(this,'POST','https://api.github.com','/markdown/raw',''); return false;">
 Try it!
 </button>
-<img src="../.././../ajax-loader.gif" class="invisible loader"/>
-<div class="response">
+<img src="../../.././ajax-loader.gif" class="invisible loader"/>
+<div class="invisible response">
 Request URL <pre name="requestUrl" class="tryData border_POST"> </pre>
+Request Headers <pre name="requestHeaders" class="tryData border_POST"> </pre>
+<br/>
 Response Code <pre name="responseCode" class="tryData border_POST"> </pre>
 Response Headers <pre name="responseHeaders" class="tryData border_POST"> </pre>
 Response Body <pre name="responseBody" class="tryData border_POST"> </pre>

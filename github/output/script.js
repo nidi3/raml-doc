@@ -65,6 +65,7 @@ var rd = (function () {
         },
         tryOut: function (button, type, baseUri, path, securitySchemes) {
             showLoader(true);
+            showResponse();
             sendRequest(createRequest(baseUri + path, securitySchemes), handleResponse);
 
             function createRequest(uri, securitySchemes) {
@@ -97,7 +98,7 @@ var rd = (function () {
                         req.header[r] = elem.value;
                     } else if (r = rest(elem.name, 'uri_')) {
                         req.uri = req.uri.replace('{' + r + '}', elem.value);
-                    } else if (startsWith(elem.name, 'contentType_http')) {
+                    } else if (hasClass(elem, 'request') && hasClass(elem, 'contentType')) {
                         req.header['Content-Type'] = elem.value;
                     } else if (startsWith(elem.name, 'body') && findParent(elem, 'tr').style.display === 'table-row') {
                         req.body = elem.value;
@@ -116,6 +117,13 @@ var rd = (function () {
                 showLoader(false);
             }
 
+            function showResponse() {
+                var response = findNextSibling(button, function (e) {
+                    return hasClass(e, 'response');
+                });
+                response.style.display = 'block';
+            }
+
             function sendRequest(r, handler) {
                 var h, url = normalize(interpretUri(r.uri) + '?' + r.query),
                     req = new XMLHttpRequest();
@@ -130,6 +138,7 @@ var rd = (function () {
                 req.open(type, url, true);
                 for (h in r.header) {
                     req.setRequestHeader(h, r.header[h]);
+                    req.requestHeaders = r.header;
                 }
                 try {
                     req.send(r.body);
@@ -167,6 +176,13 @@ var rd = (function () {
                         switch (elem.getAttribute && elem.getAttribute('name')) {
                         case 'requestUrl':
                             elem.firstChild.nodeValue = url;
+                            break;
+                        case 'requestHeaders':
+                            var h, s = '';
+                            for (h in req.requestHeaders) {
+                                s += h + ': ' + req.requestHeaders[h] + '\n';
+                            }
+                            elem.firstChild.nodeValue = s;
                             break;
                         case 'responseBody':
                             if (isJson(req.getResponseHeader('Content-Type'))) {

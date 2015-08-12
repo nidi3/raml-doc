@@ -47,9 +47,13 @@ a, a:visited, a:active, a:hover {
     margin: 1em;
 }
 
-.paramsTitle {
+.title {
     margin-top: 1em;
     font-weight: bold;
+}
+
+.mainTitle {
+    font-size: 125%;
 }
 
 .actionHeader {
@@ -59,31 +63,11 @@ a, a:visited, a:active, a:hover {
     padding: .5em;
 }
 
-.paramTitle {
-    margin-top: 1em;
-    font-weight: bold;
-}
-
-.bodyTitle {
-    margin-top: 1em;
-    font-weight: bold;
-}
-
-.mimeTitle {
-    font-weight: bold;
-}
-
-.mainTitle {
-    margin-top: 1em;
-    font-weight: bold;
-    font-size: 125%;
-}
-
 .paramBool {
     width: 2em;
 }
 
-.paramType{
+.paramType {
     width: 5em;
 }
 
@@ -231,6 +215,7 @@ code {
     overflow: auto;
     background-color: #fff;
     font-family: inherit;
+    margin-bottom: .8em;
 }
 
 button {
@@ -258,12 +243,20 @@ button {
 
 .active:hover, .inactive:hover {
     text-decoration: underline;
-
 }
+
 .active, .inactive, .example {
     cursor: pointer;
 }
 
 .active {
     font-weight: bolder;
+}
+
+select.contentType {
+    width: 100%;
+}
+
+.response {
+    margin-top: 1em;
 }
