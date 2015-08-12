@@ -42,26 +42,28 @@ resEntry(key,value) ::= <<
         <td>$value.description;format="markdown"$</td>
         <td>$value.headers.entrySet:{h | $headerParam(h.key,h.value)$}$</td>
         <td>
-            $value.body.entrySet:{entry | $body(entry.key,entry.value)$}$
             $if(value.body)$
-                <select name="contentType_false" onchange="rd.showBodyWithId(this,this.value)">
+                <select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
                     $value.body.keys:{key | <option>$key$</option>}$
                 </select>
-                <script>rd.showBodyWithId(document.currentScript,'$first(value.body.keys)$');</script>
+                <br/><br/>
             $endif$
+            $value.body.entrySet:{entry | $body(entry.key,entry.value)$}$
+            <script>rd.showBodyWithId(document.currentScript,'$first(value.body.keys)$');</script>
         </td>
     </tr>
 >>
 
 body(key,value) ::= <<
     <div class="body $key$">
-        $if(value.schema)$ <pre class="code prettyprint">$value.schema;format="schema,js"$</pre> $endif$
-        $if(value.example)$ <p>Example:</p><pre class="code prettyprint">$value.example;format="js"$ </pre> $endif$
+        $/namedParams/schemaExample(value)$
     </div>
 >>
 
 headerParam(key,value) ::= <<
-    <p>$key$: $value.description;format="markdown"$</p>
+    <p><strong>$key$</strong></p>
+    $value.description;format="markdown"$
+    <br/>
 >>
 
 footer() ::= <<

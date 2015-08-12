@@ -83,7 +83,7 @@ a, a:visited, a:active, a:hover {
     width: 2em;
 }
 
-.paramType{
+.paramType {
     width: 5em;
 }
 
@@ -231,6 +231,7 @@ code {
     overflow: auto;
     background-color: #fff;
     font-family: inherit;
+    margin-bottom: .8em;
 }
 
 button {
@@ -260,10 +261,19 @@ button {
     text-decoration: underline;
 
 }
+
 .active, .inactive, .example {
     cursor: pointer;
 }
 
 .active {
     font-weight: bolder;
+}
+
+select.contentType {
+    width: 100%;
+}
+
+.response {
+    margin-top: 1em;
 }

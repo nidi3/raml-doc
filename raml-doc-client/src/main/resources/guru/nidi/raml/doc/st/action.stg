@@ -29,8 +29,10 @@ action(action) ::= <<
                 Try it!
                 </button>
                 <img src="$relPath$/../ajax-loader.gif" class="invisible loader"/>
-                <div class="response">
+                <div class="invisible response">
                     Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
+                    Request Headers <pre name="requestHeaders" class="tryData border_$action.type$"> </pre>
+                    <br/>
                     Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>
                     Response Headers <pre name="responseHeaders" class="tryData border_$action.type$"> </pre>
                     Response Body <pre name="responseBody" class="tryData border_$action.type$"> </pre>

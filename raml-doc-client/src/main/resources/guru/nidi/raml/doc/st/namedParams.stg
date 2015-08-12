@@ -40,9 +40,15 @@ namedParamsElem(title,params,baseUri,type) ::= <<
 namedParamsBody(body,baseUri) ::= <<
     $if(body)$
         <tr>
-            <td colspan="$if(baseUri)$ 9 $else$ 8 $endif$">
+            <td>
                 <span class="paramTitle">Body</span>
             </td>
+            <td colspan="$if(baseUri)$ 2 $else$ 1 $endif$">
+                <select class="request contentType" onchange="rd.showTrWithId(this,this.value)">
+                    $body.keys:{key | <option>$key$</option>}$
+                </select>
+            </td>
+            <td colspan="6"></td>
         </tr>
         $body.entrySet:{entry | $mime(body.keys,entry.key,entry.value,baseUri)$}$
         <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
@@ -55,27 +61,28 @@ mime(keys,key,body,baseUri) ::= <<
         $if(baseUri)$
             <td colspan="2" style="vertical-align:top">
                 <textarea name="body"></textarea>
-                <select name="contentType_$baseUri$" onchange="rd.showTrWithId(this,this.value)">
-                    $keys:{key | <option>$key$</option>}$
-                </select>
             </td>
         $else$
             <td></td>
         $endif$
         <td></td>
         <td colspan="5" style="vertical-align: top">
-            <span class="active" onclick="rd.showModel(this,true)">model</span> |
-            <span class="inactive" onclick="rd.showModel(this,false)">example</span>
-            <div class="model">
-                <pre class="code prettyprint">$body.schema;format="schema,js"$</pre>
-            </div>
-            <div class="example invisible" onclick="rd.useExample(this)">
-                <div class="invisible rawExample">$body.example;format="js"$</div>
-                <pre class="code prettyprint">$body.example;format="js"$</pre>
-            </div>
+            $schemaExample(body)$
         </td>
     </tr>
     $namedParamsElem("Form parameters",body.formParameters,baseUri,"form")$
+>>
+
+schemaExample(value) ::= <<
+    <span class="active" onclick="rd.showModel(this,true)">model</span> |
+    <span class="inactive" onclick="rd.showModel(this,false)">example</span>
+    <div class="model">
+        <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
+    </div>
+    <div class="example invisible" onclick="rd.useExample(this)">
+        <div class="invisible rawExample">$value.example;format="js"$</div>
+        <pre class="code prettyprint">$value.example;format="js"$</pre>
+    </div>
 >>
 
 title(title,baseUri) ::= <<
