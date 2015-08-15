@@ -26,6 +26,8 @@ import org.stringtemplate.v4.STGroupDir;
 import org.stringtemplate.v4.compiler.CompiledST;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -126,7 +128,16 @@ public class Generator {
         try {
             return new STGroupDir(path, '$', '$');
         } catch (IllegalArgumentException e) {
-            return new TrailingSlashSTGroupDir(path, '$', '$');
+            //websphere classloader needs a trailing / to find directories on the classpath
+            //-> add it to check if it exists, and then remove it
+            final STGroupDir stGroupDir = new STGroupDir(path + "/", '$', '$');
+            final String url = stGroupDir.root.toExternalForm();
+            try {
+                stGroupDir.root = new URL(url.substring(0, url.length() - 1));
+                return stGroupDir;
+            } catch (MalformedURLException me) {
+                throw new IllegalArgumentException(me);
+            }
         }
     }
 
@@ -150,7 +161,7 @@ public class Generator {
         while ((pos = s.indexOf('/', pos + 1)) >= 0) {
             res += "../";
         }
-        return res+".";
+        return res + ".";
     }
 
     private void render(ST template, File file) throws IOException {
@@ -167,19 +178,6 @@ public class Generator {
         int read;
         while ((read = in.read(buf)) > 0) {
             out.write(buf, 0, read);
-        }
-    }
-
-    //websphere classloader needs a trailing / to find directories on the classpath
-    //-> add it, and remove it to load files
-    private static class TrailingSlashSTGroupDir extends STGroupDir {
-        public TrailingSlashSTGroupDir(String dirName, char delimiterStartChar, char delimiterStopChar) {
-            super(dirName + "/", delimiterStartChar, delimiterStopChar);
-        }
-
-        @Override
-        protected CompiledST load(String name) {
-            return super.load(name.substring(1));
         }
     }
 }
