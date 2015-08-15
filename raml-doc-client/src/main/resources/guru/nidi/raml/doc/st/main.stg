@@ -18,6 +18,7 @@ main(raml,ramls,template,param,util,relPath,basePath,baseUri,download) ::= <<
 
     $(template)(param)$
 
+    <script>rd.applyQuery()</script>
     </body>
     </html>
 >>

@@ -18,7 +18,7 @@ res(response) ::= <<
     $response.description;format="markdown"$
 
     $/namedParams/header(false)$
-    $/namedParams/namedParamsElemShort("Headers",response.headers,false,"header")$
+    $/namedParams/namedParamsElemShort("Headers",response.headers,false,"h")$
     $/namedParams/namedParamsBody(response.body,false)$
     $/namedParams/footer()$
 >>

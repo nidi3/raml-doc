@@ -70,13 +70,15 @@ var rd = (function () {
             });
         },
         showActionDetail: function (elem) {
-            //doWithChildren(elem.parentNode, function (e) {
-            //    if (hasClass(e, 'actionDetail')) {
-            //        e.style.display = 'none';
-            //    }
-            //});
-            var next = nextSiblingWithClass(elem, 'actionDetail');
-            next.style.display = next.style.display === 'block' ? 'none' : 'block';
+            if (elem) {
+                //doWithChildren(elem.parentNode, function (e) {
+                //    if (hasClass(e, 'actionDetail')) {
+                //        e.style.display = 'none';
+                //    }
+                //});
+                var next = nextSiblingWithClass(elem, 'actionDetail');
+                next.style.display = next.style.display === 'block' ? 'none' : 'block';
+            }
         },
         tryOut: function (button, type, baseUri, path, securitySchemes) {
             showLoader(true);
@@ -107,11 +109,11 @@ var rd = (function () {
             function setRequestValue(req, elem) {
                 var r;
                 if (elem.value) {
-                    if (r = rest(elem.name, 'query_')) {
+                    if (r = rest(elem.name, 'q_')) {
                         req.query += encodeURIComponent(r) + '=' + encodeURIComponent(elem.value) + '&';
-                    } else if (r = rest(elem.name, 'header_')) {
+                    } else if (r = rest(elem.name, 'h_')) {
                         req.header[r] = elem.value;
-                    } else if (r = rest(elem.name, 'uri_')) {
+                    } else if (r = rest(elem.name, 'u_')) {
                         req.uri = req.uri.replace('{' + r + '}', elem.value);
                     } else if (hasClass(elem, 'request') && hasClass(elem, 'contentType')) {
                         req.header['Content-Type'] = elem.value;
@@ -271,6 +273,33 @@ var rd = (function () {
             var input, code, rawExample = div.querySelector('.rawExample');
             code = (rawExample ? rawExample : div).firstChild.nodeValue;
             findParent(div, 'tr').querySelectorAll('td textarea,td input')[0].value = code;
+        },
+        applyQuery: function () {
+            var inputs, i, q, query = parseQuery();
+            for (q in query) {
+                if (q.charAt(1) === '_') {
+                    inputs = document.querySelectorAll('input[name=' + q + ']');
+                    for (i = 0; i < inputs.length; i++) {
+                        inputs[i].value = query[q];
+                    }
+                }
+            }
+            if (query['method']) {
+                var method = query['method'].toUpperCase();
+                rd.showActionDetail(document.querySelector('.actionHeader.bg_' + method));
+                if (query['run']) {
+                    document.querySelector('.try.'+method).click();
+                }
+            }
+
+            function parseQuery() {
+                var i, parts, res = {}, params = document.location.search.substring(1).split('&');
+                for (i = 0; i < params.length; i++) {
+                    parts = params[i].split('=');
+                    res[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+                }
+                return res;
+            }
         }
     };
 }());

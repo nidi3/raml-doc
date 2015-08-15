@@ -70,7 +70,7 @@ mime(keys,key,body,baseUri) ::= <<
             $schemaExample(body)$
         </td>
     </tr>
-    $namedParamsElem("Form parameters",body.formParameters,baseUri,"form")$
+    $namedParamsElem("Form parameters",body.formParameters,baseUri,"f")$
 >>
 
 schemaExample(value) ::= <<
