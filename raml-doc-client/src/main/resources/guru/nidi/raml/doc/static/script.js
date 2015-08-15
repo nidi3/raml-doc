@@ -13,6 +13,12 @@ var rd = (function () {
         return elem;
     }
 
+    function nextSiblingWithClass(elem, clazz) {
+        return findNextSibling(elem, function (e) {
+            return hasClass(e, clazz);
+        });
+    }
+
     function doWithChildren(elem, action) {
         var e = elem.firstChild;
         while (e) {
@@ -58,9 +64,7 @@ var rd = (function () {
             //        e.style.display = 'none';
             //    }
             //});
-            var next = findNextSibling(elem, function (elem) {
-                return hasClass(elem, 'actionDetail');
-            });
+            var next = nextSiblingWithClass(elem, 'actionDetail');
             next.style.display = next.style.display === 'block' ? 'none' : 'block';
         },
         tryOut: function (button, type, baseUri, path, securitySchemes) {
@@ -107,9 +111,7 @@ var rd = (function () {
             }
 
             function showLoader(show) {
-                var loader = findNextSibling(button, function (e) {
-                    return hasClass(e, 'loader');
-                });
+                var loader = nextSiblingWithClass(button, 'loader');
                 loader.style.display = show ? 'inline' : 'none';
             }
 
@@ -118,9 +120,7 @@ var rd = (function () {
             }
 
             function showResponse() {
-                var response = findNextSibling(button, function (e) {
-                    return hasClass(e, 'response');
-                });
+                var response = nextSiblingWithClass(button, 'response');
                 response.style.display = 'block';
             }
 
@@ -168,37 +168,18 @@ var rd = (function () {
             }
 
             function handleResponse(url, req) {
-                doWithChildren(
-                    findNextSibling(button, function (e) {
-                        return hasClass(e, 'response');
-                    }),
-                    function (elem) {
-                        switch (elem.getAttribute && elem.getAttribute('name')) {
-                        case 'requestUrl':
-                            elem.firstChild.nodeValue = url;
-                            break;
-                        case 'requestHeaders':
-                            var h, s = '';
-                            for (h in req.requestHeaders) {
-                                s += h + ': ' + req.requestHeaders[h] + '\n';
-                            }
-                            elem.firstChild.nodeValue = s;
-                            break;
-                        case 'responseBody':
-                            if (isJson(req.getResponseHeader('Content-Type'))) {
-                                elem.innerHTML = PR.prettyPrintOne(js_beautify(req.responseText));
-                            } else {
-                                elem.firstChild.nodeValue = req.responseText;
-                            }
-                            break;
-                        case 'responseCode':
-                            elem.firstChild.nodeValue = req.status + ' ' + req.statusText;
-                            break;
-                        case 'responseHeaders':
-                            elem.firstChild.nodeValue = req.getAllResponseHeaders();
-                            break;
-                        }
-                    });
+                var response = nextSiblingWithClass(button, 'response'),
+                    h, reqHeaderStr = '';
+                for (h in req.requestHeaders) {
+                    reqHeaderStr += h + ': ' + req.requestHeaders[h] + '\n';
+                }
+                response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
+                response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
+                response.querySelector('[name=responseBody]').innerHTML = isJson(req.getResponseHeader('Content-Type'))
+                    ? PR.prettyPrintOne(js_beautify(req.responseText))
+                    : req.responseText;
+                response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
+                response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
             }
 
             function isJson(mimeType) {
@@ -247,42 +228,20 @@ var rd = (function () {
             }
         },
         initGlobalSecData: function (script) {
-            var data = JSON.parse(sessionStorage.getItem('creds'));
-            doWithChildren(findParent(script, 'div'), function (elem) {
-                if (elem.name === 'logout') {
-                    elem.style.display = data ? 'inline' : 'none';
-                }
-            });
+            var data = JSON.parse(sessionStorage.getItem('creds')),
+                logout = findParent(script, 'div').querySelector('[name=logout]');
+            logout.style.display = data ? 'inline' : 'none';
         },
         showModel: function (span, model) {
-            span.className = 'active';
-            doWithChildren(span.parentNode, function (e) {
-                if (e.nodeName === 'SPAN' && e !== span) {
-                    e.className = 'inactive';
-                }
-                if (hasClass(e, 'model')) {
-                    e.style.display = model ? 'block' : 'none';
-                }
-                if (hasClass(e, 'example')) {
-                    e.style.display = model ? 'none' : 'block';
-                }
-            });
+            span.parentNode.querySelector('.modelTitle').className = (model ? 'active' : 'inactive') + ' modelTitle';
+            span.parentNode.querySelector('.exampleTitle').className = (model ? 'inactive' : 'active') + ' exampleTitle';
+            span.parentNode.querySelector('.model').style.display = model ? 'block' : 'none';
+            span.parentNode.querySelector('.example').style.display = model ? 'none' : 'block';
         },
         useExample: function (div) {
-            var input, code, rawExample = findNextSibling(div.firstChild, function (e) {
-                return hasClass(e, 'rawExample');
-            });
+            var input, code, rawExample = div.querySelector('.rawExample');
             code = (rawExample ? rawExample : div).firstChild.nodeValue;
-            doWithChildren(findParent(div, 'tr'), function (e) {
-                if (e.nodeName === 'TD') {
-                    input = findNextSibling(e.firstChild, function (e) {
-                        return e.nodeName === 'TEXTAREA' || e.nodeName === 'INPUT';
-                    });
-                    if (input) {
-                        input.value = code;
-                    }
-                }
-            });
+            findParent(div, 'tr').querySelectorAll('td textarea,td input').item(0).value = code;
         }
     };
 }());
