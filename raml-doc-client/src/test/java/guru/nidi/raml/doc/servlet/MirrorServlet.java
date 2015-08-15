@@ -15,6 +15,8 @@
  */
 package guru.nidi.raml.doc.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -33,10 +34,21 @@ public class MirrorServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         final PrintWriter out = res.getWriter();
-        out.println(req.getMethod() + " " + req.getRequestURL());
-        headers(req, out);
-        query(req, out);
-        copy(req.getReader(), out);
+        if ("json".equals(req.getParameter("q"))) {
+            res.setContentType("application/json");
+            final ObjectMapper mapper = new ObjectMapper();
+            final Map<String, Object> map = new HashMap<>();
+            map.put("method", req.getMethod());
+            map.put("url", req.getRequestURL().toString());
+            map.put("headers", headers(req));
+            map.put("query", query(req));
+            mapper.writeValue(out, map);
+        } else {
+            out.println(req.getMethod() + " " + req.getRequestURL());
+            headers(req, out);
+            query(req, out);
+            copy(req.getReader(), out);
+        }
         res.flushBuffer();
     }
 
@@ -60,6 +72,14 @@ public class MirrorServlet extends HttpServlet {
         out.println();
     }
 
+    private Map<String, Object> query(HttpServletRequest req) {
+        final Map<String, Object> map = new HashMap<>();
+        for (Map.Entry<String, String[]> entry : req.getParameterMap().entrySet()) {
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
     private void headers(HttpServletRequest req, PrintWriter out) {
         out.println("headers");
         final Enumeration<String> headerNames = req.getHeaderNames();
@@ -73,5 +93,20 @@ public class MirrorServlet extends HttpServlet {
             out.println();
         }
         out.println();
+    }
+
+    private Map<String, Object> headers(HttpServletRequest req) {
+        final Map<String, Object> map = new HashMap<>();
+        final Enumeration<String> headerNames = req.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            final String name = headerNames.nextElement();
+            final List<String> values = new ArrayList<>();
+            final Enumeration<String> headers = req.getHeaders(name);
+            while (headers.hasMoreElements()) {
+                values.add(headers.nextElement());
+            }
+            map.put(name, values);
+        }
+        return map;
     }
 }

@@ -39,6 +39,17 @@ var rd = (function () {
         return node.className && node.className.indexOf(clazz) >= 0;
     }
 
+    function wrap(node, wrapper) {
+        var next = node.nextSibling, parent = node.parentNode;
+        parent.removeChild(node);
+        wrapper.appendChild(node);
+        if (next) {
+            parent.insertBefore(wrapper, next);
+        } else {
+            parent.appendChild(wrapper);
+        }
+    }
+
     return {
         showTrWithId: function (elem, id) {
             var show = null;
@@ -169,17 +180,35 @@ var rd = (function () {
 
             function handleResponse(url, req) {
                 var response = nextSiblingWithClass(button, 'response'),
-                    h, reqHeaderStr = '';
-                for (h in req.requestHeaders) {
-                    reqHeaderStr += h + ': ' + req.requestHeaders[h] + '\n';
+                    i, reqHeaderStr = '';
+                for (i in req.requestHeaders) {
+                    reqHeaderStr += i + ': ' + req.requestHeaders[i] + '\n';
                 }
                 response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
                 response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
-                response.querySelector('[name=responseBody]').innerHTML = isJson(req.getResponseHeader('Content-Type'))
-                    ? PR.prettyPrintOne(js_beautify(req.responseText))
-                    : req.responseText;
+                var resBody = response.querySelector('[name=responseBody]');
+                if (isJson(req.getResponseHeader('Content-Type'))) {
+                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(req.responseText));
+                    linkify(resBody);
+                } else {
+                    resBody.firstChild.nodeValue = req.responseText;
+                }
                 response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
                 response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
+            }
+
+            function linkify(resBody) {
+                var i, a, strings = resBody.querySelectorAll('.str');
+                for (i = 0; i < strings.length; i++) {
+                    var content = strings[i].firstChild.nodeValue;
+                    if (content.substring(0, 5) === '"http') {
+                        a = document.createElement('a');
+                        a.setAttribute('href', content.substring(1, content.length - 1));
+                        a.setAttribute('target', '_blank');
+                        wrap(strings[i], a);
+                        strings[i].className = 'link';
+                    }
+                }
             }
 
             function isJson(mimeType) {
@@ -241,7 +270,7 @@ var rd = (function () {
         useExample: function (div) {
             var input, code, rawExample = div.querySelector('.rawExample');
             code = (rawExample ? rawExample : div).firstChild.nodeValue;
-            findParent(div, 'tr').querySelectorAll('td textarea,td input').item(0).value = code;
+            findParent(div, 'tr').querySelectorAll('td textarea,td input')[0].value = code;
         }
     };
 }());
