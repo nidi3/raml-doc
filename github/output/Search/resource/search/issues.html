@@ -163,7 +163,7 @@ GET
 </tr>
 <tr>
 <td> q </td>
- <td><input name="query_q"></td> 
+ <td><input name="q_q"></td> 
 <td><p>The search terms.</p></td>
 <td onclick="rd.useExample(this)" class="example">windows+label:bug+language:python+state:open</td>
 <td> STRING </td>
@@ -174,7 +174,7 @@ GET
 <td></td>
 </tr> <tr>
 <td> sort </td>
- <td><input name="query_sort"></td> 
+ <td><input name="q_sort"></td> 
 <td><p>The sort field. Can be <code>comments</code>, <code>created</code>, or <code>updated</code>. Default: results are sorted by best match.</p></td>
 <td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
@@ -185,7 +185,7 @@ GET
 <td></td>
 </tr> <tr>
 <td> order </td>
- <td><input name="query_order"></td> 
+ <td><input name="q_order"></td> 
 <td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p></td>
 <td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
@@ -222,8 +222,8 @@ GET
 </select>
 <br/><br/>
 <div class="body application/json">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -339,7 +339,7 @@ GET
 </table>
 </div>
 
-<button onclick="rd.tryOut(this,'GET','https://api.github.com','/search/issues',''); return false;">
+<button class="try GET" onclick="rd.tryOut(this,'GET','/search/issues',''); return false;">
 Try it!
 </button>
 <img src="../../.././ajax-loader.gif" class="invisible loader"/>
@@ -355,6 +355,6 @@ Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
 </div>
 </div>
 </div>
-
+<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
 </body>
 </html>

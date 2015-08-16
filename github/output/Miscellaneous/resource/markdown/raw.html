@@ -152,8 +152,8 @@ POST
 </td>
 <td></td>
 <td colspan="5" style="vertical-align: top">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -170,8 +170,8 @@ POST
 </td>
 <td></td>
 <td colspan="5" style="vertical-align: top">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -210,8 +210,8 @@ POST
 </select>
 <br/><br/>
 <div class="body application/json">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -227,7 +227,7 @@ POST
 </table>
 </div>
 
-<button onclick="rd.tryOut(this,'POST','https://api.github.com','/markdown/raw',''); return false;">
+<button class="try POST" onclick="rd.tryOut(this,'POST','/markdown/raw',''); return false;">
 Try it!
 </button>
 <img src="../../.././ajax-loader.gif" class="invisible loader"/>
@@ -243,6 +243,6 @@ Response Body <pre name="responseBody" class="tryData border_POST"> </pre>
 </div>
 </div>
 </div>
-
+<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
 </body>
 </html>

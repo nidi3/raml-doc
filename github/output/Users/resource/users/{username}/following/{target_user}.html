@@ -141,7 +141,7 @@ GET
 </tr>
 <tr>
 <td> username </td>
- <td><input name="uri_username"></td> 
+ <td><input name="u_username"></td> 
 <td></td>
 <td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
@@ -152,7 +152,7 @@ GET
 <td></td>
 </tr> <tr>
 <td> target_user </td>
- <td><input name="uri_target_user"></td> 
+ <td><input name="u_target_user"></td> 
 <td></td>
 <td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
@@ -198,7 +198,7 @@ GET
 </table>
 </div>
 
-<button onclick="rd.tryOut(this,'GET','https://api.github.com','/users/{username}/following/{target_user}',''); return false;">
+<button class="try GET" onclick="rd.tryOut(this,'GET','/users/{username}/following/{target_user}',''); return false;">
 Try it!
 </button>
 <img src="../../../../.././ajax-loader.gif" class="invisible loader"/>
@@ -214,6 +214,6 @@ Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
 </div>
 </div>
 </div>
-
+<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
 </body>
 </html>

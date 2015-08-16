@@ -141,7 +141,7 @@ GET
 </tr>
 <tr>
 <td> language </td>
- <td><input name="uri_language"></td> 
+ <td><input name="u_language"></td> 
 <td></td>
 <td onclick="rd.useExample(this)" class="example"></td>
 <td> STRING </td>
@@ -178,8 +178,8 @@ GET
 </select>
 <br/><br/>
 <div class="body application/json">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -194,8 +194,8 @@ GET
 }</pre>
 </div>
 </div><div class="body application/vnd.github.VERSION.raw+json">
-<span class="active" onclick="rd.showModel(this,true)">model</span> |
-<span class="inactive" onclick="rd.showModel(this,false)">example</span>
+<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
+<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
 <div class="model">
 <pre class="code prettyprint"></pre>
 </div>
@@ -233,7 +233,7 @@ Object files
 </table>
 </div>
 
-<button onclick="rd.tryOut(this,'GET','https://api.github.com','/gitignore/templates/{language}',''); return false;">
+<button class="try GET" onclick="rd.tryOut(this,'GET','/gitignore/templates/{language}',''); return false;">
 Try it!
 </button>
 <img src="../../../.././ajax-loader.gif" class="invisible loader"/>
@@ -249,6 +249,6 @@ Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
 </div>
 </div>
 </div>
-
+<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
 </body>
 </html>

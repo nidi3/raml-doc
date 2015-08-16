@@ -260,3 +260,7 @@ select.contentType {
 .response {
     margin-top: 1em;
 }
+
+.link {
+    color: blue;
+}
