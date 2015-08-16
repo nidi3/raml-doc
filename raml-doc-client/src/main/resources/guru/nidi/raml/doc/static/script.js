@@ -50,7 +50,38 @@ var rd = (function () {
         }
     }
 
+    function parseQuery(q) {
+        var i, parts, res = {}, params = q.substring(1).split('&');
+        if (q.charAt(0) === '?') {
+            for (i = 0; i < params.length; i++) {
+                parts = params[i].split('=');
+                res[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+            }
+        }
+        return res;
+    }
+
     return {
+        setBaseUri: function (uri) {
+            var href = window.location.href,
+                hostPos = href.indexOf('://'),
+                pathPos = href.indexOf('/', hostPos + 3),
+                endPathPos = href.indexOf('/resource/'),
+                host = href.substring(hostPos + 3, pathPos),
+                path = href.substring(pathPos + 1, endPathPos);
+            rd.baseUri = normalize(uri.replace('$host', host).replace('$path', path + '/../..'));
+
+            function normalize(path) {
+                var len;
+                path = path.replace(/\/\.\//g, '/');
+                do {
+                    len = path.length;
+                    path = path.replace(/\/[^\/]+\/\.\.\//, '/');
+                } while (path.length != len);
+                return path;
+            }
+        },
+
         showTrWithId: function (elem, id) {
             var show = null;
             doWithChildren(findParent(elem, 'tbody'), function (tr) {
@@ -80,10 +111,10 @@ var rd = (function () {
                 next.style.display = next.style.display === 'block' ? 'none' : 'block';
             }
         },
-        tryOut: function (button, type, baseUri, path, securitySchemes) {
+        tryOut: function (button, type, path, securitySchemes) {
             showLoader(true);
             showResponse();
-            sendRequest(createRequest(baseUri + path, securitySchemes), handleResponse);
+            sendRequest(createRequest(rd.baseUri + path, securitySchemes), handleResponse);
 
             function createRequest(uri, securitySchemes) {
                 var i, prop,
@@ -138,7 +169,7 @@ var rd = (function () {
             }
 
             function sendRequest(r, handler) {
-                var h, url = normalize(interpretUri(r.uri) + '?' + r.query),
+                var h, url = (r.uri + '?' + r.query).replace(/[?&]$/, ''),
                     req = new XMLHttpRequest();
                 req.onreadystatechange = function () {
                     if (req.readyState === 4) {
@@ -158,26 +189,6 @@ var rd = (function () {
                 } catch (e) {
                     alert('Could not send request: ' + e);
                 }
-            }
-
-            function normalize(path) {
-                var len;
-                path = path.replace(/\/\.\//g, '/').replace(/[?&]$/, '');
-                do {
-                    len = path.length;
-                    path = path.replace(/\/[^\/]+\/\.\.\//, '/');
-                } while (path.length != len);
-                return path;
-            }
-
-            function interpretUri(uri) {
-                var href = window.location.href,
-                    hostPos = href.indexOf('://'),
-                    pathPos = href.indexOf('/', hostPos + 3),
-                    endPathPos = href.indexOf('/resource/'),
-                    host = href.substring(hostPos + 3, pathPos),
-                    path = href.substring(pathPos + 1, endPathPos);
-                return uri.replace('$host', host).replace('$path', path + '/../..');
             }
 
             function handleResponse(url, req) {
@@ -200,15 +211,53 @@ var rd = (function () {
             }
 
             function linkify(resBody) {
-                var i, a, strings = resBody.querySelectorAll('.str');
+                var i, p, a,url,known, strings = resBody.querySelectorAll('.str');
                 for (i = 0; i < strings.length; i++) {
                     var content = strings[i].firstChild.nodeValue;
                     if (content.substring(0, 5) === '"http') {
+                        url = content.substring(1, content.length - 1);
+                        known = knownLink(url);
+                        if (known) {
+                            url = document.location.protocol + '//' + document.location.host + document.location.pathname + '/' + rd.relPath + known.url + '.html?';
+                            for (p in known.query) {
+                                url += 'q_' + encodeURIComponent(p) + '=' + encodeURIComponent(known.query[p]) + '&';
+                            }
+                            for (p in known.vars) {
+                                url += 'u_' + encodeURIComponent(p) + '=' + encodeURIComponent(known.vars[p]) + '&';
+                            }
+                            url += 'method=get&run';
+                        }
                         a = document.createElement('a');
-                        a.setAttribute('href', content.substring(1, content.length - 1));
+                        a.setAttribute('href', url);
                         a.setAttribute('target', '_blank');
                         wrap(strings[i], a);
                         strings[i].className = 'link';
+                    }
+                }
+            }
+
+            function knownLink(url) {
+                var i, j, patternParts, res, match, parts, qPos;
+                if (url.substring(0, rd.baseUri.length) === rd.baseUri) {
+                    url = url.substring(rd.baseUri.length);
+                    qPos = url.indexOf('?');
+                    parts = (qPos < 0 ? url : url.substring(0, qPos)).split('/');
+                    for (i = 0; i < rd.urls.length; i++) {
+                        patternParts = rd.urls[i].split('/');
+                        if (patternParts.length === parts.length) {
+                            res = {url: rd.urls[i], vars: {}, query: parseQuery(url.substring(qPos))};
+                            match = true;
+                            for (j = 0; j < patternParts.length; j++) {
+                                if (patternParts[j].charAt(0) === '{') {
+                                    res.vars[patternParts[j].substring(1, patternParts[j].length - 1)] = parts[j];
+                                } else if (patternParts[j] !== parts[j]) {
+                                    match = false;
+                                }
+                            }
+                            if (match) {
+                                return res;
+                            }
+                        }
                     }
                 }
             }
@@ -275,7 +324,7 @@ var rd = (function () {
             findParent(div, 'tr').querySelectorAll('td textarea,td input')[0].value = code;
         },
         applyQuery: function () {
-            var inputs, i, q, query = parseQuery();
+            var inputs, i, q, query = parseQuery(document.location.search);
             for (q in query) {
                 if (q.charAt(1) === '_') {
                     inputs = document.querySelectorAll('input[name=' + q + ']');
@@ -288,17 +337,8 @@ var rd = (function () {
                 var method = query['method'].toUpperCase();
                 rd.showActionDetail(document.querySelector('.actionHeader.bg_' + method));
                 if (query['run']) {
-                    document.querySelector('.try.'+method).click();
+                    document.querySelector('.try.' + method).click();
                 }
-            }
-
-            function parseQuery() {
-                var i, parts, res = {}, params = document.location.search.substring(1).split('&');
-                for (i = 0; i < params.length; i++) {
-                    parts = params[i].split('=');
-                    res[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-                }
-                return res;
             }
         }
     };

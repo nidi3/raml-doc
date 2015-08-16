@@ -17,10 +17,13 @@ main(raml,ramls,template,param,util,relPath,basePath,baseUri,download) ::= <<
     $htmlHead()$
 
     $(template)(param)$
-
-    <script>rd.applyQuery()</script>
+    <script>rd.urls=[$ramls:urls()$]; rd.relPath='$relPath$'; rd.setBaseUri('$baseUri$'); rd.applyQuery();</script>
     </body>
     </html>
+>>
+
+urls(raml) ::= <<
+    $raml.allResources:{r|"$r.uri$", }$
 >>
 
 htmlHead() ::= <<
