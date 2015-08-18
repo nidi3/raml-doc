@@ -17,6 +17,7 @@ package guru.nidi.raml.doc;
 
 import guru.nidi.raml.doc.st.Feature;
 import org.apache.commons.cli.*;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,13 +55,14 @@ public class OptionParser {
 
     @SuppressWarnings("static-access")
     protected Options createOptions() {
+        final String features = StringUtils.join(EnumSet.allOf(Feature.class).toArray(),", ").toLowerCase();
         return new Options()
                 .addOption(withDescription("The RAML resource\n" +
                         "Format: filename,\n" +
                         "[user:pass@]http://, [user:pass@]https://,\n" +
                         "[token@]github://user/project/file, user:pass@apiportal://").isRequired(true).withArgName("URL").hasArg(true).create('r'))
                 .addOption(withDescription("Target directory to write the output\nDefault: current directory").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
-                .addOption(withDescription("Enable features\nComma separated list of these features: download,tryout\nDefault: download,tryout").isRequired(false).hasArg(true).create('f'))
+                .addOption(withDescription("Enable features\nComma separated list of these features: " + features + "\nDefault: " + features).isRequired(false).hasArg(true).create('f'))
                 .addOption(withDescription("The parent title if there is more than one RAML\nDefault: The title for the first RAML").isRequired(false).withArgName("Title").hasArg(true).create('m'))
                 .addOption(withDescription("The base URI to use\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
                 .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'));
