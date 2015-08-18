@@ -15,6 +15,8 @@
  */
 package guru.nidi.raml.doc.servlet;
 
+import guru.nidi.loader.Loader;
+import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.st.Feature;
 import org.slf4j.Logger;
@@ -98,8 +100,22 @@ public class RamlDocServlet extends HttpServlet {
         return getInitParameter("baseUriParameters");
     }
 
+    protected String customization() {
+        return getInitParameter("customization");
+    }
+
+    protected Loader getCustomization() {
+        final String base = customization() == null ? "classpath://guru/nidi/raml/doc/custom" : customization();
+        return new UriLoader() {
+            @Override
+            public InputStream fetchResource(String name, long ifModifiedSince) {
+                return super.fetchResource(base + "/" + name, ifModifiedSince);
+            }
+        };
+    }
+
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters());
+        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters(), getCustomization());
     }
 
     protected String getRamlLocations() {

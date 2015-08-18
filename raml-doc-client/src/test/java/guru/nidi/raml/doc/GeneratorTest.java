@@ -15,9 +15,7 @@
  */
 package guru.nidi.raml.doc;
 
-import guru.nidi.loader.basic.FileLoader;
-import guru.nidi.loader.use.raml.RamlLoad;
-import guru.nidi.raml.doc.st.Generator;
+import guru.nidi.raml.doc.st.Feature;
 import org.junit.Test;
 
 import javax.script.ScriptEngine;
@@ -25,6 +23,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.EnumSet;
 
 /**
  *
@@ -32,12 +31,12 @@ import java.io.InputStreamReader;
 public class GeneratorTest {
     @Test
     public void basic() throws Exception {
-        new Generator(new File("target/basicTryOut"))
-                .baseUri("http://localhost:8080")
-                .generate(new RamlLoad(new FileLoader(new File("src/test/resources/data"))).load("basic.raml"));
-        new Generator(new File("target/basic"))
-                .generate(new RamlLoad(new FileLoader(new File("src/test/resources/data"))).load("basic.raml"));
-//        new Generator().tryOut(false).generate("file:src/test/resources/GaiaNewListServices.raml", new File("target"));
+        new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basicTryOut"),
+                EnumSet.allOf(Feature.class), "http://localhost:8080", null, null)
+                .generate();
+        new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basic"),
+                EnumSet.noneOf(Feature.class), "http://localhost:8080", null, null)
+                .generate();
     }
 
     @Test

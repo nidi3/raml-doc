@@ -15,6 +15,7 @@
  */
 package guru.nidi.raml.doc;
 
+import guru.nidi.loader.Loader;
 import guru.nidi.loader.basic.CachingLoaderInterceptor;
 import guru.nidi.loader.basic.FileLoader;
 import guru.nidi.loader.basic.InterceptingLoader;
@@ -38,13 +39,31 @@ public class GeneratorConfig {
     private final EnumSet<Feature> features;
     private final String baseUri;
     private final String baseUriParameters;
+    private final Loader customization;
 
-    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters) {
+    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization) {
         this.ramlLocations = ramlLocations;
         this.target = target;
         this.features = features;
         this.baseUri = baseUri;
         this.baseUriParameters = baseUriParameters;
+        this.customization = customization;
+    }
+
+    public File getTarget() {
+        return target;
+    }
+
+    public boolean hasFeature(Feature feature) {
+        return features.contains(feature);
+    }
+
+    public String getBaseUri() {
+        return baseUri;
+    }
+
+    public InputStream loadCustomization(String name) {
+        return customization == null ? null : customization.fetchResource(name, -1);
     }
 
     public String getBaseUri(Raml raml) {
@@ -84,12 +103,10 @@ public class GeneratorConfig {
     }
 
     public String generate() throws IOException {
-        final Generator generator = new Generator(target).features(this.features);
+        final Generator generator = new Generator(this);
         final List<Raml> ramls = loadRamls(generator);
         for (final Raml raml : ramls) {
-            generator
-                    .baseUri(getBaseUri(raml))
-                    .generate(raml, ramls);
+            generator.generate(raml, ramls);
         }
         return generator.getTarget(ramls.get(0)).getName();
     }

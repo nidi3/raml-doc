@@ -15,6 +15,8 @@
  */
 package guru.nidi.raml.doc.st;
 
+import guru.nidi.loader.Loader;
+import guru.nidi.raml.doc.GeneratorConfig;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
@@ -23,37 +25,26 @@ import org.raml.model.parameter.AbstractParam;
 import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
-import org.stringtemplate.v4.compiler.CompiledST;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  */
 public class Generator {
-    private final File target;
-    private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
-    private String baseUri;
+    private final GeneratorConfig config;
 
-    public Generator(File target) {
-        this.target = target;
-    }
-
-    public Generator features(EnumSet<Feature> features) {
-        this.features = features;
-        return this;
-    }
-
-    public Generator baseUri(String baseUri) {
-        this.baseUri = baseUri;
-        return this;
+    public Generator(GeneratorConfig config) {
+        this.config = config;
     }
 
     public File getTarget(Raml raml) {
-        return new File(target, raml.getTitle());
+        return new File(config.getTarget(), raml.getTitle());
     }
 
     public void generate(Raml raml) throws IOException {
@@ -74,13 +65,14 @@ public class Generator {
         final ST main = group.getInstanceOf("main/main");
         main.add("ramls", ramls);
 
-        final String realBaseUri = baseUri != null ? baseUri : raml.getBaseUri();
-        main.add("baseUri", features.contains(Feature.TRYOUT) ? realBaseUri : null);
-        main.add("download", features.contains(Feature.DOWNLOAD));
+        final String realBaseUri = config.getBaseUri() != null ? config.getBaseUri() : raml.getBaseUri();
+        main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? realBaseUri : null);
+        main.add("download", config.hasFeature(Feature.DOWNLOAD));
 
-        target.mkdirs();
-        copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
+        config.getTarget().mkdirs();
+        copyStaticResource(config.getTarget(), "favicon.ico", "ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+        copyCustomResource(config.getTarget(), "favicon.ico");
 
         final File target = getTarget(raml);
         target.mkdirs();
@@ -90,7 +82,7 @@ public class Generator {
         for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
             final File file = new File(target, "resource/" + resource.getUri() + ".html");
-            render(main, "/resource/resource",  depth(resource.getUri()), file);
+            render(main, "/resource/resource", depth(resource.getUri()), file);
         }
 
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
@@ -102,7 +94,7 @@ public class Generator {
         }
     }
 
-    private void render(ST template, String sub,String relPath, File target) throws IOException {
+    private void render(ST template, String sub, String relPath, File target) throws IOException {
         set(template, "template", sub);
         set(template, "relPath", relPath);
         render(template, target);
@@ -125,11 +117,22 @@ public class Generator {
         }
     }
 
-    private void copyResource(File base, String... names) throws IOException {
+    private void copyStaticResource(File base, String... names) throws IOException {
         for (String name : names) {
             try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
                 copy(in, out);
+            }
+        }
+    }
+
+    private void copyCustomResource(File base, String... names) throws IOException {
+        for (String name : names) {
+            try (final InputStream in = config.loadCustomization(name);
+                 final FileOutputStream out = new FileOutputStream(new File(base, name))) {
+                copy(in, out);
+            } catch (Loader.ResourceNotFoundException e) {
+                //ignore
             }
         }
     }

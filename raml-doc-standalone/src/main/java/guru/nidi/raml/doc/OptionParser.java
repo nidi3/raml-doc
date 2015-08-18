@@ -15,6 +15,9 @@
  */
 package guru.nidi.raml.doc;
 
+import guru.nidi.loader.Loader;
+import guru.nidi.loader.basic.FileLoader;
+import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.raml.doc.st.Feature;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang.StringUtils;
@@ -37,9 +40,17 @@ public class OptionParser {
                 parseTarget(cmd.getOptionValue('t')),
                 parseFeatures(cmd.getOptionValue('f')),
                 cmd.getOptionValue('b'),
-                cmd.getOptionValue('p'));
+                cmd.getOptionValue('p'),
+                parseCustomization(cmd.getOptionValue('c')));
     }
 
+
+    private Loader parseCustomization(String c) {
+        if (c == null) {
+            return null;
+        }
+        return new UriLoader(new FileLoader(new File(c)));
+    }
 
     private File parseTarget(String t) {
         if (t == null) {
@@ -54,7 +65,7 @@ public class OptionParser {
 
     @SuppressWarnings("static-access")
     protected Options createOptions() {
-        final String features = StringUtils.join(EnumSet.allOf(Feature.class).toArray(),", ").toLowerCase();
+        final String features = StringUtils.join(EnumSet.allOf(Feature.class).toArray(), ", ").toLowerCase();
         return new Options()
                 .addOption(withDescription("The RAML resource\n" +
                         "Format: filename,\n" +
@@ -63,7 +74,8 @@ public class OptionParser {
                 .addOption(withDescription("Target directory to write the output\nDefault: current directory").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
                 .addOption(withDescription("Enable features\nComma separated list of these features: " + features + "\nDefault: " + features).isRequired(false).hasArg(true).create('f'))
                 .addOption(withDescription("The base URI to use\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
-                .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'));
+                .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'))
+                .addOption(withDescription("Customization location, favicon.ico is taken from here\nFormat: see -r").isRequired(false).withArgName("URL").hasArg(true).create('c'));
     }
 
     public void showHelp() {
@@ -78,7 +90,7 @@ public class OptionParser {
     }
 
     protected OptionComparator optionComparator() {
-        return new OptionComparator("rtfbp");
+        return new OptionComparator("rtfbpc");
     }
 
     protected String[] expandArgs(String[] args) {
