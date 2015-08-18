@@ -37,7 +37,6 @@ public class Generator {
     private final File target;
     private EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
     private String baseUri;
-    private String parentTitle;
 
     public Generator(File target) {
         this.target = target;
@@ -48,17 +47,8 @@ public class Generator {
         return this;
     }
 
-    public Generator features(Feature... features) {
-        return features(EnumSet.copyOf(Arrays.asList(features)));
-    }
-
     public Generator baseUri(String baseUri) {
         this.baseUri = baseUri;
-        return this;
-    }
-
-    public Generator parentTitle(String parentTitle) {
-        this.parentTitle = parentTitle;
         return this;
     }
 
@@ -92,34 +82,28 @@ public class Generator {
         copyResource(target, "favicon.ico", "ajax-loader.gif", "style.css",
                 "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
 
-        final Raml parent = new Raml();
-        parent.setTitle(parentTitle == null ? ramls.get(0).getTitle() : parentTitle);
-        main.add("raml", parent);
-        render(main, "/main/docMain", ".", ".", new File(target, "index.html"));
-
         final File target = getTarget(raml);
         target.mkdirs();
         set(main, "raml", raml);
-        render(main, "/main/doc", "..", ".", new File(target, "index.html"));
+        render(main, "/main/doc", ".", new File(target, "index.html"));
 
         for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
             final File file = new File(target, "resource/" + resource.getUri() + ".html");
-            render(main, "/resource/resource", "../" + depth(resource.getUri()), depth(resource.getUri()), file);
+            render(main, "/resource/resource",  depth(resource.getUri()), file);
         }
 
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
             for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
                 set(main, "param", entry);
                 final File file = new File(target, "security-scheme/" + entry.getKey() + ".html");
-                render(main, "/securityScheme/securityScheme", "../..", "..", file);
+                render(main, "/securityScheme/securityScheme", "..", file);
             }
         }
     }
 
-    private void render(ST template, String sub, String basePath, String relPath, File target) throws IOException {
+    private void render(ST template, String sub,String relPath, File target) throws IOException {
         set(template, "template", sub);
-        set(template, "basePath", basePath);
         set(template, "relPath", relPath);
         render(template, target);
     }

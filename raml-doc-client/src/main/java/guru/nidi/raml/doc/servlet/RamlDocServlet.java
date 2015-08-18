@@ -40,6 +40,7 @@ public class RamlDocServlet extends HttpServlet {
     }};
 
     private final CountDownLatch latch = new CountDownLatch(1);
+    private String baseDir;
 
     @Override
     public void init() throws ServletException {
@@ -52,7 +53,7 @@ public class RamlDocServlet extends HttpServlet {
                 @Override
                 public void run() {
                     try {
-                        createGeneratorConfig().generate();
+                        baseDir = createGeneratorConfig().generate();
                     } catch (Exception e) {
                         log.error("Could not create RAML documentation", e);
                     } finally {
@@ -89,10 +90,6 @@ public class RamlDocServlet extends HttpServlet {
         return Feature.parse(getInitParameter("features"));
     }
 
-    protected String parentTitle() {
-        return getInitParameter("parentTitle");
-    }
-
     protected String baseUri() {
         return getInitParameter("baseUri");
     }
@@ -102,7 +99,7 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocations(), docDir(), features(), parentTitle(), baseUri(), baseUriParameters());
+        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters());
     }
 
     protected String getRamlLocations() {
@@ -112,9 +109,7 @@ public class RamlDocServlet extends HttpServlet {
 
     private File docDir() {
         final File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        final String contextPath = getServletContext().getContextPath();
-        final boolean isEmpty = contextPath.length() == 0 || contextPath.length() == 1;
-        return new File(tempDir, "raml-doc" + (isEmpty ? "/_ROOT" : contextPath));
+        return new File(tempDir, "raml-doc/" + getServletName());
     }
 
     @Override
@@ -126,11 +121,11 @@ public class RamlDocServlet extends HttpServlet {
         try {
             latch.await();
             if (req.getPathInfo() == null) {
-                res.sendRedirect(req.getRequestURL().append("/index.html").toString());
+                res.sendRedirect(req.getRequestURL().append("/" + baseDir + "/index.html").toString());
                 return;
             }
             if (req.getPathInfo().length() == 1) {
-                res.sendRedirect(req.getRequestURL().append("index.html").toString());
+                res.sendRedirect(req.getRequestURL().append(baseDir + "/index.html").toString());
                 return;
             }
             final File source = new File(docDir(), req.getPathInfo());
