@@ -63,7 +63,10 @@ public class GeneratorConfig {
     }
 
     public InputStream loadCustomization(String name) {
-        return customization == null ? null : customization.fetchResource(name, -1);
+        if (customization == null) {
+            throw new Loader.ResourceNotFoundException(name);
+        }
+        return customization.fetchResource(name, -1);
     }
 
     public String getBaseUri(Raml raml) {
