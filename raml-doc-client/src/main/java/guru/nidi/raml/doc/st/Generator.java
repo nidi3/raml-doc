@@ -127,7 +127,7 @@ public class Generator {
     }
 
     private STGroupDir initSTGroup(Raml raml) {
-        final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st");
+        final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st-templates");
 
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
         group.registerModelAdaptor(Raml.class, new RamlAdaptor());

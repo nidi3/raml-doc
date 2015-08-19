@@ -13,34 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package guru.nidi.raml.doc;
+package guru.nidi.raml.doc.st;
 
 import org.junit.Test;
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
 
 /**
  *
  */
-public class MarkdownTest {
+public class StringRendererTest {
+    private final StringRenderer renderer = new StringRenderer(null);
+
     @Test
     public void code() {
-        final PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
         final String s = "bla `inline`\n\n    indented\n\n```\nblock\n```\n\nnext";
-        System.out.println(processor.markdownToHtml(s));
+        System.out.println(renderer.toString(s, "markdown", null));
     }
 
     @Test
     public void list() {
-        final PegDownProcessor processor = new PegDownProcessor();
         final String s = "bla\n\n- first\n- second\n\nbla\n\n* first\n* second\n\nbla\n\n+ first\n+ second\n\n1. first\n1. second\n\n";
-        System.out.println(processor.markdownToHtml(s));
+        System.out.println(renderer.toString(s, "markdown", null));
+    }
+
+    @Test
+    public void heading() {
+        final String s = "#### h4";
+        System.out.println(renderer.toString(s, "markdown", null));
     }
 
     @Test
     public void table() {
-        final PegDownProcessor processor = new PegDownProcessor(Extensions.TABLES);
-        final String s = processor.markdownToHtml("```\n" +
+        final String s = renderer.toString("```\n" +
                 "      Status: 200 OK\n" +
                 "      Link: <https://api.github.com/resource?page=2>; rel=\"next\",\n" +
                 "            <https://api.github.com/resource?page=5>; rel=\"last\"\n" +
@@ -85,7 +88,7 @@ public class MarkdownTest {
                 "          }\n" +
                 "        ]\n" +
                 "      }\n" +
-                "      ```");
+                "      ```", "markdown", null);
         System.out.println(s);
     }
 }

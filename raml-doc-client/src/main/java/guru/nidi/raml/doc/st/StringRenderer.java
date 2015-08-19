@@ -15,7 +15,6 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.pegdown.PegDownProcessor;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -27,27 +26,29 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
-import static org.pegdown.Extensions.FENCED_CODE_BLOCKS;
-import static org.pegdown.Extensions.TABLES;
 
 /**
  *
  */
 class StringRenderer implements AttributeRenderer {
-    private final PegDownProcessor processor;
     private final Raml raml;
-    private final ScriptEngine engine;
-    private final Invocable invocable;
+    private final JsBeautifyer jsBeautifyer;
+    private final MarkdownProcessor markdownProcessor;
 
     public StringRenderer(Raml raml) {
         this.raml = raml;
-        processor = new PegDownProcessor(TABLES | FENCED_CODE_BLOCKS);
-        engine = new ScriptEngineManager().getEngineByExtension("js");
-        invocable = (Invocable) engine;
+        final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
+        final Invocable invocable = (Invocable) engine;
         try {
             engine.eval("var window=this;");
             //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
             engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js"), "utf-8"));
+            engine.eval("jsBeautify=js_beautify;");
+            jsBeautifyer = invocable.getInterface(JsBeautifyer.class);
+
+            engine.eval("Inline=null;");
+            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/marked.js"), "utf-8"));
+            markdownProcessor = invocable.getInterface(MarkdownProcessor.class);
         } catch (ScriptException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -86,11 +87,7 @@ class StringRenderer implements AttributeRenderer {
     }
 
     private String js(String s) {
-        try {
-            return ((String) invocable.invokeFunction("js_beautify", s)).replace("<", "&lt;");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return jsBeautifyer.jsBeautify(s).replace("<", "&lt;");
     }
 
     private String summary(String s) {
@@ -99,6 +96,14 @@ class StringRenderer implements AttributeRenderer {
     }
 
     private String markdown(String s) {
-        return processor.markdownToHtml(s.replaceAll("\\n([-+*]) ","\n\n$1 ").replaceAll("\\n(\\d+)\\.","\n\n$1."));
+        return markdownProcessor.marked(s);
+    }
+
+    private interface JsBeautifyer {
+        String jsBeautify(String s);
+    }
+
+    private interface MarkdownProcessor {
+        String marked(String s);
     }
 }

@@ -48,7 +48,23 @@ documentation:
       - dfd
       - fsdf
       - fdssd
+
       xfhsdkfjshdfksd
+
+      1. Log in to your Unbounce account and navigate to your account management screen.
+
+         ![Account Preferences](https://api.unbounce.com/app_assets/api/screenshots/account_preferences_link-387278417417bdc3e43c74925c0303ac.png)
+
+      1. Open the API Keys tab and create a new API key.
+
+         ![Create API key](https://api.unbounce.com/app_assets/api/screenshots/create_api_key-f66f72b526f2250da2b3c8c069c62296.png)
+
+      1. Test your new API Key by running:
+
+             curl -u API_KEY: -X GET https://api.unbounce.com/accounts
+
+         Or alternatively, browse the [API Console](https://api.unbounce.com/console.html)
+         and use your API key as the username, leaving the password field blank.
 /data:
   get:
     description: |
