@@ -23,15 +23,16 @@ a, a:visited, a:active, a:hover {
 }
 
 .resources {
+    white-space: nowrap;
     line-height: 150%;
-    width: 12em;
+    width: 22em;
     float: left;
     padding-left: 1em;
     overflow: auto;
 }
 
 .content {
-    margin-left: 13em;
+    margin-left: 24em;
     padding-right: 1em;
 }
 
