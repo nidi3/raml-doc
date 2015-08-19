@@ -212,12 +212,16 @@ var rd = (function () {
                 }
                 response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
                 response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
-                var resBody = response.querySelector('[name=responseBody]');
+                var resBody = response.querySelector('[name=responseBody]'),
+                    resText = req.responseText;
+                if (resText.length > 100000) {
+                    resText = resText.substring(0, 100000) + '...';
+                }
                 if (isJson(req.getResponseHeader('Content-Type'))) {
-                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(req.responseText));
+                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
                     linkify(resBody);
                 } else {
-                    resBody.firstChild.nodeValue = req.responseText;
+                    resBody.firstChild.nodeValue = resText;
                 }
                 response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
                 response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
@@ -370,7 +374,7 @@ var rd = (function () {
             var loc = document.location.pathname,
                 pos = loc.indexOf('resource'),
                 path = decodeURIComponent(loc.substring(pos + 8, loc.length - 5)),
-                escPath=path.replace(/\//g,'\\/').replace(/\{/g,'\\{').replace(/\}/g,'\\}'),
+                escPath = path.replace(/\//g, '\\/').replace(/\{/g, '\\{').replace(/\}/g, '\\}'),
                 link = document.querySelector('a[title=' + escPath + ']');
             if (link) {
                 link.classList.add('active');
