@@ -23,19 +23,11 @@ a, a:visited, a:active, a:hover {
 }
 
 .resources {
+    line-height: 150%;
     width: 12em;
     float: left;
     padding-left: 1em;
     overflow: auto;
-}
-
-.resources li {
-    list-style-type: none;
-    line-height: 150%;
-}
-
-.resources ul {
-    padding-left: 1em;
 }
 
 .content {
@@ -245,12 +237,13 @@ button {
     text-decoration: underline;
 }
 
-.active, .inactive, .example {
+.active, .inactive, .example, .foldable {
     cursor: pointer;
 }
 
 .active {
     font-weight: bolder;
+    color: #000 !important;
 }
 
 select.contentType {
@@ -263,4 +256,23 @@ select.contentType {
 
 .link {
     color: blue;
+}
+
+.subLink {
+    margin-left: 1em;
+}
+
+.subLink span, .subLink a {
+    float: left;
+}
+
+.foldable {
+    display: inline-block;
+    font-size: 80%;
+    color: #888;
+    margin-left: -1em;
+}
+
+.collapsed {
+    transform: rotate(-90deg);
 }

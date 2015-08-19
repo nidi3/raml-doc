@@ -55,11 +55,25 @@ var rd = (function () {
         if (q.charAt(0) === '?') {
             for (i = 0; i < params.length; i++) {
                 parts = params[i].split('=');
-                res[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+                res[decodeURIComponent(parts[0])] = parts.length == 1 ? null : decodeURIComponent(parts[1]);
             }
         }
         return res;
     }
+
+    var items = {
+        load: function (name) {
+            var val = sessionStorage.getItem(name);
+            return val ? JSON.parse(val) : null;
+        },
+
+        store: function (name, value) {
+            sessionStorage.setItem(name, JSON.stringify(value));
+        },
+        remove: function (name) {
+            sessionStorage.removeItem(name);
+        }
+    };
 
     return {
         setBaseUri: function (uri) {
@@ -122,9 +136,8 @@ var rd = (function () {
                         uri: uri, body: null, query: '', header: {}
                     },
                     form = findParent(button, 'form'),
-                    creds = sessionStorage.getItem('creds');
+                    creds = items.load('creds');
                 if (creds) {
-                    creds = JSON.parse(creds);
                     if (securitySchemes.indexOf(creds.name + ',') >= 0) {
                         for (prop in creds.data) {
                             setRequestValue(req, {name: prop, value: creds.data[prop]});
@@ -199,19 +212,23 @@ var rd = (function () {
                 }
                 response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
                 response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
-                var resBody = response.querySelector('[name=responseBody]');
+                var resBody = response.querySelector('[name=responseBody]'),
+                    resText = req.responseText;
+                if (resText.length > 100000) {
+                    resText = resText.substring(0, 100000) + '...';
+                }
                 if (isJson(req.getResponseHeader('Content-Type'))) {
-                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(req.responseText));
+                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
                     linkify(resBody);
                 } else {
-                    resBody.firstChild.nodeValue = req.responseText;
+                    resBody.firstChild.nodeValue = resText;
                 }
                 response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
                 response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
             }
 
             function linkify(resBody) {
-                var i, p, a,url,known, strings = resBody.querySelectorAll('.str');
+                var i, p, a, url, known, strings = resBody.querySelectorAll('.str');
                 for (i = 0; i < strings.length; i++) {
                     var content = strings[i].firstChild.nodeValue;
                     if (content.substring(0, 5) === '"http') {
@@ -276,11 +293,11 @@ var rd = (function () {
                 elem = form.elements[i];
                 data[elem.name] = elem.value;
             }
-            sessionStorage.setItem('creds', JSON.stringify({name: name, data: data}));
+            items.store('creds', {name: name, data: data});
             rd.initSecData(button);
         },
         logout: function (button, global) {
-            sessionStorage.removeItem('creds');
+            items.remove('creds');
             if (global) {
                 rd.initGlobalSecData(button);
             } else {
@@ -290,10 +307,10 @@ var rd = (function () {
         initSecData: function (script) {
             var i, elem,
                 form = findParent(script, 'form'),
-                data = sessionStorage.getItem('creds');
+                data = items.load('creds');
 
             if (data) {
-                data = JSON.parse(data).data;
+                data = data.data;
             }
             for (i = 0; i < form.elements.length; i++) {
                 elem = form.elements[i];
@@ -308,7 +325,7 @@ var rd = (function () {
             }
         },
         initGlobalSecData: function (script) {
-            var data = JSON.parse(sessionStorage.getItem('creds')),
+            var data = items.load('creds'),
                 logout = findParent(script, 'div').querySelector('[name=logout]');
             logout.style.display = data ? 'inline' : 'none';
         },
@@ -324,7 +341,7 @@ var rd = (function () {
             findParent(div, 'tr').querySelectorAll('td textarea,td input')[0].value = code;
         },
         applyQuery: function () {
-            var inputs, i, q, query = parseQuery(document.location.search);
+            var inputs, i, q, foldables, expanded, query = parseQuery(document.location.search);
             for (q in query) {
                 if (q.charAt(1) === '_') {
                     inputs = document.querySelectorAll('input[name=' + q + ']');
@@ -340,6 +357,43 @@ var rd = (function () {
                     document.querySelector('.try.' + method).click();
                 }
             }
+            if ((expanded = query['expanded']) !== undefined) {
+                var ex = (expanded || '').split(',');
+                foldables = document.querySelectorAll('.foldable.collapsed');
+                for (i = 0; i < foldables.length; i++) {
+                    rd.switchFoldable(foldables[i], expanded === null || ex.indexOf(foldables[i].getAttribute('name')) !== -1);
+                }
+            } else {
+                var tree = items.load('tree') || {};
+                foldables = document.querySelectorAll('.foldable');
+                for (i = 0; i < foldables.length; i++) {
+                    var expanded = tree[foldables[i].getAttribute('name')];
+                    rd.switchFoldable(foldables[i], expanded === undefined ? false : expanded);
+                }
+            }
+            var loc = document.location.pathname,
+                pos = loc.indexOf('resource'),
+                path = decodeURIComponent(loc.substring(pos + 8, loc.length - 5)),
+                escPath = path.replace(/\//g, '\\/').replace(/\{/g, '\\{').replace(/\}/g, '\\}'),
+                link = document.querySelector('a[title=' + escPath + ']');
+            if (link) {
+                link.classList.add('active');
+            }
+        },
+        switchFoldable: function (span, expanded) {
+            var cl = span.classList,
+                name = span.getAttribute('name'),
+                tree = items.load('tree') || {};
+            if (hasClass(span, 'collapsed') && expanded !== false) {
+                tree[name] = true;
+                cl.remove('collapsed');
+                nextSiblingWithClass(span, 'subLink').style.display = 'block';
+            } else if (expanded !== true) {
+                tree[name] = false;
+                cl.add('collapsed');
+                nextSiblingWithClass(span, 'subLink').style.display = 'none';
+            }
+            items.store('tree', tree);
         }
     };
 }());
