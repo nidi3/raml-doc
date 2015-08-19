@@ -41,7 +41,8 @@ public class OptionParser {
                 parseFeatures(cmd.getOptionValue('f')),
                 cmd.getOptionValue('b'),
                 cmd.getOptionValue('p'),
-                parseCustomization(cmd.getOptionValue('c')));
+                parseCustomization(cmd.getOptionValue('c')),
+                false);
     }
 
 

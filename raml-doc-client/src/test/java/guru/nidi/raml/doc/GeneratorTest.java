@@ -32,10 +32,10 @@ public class GeneratorTest {
     @Test
     public void basic() throws Exception {
         new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basicTryOut"),
-                EnumSet.allOf(Feature.class), "http://localhost:8080", null, null)
+                EnumSet.allOf(Feature.class), "http://localhost:8080", null, null, false)
                 .generate();
         new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basic"),
-                EnumSet.noneOf(Feature.class), "http://localhost:8080", null, null)
+                EnumSet.noneOf(Feature.class), "http://localhost:8080", null, null, false)
                 .generate();
     }
 

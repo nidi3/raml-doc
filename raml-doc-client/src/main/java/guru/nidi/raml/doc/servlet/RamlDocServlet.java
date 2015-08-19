@@ -115,7 +115,7 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected GeneratorConfig createGeneratorConfig() {
-        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters(), getCustomization());
+        return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters(), getCustomization(), true);
     }
 
     protected String getRamlLocations() {

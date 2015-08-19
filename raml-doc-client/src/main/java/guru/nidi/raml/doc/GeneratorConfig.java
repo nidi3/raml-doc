@@ -40,14 +40,16 @@ public class GeneratorConfig {
     private final String baseUri;
     private final String baseUriParameters;
     private final Loader customization;
+    private final boolean forceDelete;
 
-    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization) {
+    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
         this.ramlLocations = ramlLocations;
         this.target = target;
         this.features = features;
         this.baseUri = baseUri;
         this.baseUriParameters = baseUriParameters;
         this.customization = customization;
+        this.forceDelete = forceDelete;
     }
 
     public File getTarget() {
@@ -60,6 +62,10 @@ public class GeneratorConfig {
 
     public String getBaseUri() {
         return baseUri;
+    }
+
+    public boolean isForceDelete() {
+        return forceDelete;
     }
 
     public InputStream loadCustomization(String name) {

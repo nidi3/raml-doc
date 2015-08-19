@@ -29,6 +29,7 @@ import org.stringtemplate.v4.STGroupDir;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,9 @@ import java.util.Map;
  *
  */
 public class Generator {
+    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif", "style.css",
+            "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+
     private final GeneratorConfig config;
 
     public Generator(GeneratorConfig config) {
@@ -55,27 +59,30 @@ public class Generator {
         final STGroupDir group = initSTGroup(raml);
 
         if (raml == ramls.get(0)) {
+            config.getTarget().mkdirs();
+            if (!config.isForceDelete()) {
+                checkTargetEmpty(config.getTarget(), ramls);
+            }
+            deleteAll(config.getTarget());
             generateBase(raml, group);
         }
 
+        final File target = getTarget(raml);
+        target.mkdirs();
+
         final ST main = group.getInstanceOf("main/main");
         main.add("ramls", ramls);
-
         main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? config.getBaseUri(raml) : null);
         main.add("download", config.hasFeature(Feature.DOWNLOAD));
 
-
-        final File target = getTarget(raml);
-        target.mkdirs();
         set(main, "raml", raml);
         render(main, "/main/doc", ".", new File(target, "index.html"));
 
-        for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
-            set(main, "param", resource);
-            final File file = new File(target, "resource/" + resource.getUri() + ".html");
-            render(main, "/resource/resource", depth(resource.getUri()), file);
-        }
+        renderResources(raml, main, target);
+        renderSecurity(raml, main, target);
+    }
 
+    private void renderSecurity(Raml raml, ST main, File target) throws IOException {
         for (Map<String, SecurityScheme> sss : raml.getSecuritySchemes()) {
             for (Map.Entry<String, SecurityScheme> entry : sss.entrySet()) {
                 set(main, "param", entry);
@@ -85,7 +92,41 @@ public class Generator {
         }
     }
 
-    private STGroupDir initSTGroup(Raml raml){
+    private void renderResources(Raml raml, ST main, File target) throws IOException {
+        for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
+            set(main, "param", resource);
+            final File file = new File(target, "resource/" + resource.getUri() + ".html");
+            render(main, "/resource/resource", depth(resource.getUri()), file);
+        }
+    }
+
+    private void checkTargetEmpty(File target, List<Raml> ramls) {
+        for (final String name : target.list()) {
+            if (!("index.html".equals(name) || STATIC_FILES.contains(name) || existsTitle(name, ramls))) {
+                throw new IllegalStateException("Target directory '" + target + "' is not empty. Contains file " + name);
+            }
+        }
+    }
+
+    private boolean existsTitle(String name, List<Raml> ramls) {
+        for (final Raml raml : ramls) {
+            if (name.equals(raml.getTitle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void deleteAll(File target) {
+        for (final File file : target.listFiles()) {
+            if (file.isDirectory()) {
+                deleteAll(file);
+            }
+            file.delete();
+        }
+    }
+
+    private STGroupDir initSTGroup(Raml raml) {
         final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st");
 
         group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
@@ -102,9 +143,7 @@ public class Generator {
     }
 
     private void generateBase(Raml raml, STGroupDir group) throws IOException {
-        config.getTarget().mkdirs();
-        copyStaticResource(config.getTarget(), "favicon.ico", "ajax-loader.gif", "style.css",
-                "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+        copyStaticResource(config.getTarget(), STATIC_FILES);
         copyCustomResource(config.getTarget(), "favicon.ico");
 
         final ST index = group.getInstanceOf("main/index");
@@ -144,7 +183,7 @@ public class Generator {
         }
     }
 
-    private void copyStaticResource(File base, String... names) throws IOException {
+    private void copyStaticResource(File base, List<String> names) throws IOException {
         for (String name : names) {
             try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
