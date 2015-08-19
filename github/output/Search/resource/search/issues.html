@@ -159,26 +159,26 @@ Users
 <div class="desc">
 <h2>Search issues</h2><p>Find issues by state and keyword. (This method returns up to 100 results per page.)</p><p>The <code>q</code> search term can also contain any combination of the supported issue search qualifiers as described by the in-browser issue search documentation and search syntax documentation:</p>
 <ul>
-  <li><code>type</code> With this qualifier you can restrict the search to issues (issue) or pull request (pr) only.</li>
-  <li><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to just the title (title), body (body), comments (comment), or any combination of these.</li>
-  <li><code>author</code> Finds issues or pull requests created by a certain user.</li>
-  <li><code>assignee</code> Finds issues or pull requests that are assigned to a certain user.</li>
-  <li><code>mentions</code> Finds issues or pull requests that mention a certain user.</li>
-  <li><code>commenter</code> Finds issues or pull requests that a certain user commented on.</li>
-  <li><code>involves</code> Finds issues or pull requests that were either created by a certain user, assigned to that user, mention that user, or were commented on by that user.</li>
-  <li><code>team</code> For organizations you’re a member of, finds issues or pull requests that @mention a team within the organization.</li>
-  <li><code>state</code> Filter issues or pull requests based on whether they’re open or closed.</li>
-  <li><code>labels</code> Filters issues or pull requests based on their labels.</li>
-  <li><code>no</code> Filters items missing certain metadata, such as label, milestone, or assignee</li>
-  <li><code>language</code> Searches for issues or pull requests within repositories that match a certain language.</li>
-  <li><code>is</code> Searches for items within repositories that match a certain state, such as open, closed, or merged</li>
-  <li><code>created</code> or updated Filters issues or pull requests based on date of creation, or when they were last updated.</li>
-  <li><code>merged</code> Filters pull requests based on the date when they were merged.</li>
-  <li><code>status</code> Filters pull requests based on the commit status.</li>
-  <li><code>head</code> or base Filters pull requests based on the branch that they came from or that they are modifying.</li>
-  <li><code>closed</code> Filters issues or pull requests based on the date when they were closed.</li>
-  <li><code>comments</code> Filters issues or pull requests based on the quantity of comments.</li>
-  <li><code>user</code> or repo Limits searches to a specific user or repository.</li>
+  <li><p><code>type</code> With this qualifier you can restrict the search to issues (issue) or pull request (pr) only.</p></li>
+  <li><p><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to just the title (title), body (body), comments (comment), or any combination of these.</p></li>
+  <li><p><code>author</code> Finds issues or pull requests created by a certain user.</p></li>
+  <li><p><code>assignee</code> Finds issues or pull requests that are assigned to a certain user.</p></li>
+  <li><p><code>mentions</code> Finds issues or pull requests that mention a certain user.</p></li>
+  <li><p><code>commenter</code> Finds issues or pull requests that a certain user commented on.</p></li>
+  <li><p><code>involves</code> Finds issues or pull requests that were either created by a certain user, assigned to that user, mention that user, or were commented on by that user.</p></li>
+  <li><p><code>team</code> For organizations you’re a member of, finds issues or pull requests that @mention a team within the organization.</p></li>
+  <li><p><code>state</code> Filter issues or pull requests based on whether they’re open or closed.</p></li>
+  <li><p><code>labels</code> Filters issues or pull requests based on their labels.</p></li>
+  <li><p><code>no</code> Filters items missing certain metadata, such as label, milestone, or assignee</p></li>
+  <li><p><code>language</code> Searches for issues or pull requests within repositories that match a certain language.</p></li>
+  <li><p><code>is</code> Searches for items within repositories that match a certain state, such as open, closed, or merged</p></li>
+  <li><p><code>created</code> or updated Filters issues or pull requests based on date of creation, or when they were last updated.</p></li>
+  <li><p><code>merged</code> Filters pull requests based on the date when they were merged.</p></li>
+  <li><p><code>status</code> Filters pull requests based on the commit status.</p></li>
+  <li><p><code>head</code> or base Filters pull requests based on the branch that they came from or that they are modifying.</p></li>
+  <li><p><code>closed</code> Filters issues or pull requests based on the date when they were closed.</p></li>
+  <li><p><code>comments</code> Filters issues or pull requests based on the quantity of comments.</p></li>
+  <li><p><code>user</code> or repo Limits searches to a specific user or repository.</p></li>
 </ul><p>If you know the specific SHA hash of a commit, you can use also use it to search for pull requests that contain that SHA. Note that the SHA syntax must be at least seven characters.</p>
 
 <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">

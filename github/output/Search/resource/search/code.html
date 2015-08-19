@@ -159,19 +159,19 @@ Users
 <div class="desc">
 <h2>Search code</h2><p>Find file contents via various criteria. (This method returns up to 100 results per page.)</p><h3>Considerations for code search</h3><p>Due to the complexity of searching code, there are a few restrictions on how searches are performed:</p>
 <ul>
-  <li>Only the default branch is considered. In most cases, this will be the master branch.</li>
-  <li>Only files smaller than 384 KB are searchable.</li>
-  <li>You must always include at least one search term when searching source code. For example, searching for language:go is not valid, while amazing language:go is.</li>
+  <li><p>Only the default branch is considered. In most cases, this will be the master branch.</p></li>
+  <li><p>Only files smaller than 384 KB are searchable.</p></li>
+  <li><p>You must always include at least one search term when searching source code. For example, searching for language:go is not valid, while amazing language:go is.</p></li>
 </ul><p>The <code>q</code> search term can also contain any combination of the supported code search qualifiers as described by the in-browser code search documentation and search syntax documentation:</p>
 <ul>
-  <li><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to the file contents (file), the file path (path), or both.</li>
-  <li><code>language</code> Searches code based on the language it’s written in.</li>
-  <li><code>fork</code> Specifies that code from forked repositories should be searched (true). Repository forks will not be searchable unless the fork has more stars than the parent repository.</li>
-  <li><code>size</code> Finds files that match a certain size (in bytes).</li>
-  <li><code>path</code> Specifies the path prefix that the resulting file must be under.</li>
-  <li><code>filename</code> Matches files by a substring of the filename.</li>
-  <li><code>extension</code> Matches files with a certain extension after a dot.</li>
-  <li><code>user</code> or <code>repo</code> Limits searches to a specific user or repository.</li>
+  <li><p><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to the file contents (file), the file path (path), or both.</p></li>
+  <li><p><code>language</code> Searches code based on the language it’s written in.</p></li>
+  <li><p><code>fork</code> Specifies that code from forked repositories should be searched (true). Repository forks will not be searchable unless the fork has more stars than the parent repository.</p></li>
+  <li><p><code>size</code> Finds files that match a certain size (in bytes).</p></li>
+  <li><p><code>path</code> Specifies the path prefix that the resulting file must be under.</p></li>
+  <li><p><code>filename</code> Matches files by a substring of the filename.</p></li>
+  <li><p><code>extension</code> Matches files with a certain extension after a dot.</p></li>
+  <li><p><code>user</code> or <code>repo</code> Limits searches to a specific user or repository.</p></li>
 </ul>
 
 <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">
