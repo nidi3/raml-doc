@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
+import static org.pegdown.Extensions.FENCED_CODE_BLOCKS;
 import static org.pegdown.Extensions.TABLES;
 
 /**
@@ -40,13 +41,13 @@ class StringRenderer implements AttributeRenderer {
 
     public StringRenderer(Raml raml) {
         this.raml = raml;
-        processor = new PegDownProcessor(TABLES);
+        processor = new PegDownProcessor(TABLES | FENCED_CODE_BLOCKS);
         engine = new ScriptEngineManager().getEngineByExtension("js");
         invocable = (Invocable) engine;
         try {
             engine.eval("var window=this;");
             //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
-            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js"),"utf-8"));
+            engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js"), "utf-8"));
         } catch (ScriptException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -98,6 +99,6 @@ class StringRenderer implements AttributeRenderer {
     }
 
     private String markdown(String s) {
-        return processor.markdownToHtml(s);
+        return processor.markdownToHtml(s.replaceAll("\\n([-+*]) ","\n\n$1 ").replaceAll("\\n(\\d+)\\.","\n\n$1."));
     }
 }

@@ -24,7 +24,21 @@ import org.pegdown.PegDownProcessor;
  */
 public class MarkdownTest {
     @Test
-    public void table(){
+    public void code() {
+        final PegDownProcessor processor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
+        final String s = "bla `inline`\n\n    indented\n\n```\nblock\n```\n\nnext";
+        System.out.println(processor.markdownToHtml(s));
+    }
+
+    @Test
+    public void list() {
+        final PegDownProcessor processor = new PegDownProcessor();
+        final String s = "bla\n\n- first\n- second\n\nbla\n\n* first\n* second\n\nbla\n\n+ first\n+ second\n\n1. first\n1. second\n\n";
+        System.out.println(processor.markdownToHtml(s));
+    }
+
+    @Test
+    public void table() {
         final PegDownProcessor processor = new PegDownProcessor(Extensions.TABLES);
         final String s = processor.markdownToHtml("```\n" +
                 "      Status: 200 OK\n" +
