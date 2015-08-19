@@ -37,11 +37,24 @@ and the RAML documentation is available directly from your application.
 
 The available config parameters are the following:
 
-Name | Value
------|-------
-ramlLocations | Comma separated list of RAML files, protocols like `file://`, `classpath://`, `http://` are supported.
-features | Comma separated list of features to enable. Features are: `online`: The RAML documentation is available through the application, `download`: The documentation provides a download link to the RAML file, `tryout`: The API can be tried out interactively from within the documentation.
-baseUri | The URL the test requests should be sent to (overrides the baseUri setting in the RAML file).
-baseUriParameters | Set the parameter values of the baseUri in the RAML file. The format is `parameter=value,...`. Special values are `$host` and `$path` which are replaced by the actual host and path of the running servlet.
+Name | Meaning | Values
+-----|---------|-------
+ramlLocations | Comma separated list of RAML files. | Protocols like `file://`, `classpath://`, `http://` are supported.
+features | Comma separated list of features to enable. | Features are: <br>`online`: The RAML documentation is available through the application, <br>`download`: The documentation provides a download link to the RAML file, <br>`tryout`: The API can be tried out interactively from within the documentation.
+baseUri | The URL the test requests should be sent to (overrides the baseUri setting in the RAML file). |
+baseUriParameters | Set the parameter values of the baseUri in the RAML file. | The format is `parameter=value,...`. <br>Special values are `$host` and `$path` which are replaced by the actual host and path of the running servlet.
 
 Another possibility is to subclass RamlDocServlet and override the configuration methods.
+
+### Resulting HTML
+The resulting HTML supports the following query parameters in the URL.
+
+Name | Meaning | Value
+-----|---------|------
+expanded | Which resources in the resource tree on the left should be expanded. | Can be empty (all resources are expanded) or a comma separated list of resource names.
+u_* | A URI parameter value to predefine.
+q_* | A query parameter value to predefine.
+h_* | A header value to predefine.
+f_* | A form parameter value to predefine.
+method | Which method should be selected. | GET, POST, PUT, DELETE
+run | If a request of the selected method should be sent to the server. | none
