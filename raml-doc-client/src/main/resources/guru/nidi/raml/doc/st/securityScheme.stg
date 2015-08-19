@@ -14,10 +14,12 @@ secScheme(name,scheme) ::= <<
 
         <div class="securityDetail">
             <form>
-                <div class="right">
-                    <button name="login" onclick="rd.login(this,'$name$'); return false;">login</button>
-                    <button name="logout" onclick="rd.logout(this,false); return false;">logout</button>
-                </div>
+                $if(baseUri)$
+                    <div class="right">
+                        <button name="login" onclick="rd.login(this,'$name$'); return false;">login</button>
+                        <button name="logout" onclick="rd.logout(this,false); return false;">logout</button>
+                    </div>
+                $endif$
 
                 $/namedParams/header(baseUri)$
                 $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,baseUri,"h")$
