@@ -371,9 +371,16 @@ var rd = (function () {
                     rd.switchFoldable(foldables[i], expanded === undefined ? false : expanded);
                 }
             }
-            var loc = document.location.pathname,
-                pos = loc.indexOf('resource'),
-                path = decodeURIComponent(loc.substring(pos + 8, loc.length - 5)),
+            var start, end,
+                loc = document.location.pathname;
+            if (loc.substring(loc.length - 11) === '/index.html') {
+                start = loc.lastIndexOf('/', loc.length - 12)+1;
+                end = loc.length - 11;
+            } else {
+                start = loc.indexOf('resource') + 8;
+                end = loc.length - 5;
+            }
+            var path = decodeURIComponent(loc.substring(start, end)),
                 escPath = path.replace(/\//g, '\\/').replace(/\{/g, '\\{').replace(/\}/g, '\\}'),
                 link = document.querySelector('a[title=' + escPath + ']');
             if (link) {
@@ -387,11 +394,11 @@ var rd = (function () {
             if (hasClass(span, 'collapsed') && expanded !== false) {
                 tree[name] = true;
                 cl.remove('collapsed');
-                nextSiblingWithClass(span, 'subLink').style.display = 'block';
+                nextSiblingWithClass(span.parentNode, 'subLink').style.display = 'block';
             } else if (expanded !== true) {
                 tree[name] = false;
                 cl.add('collapsed');
-                nextSiblingWithClass(span, 'subLink').style.display = 'none';
+                nextSiblingWithClass(span.parentNode, 'subLink').style.display = 'none';
             }
             items.store('tree', tree);
         }

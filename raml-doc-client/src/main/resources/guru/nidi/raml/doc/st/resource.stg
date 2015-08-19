@@ -6,27 +6,31 @@ resourceLinks() ::= <<
 
 ramlResourceLink(raml) ::= <<
     <div class="clear">
-        <a href="$relPath$/../$raml.title$/index.html">
+        <a href="$relPath$/../$raml.title$/index.html" title="$raml.title$">
             $raml.title$
         </a>
     </div>
     <div class="subLink">
-        $raml.resources.values:resourceLink(raml.title)$
+        <div class="subLink">
+            $raml.resources.values:resourceLink(raml.title)$
+        </div>
     </div>
 >>
 
 resourceLink(res,link) ::= <<
-    <div class="clear subLink $if(res.parentResource && !res.parentResource.parentResource)$ invisible $endif$">
+    <div class="clear">
         $if(!res.parentResource && res.resources)$
             <span class="foldable collapsed" name="$res.relativeUri$" onclick="rd.switchFoldable(this)">&#9660;</span>
         $endif$
         <a href="$relPath$/../$link$/resource$res.uri$.html" title="$res.uri$">
             $res.relativeUri$
         </a>
-        $if(res.resources)$
-            $res.resources.values:resourceLink(link)$
-        $endif$
     </div>
+    $if(res.resources)$
+        <div class="clear subLink $if(!res.parentResource)$ invisible $endif$">
+            $res.resources.values:resourceLink(link)$
+        </div>
+    $endif$
 >>
 
 resource(res) ::= <<
