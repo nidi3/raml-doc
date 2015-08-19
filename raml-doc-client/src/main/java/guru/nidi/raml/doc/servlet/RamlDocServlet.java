@@ -41,6 +41,33 @@ public class RamlDocServlet extends HttpServlet {
         put("js", "text/javascript");
     }};
 
+    private enum InitParameter {
+        LOCATIONS("ramlLocations"),
+        FEATURES("features"),
+        BASE_URI("baseUri"),
+        BASE_URI_PARAMS("baseUriParameters"),
+        CUSTOMIZATION("customization");
+
+        private final String value;
+
+        InitParameter(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static InitParameter byValue(String value) {
+            for (final InitParameter ip : values()) {
+                if (ip.getValue().equals(value)) {
+                    return ip;
+                }
+            }
+            return null;
+        }
+    }
+
     private final CountDownLatch latch = new CountDownLatch(1);
     private String baseDir;
 
@@ -68,40 +95,40 @@ public class RamlDocServlet extends HttpServlet {
         }
     }
 
-    protected List<String> knownParameters() {
-        return Arrays.asList("ramlLocations", "features", "parentTitle", "baseUri", "baseUriParameters");
-    }
-
     protected List<String> unknownParameters() {
         final List<String> res = new ArrayList<>();
         final Enumeration<String> names = getInitParameterNames();
         while (names.hasMoreElements()) {
             final String name = names.nextElement();
-            if (!knownParameters().contains(name)) {
+            if (InitParameter.byValue(name) == null) {
                 res.add(name);
             }
         }
         return res;
     }
 
+    private String initParameter(InitParameter ip) {
+        return getInitParameter(ip.getValue());
+    }
+
     protected String ramlLocations() {
-        return getInitParameter("ramlLocations");
+        return initParameter(InitParameter.LOCATIONS);
     }
 
     protected EnumSet<Feature> features() {
-        return Feature.parse(getInitParameter("features"));
+        return Feature.parse(initParameter(InitParameter.FEATURES));
     }
 
     protected String baseUri() {
-        return getInitParameter("baseUri");
+        return initParameter(InitParameter.BASE_URI);
     }
 
     protected String baseUriParameters() {
-        return getInitParameter("baseUriParameters");
+        return initParameter(InitParameter.BASE_URI_PARAMS);
     }
 
     protected String customization() {
-        return getInitParameter("customization");
+        return initParameter(InitParameter.CUSTOMIZATION);
     }
 
     protected Loader getCustomization() {
