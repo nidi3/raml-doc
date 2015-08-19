@@ -1,4 +1,4 @@
-main(raml,ramls,template,param,util,relPath,baseUri,download) ::= <<
+main(raml,ramls,template,param,relPath,baseUri,download) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
@@ -19,6 +19,14 @@ main(raml,ramls,template,param,util,relPath,baseUri,download) ::= <<
     $(template)(param)$
     <script>rd.urls=[$ramls:urls()$]; rd.relPath='$relPath$'; rd.setBaseUri('$baseUri$'); rd.applyQuery();</script>
     </body>
+    </html>
+>>
+
+index(firstIndex) ::= <<
+    <html>
+        <head>
+            <meta http-equiv="refresh" content="0; url=$firstIndex$" />
+        </head>
     </html>
 >>
 

@@ -52,16 +52,12 @@ public class Generator {
     }
 
     public void generate(Raml raml, List<Raml> ramls) throws IOException {
-        final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st");
-        group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
-        group.registerModelAdaptor(Raml.class, new RamlAdaptor());
-        group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
-        group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
+        final STGroupDir group = initSTGroup(raml);
 
-        group.registerRenderer(String.class, new StringRenderer(raml));
-        group.registerRenderer(Boolean.class, new BooleanRenderer());
-        group.registerRenderer(AbstractParam.class, new ParamRenderer());
-        group.registerRenderer(Raml.class, new RamlRenderer());
+        if (raml == ramls.get(0)) {
+            generateBase(raml, group);
+        }
+
         final ST main = group.getInstanceOf("main/main");
         main.add("ramls", ramls);
 
@@ -69,10 +65,6 @@ public class Generator {
         main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? realBaseUri : null);
         main.add("download", config.hasFeature(Feature.DOWNLOAD));
 
-        config.getTarget().mkdirs();
-        copyStaticResource(config.getTarget(), "favicon.ico", "ajax-loader.gif", "style.css",
-                "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
-        copyCustomResource(config.getTarget(), "favicon.ico");
 
         final File target = getTarget(raml);
         target.mkdirs();
@@ -94,10 +86,46 @@ public class Generator {
         }
     }
 
+    private STGroupDir initSTGroup(Raml raml){
+        final STGroupDir group = loadGroupDir("guru/nidi/raml/doc/st");
+
+        group.registerModelAdaptor(Map.class, new EntrySetMapModelAdaptor());
+        group.registerModelAdaptor(Raml.class, new RamlAdaptor());
+        group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
+        group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
+
+        group.registerRenderer(String.class, new StringRenderer(raml));
+        group.registerRenderer(Boolean.class, new BooleanRenderer());
+        group.registerRenderer(AbstractParam.class, new ParamRenderer());
+        group.registerRenderer(Raml.class, new RamlRenderer());
+
+        return group;
+    }
+
+    private void generateBase(Raml raml, STGroupDir group) throws IOException {
+        config.getTarget().mkdirs();
+        copyStaticResource(config.getTarget(), "favicon.ico", "ajax-loader.gif", "style.css",
+                "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+        copyCustomResource(config.getTarget(), "favicon.ico");
+
+        final ST index = group.getInstanceOf("main/index");
+        index.add("firstIndex", raml.getTitle() + "/index.html");
+        render(index, new File(config.getTarget(), "index.html"));
+    }
+
     private void render(ST template, String sub, String relPath, File target) throws IOException {
         set(template, "template", sub);
         set(template, "relPath", relPath);
         render(template, target);
+    }
+
+    private void render(ST template, File file) throws IOException {
+        file.getParentFile().mkdirs();
+        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "utf-8")) {
+            final StringWriter sw = new StringWriter();
+            template.write(new NoIndentWriter(sw));
+            out.write(sw.toString());
+        }
     }
 
     private STGroupDir loadGroupDir(String path) {
@@ -149,15 +177,6 @@ public class Generator {
             res += "../";
         }
         return res + ".";
-    }
-
-    private void render(ST template, File file) throws IOException {
-        file.getParentFile().mkdirs();
-        try (final OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file), "utf-8")) {
-            final StringWriter sw = new StringWriter();
-            template.write(new NoIndentWriter(sw));
-            out.write(sw.toString());
-        }
     }
 
     private void copy(InputStream in, OutputStream out) throws IOException {
