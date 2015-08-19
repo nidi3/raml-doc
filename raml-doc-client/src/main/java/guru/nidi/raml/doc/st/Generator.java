@@ -61,8 +61,7 @@ public class Generator {
         final ST main = group.getInstanceOf("main/main");
         main.add("ramls", ramls);
 
-        final String realBaseUri = config.getBaseUri() != null ? config.getBaseUri() : raml.getBaseUri();
-        main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? realBaseUri : null);
+        main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? config.getBaseUri(raml) : null);
         main.add("download", config.hasFeature(Feature.DOWNLOAD));
 
 
