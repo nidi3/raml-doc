@@ -5,9 +5,11 @@ resourceLinks() ::= <<
 >>
 
 ramlResourceLink(raml) ::= <<
-    <a href="$relPath$/../$raml.title$/index.html">
-        $raml.title$
-    </a>
+    <div class="clear">
+        <a href="$relPath$/../$raml.title$/index.html">
+            $raml.title$
+        </a>
+    </div>
     <div class="subLink">
         $raml.resources.values:resourceLink(raml.title)$
     </div>

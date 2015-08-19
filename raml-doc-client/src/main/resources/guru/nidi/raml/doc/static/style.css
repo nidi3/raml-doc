@@ -23,19 +23,11 @@ a, a:visited, a:active, a:hover {
 }
 
 .resources {
+    line-height: 150%;
     width: 12em;
     float: left;
     padding-left: 1em;
     overflow: auto;
-}
-
-.resources li {
-    list-style-type: none;
-    line-height: 150%;
-}
-
-.resources ul {
-    padding-left: 1em;
 }
 
 .content {
