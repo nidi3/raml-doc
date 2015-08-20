@@ -99,11 +99,11 @@ class StringRenderer implements AttributeRenderer {
         return markdownProcessor.marked(s);
     }
 
-    private interface JsBeautifyer {
+    public interface JsBeautifyer {
         String jsBeautify(String s);
     }
 
-    private interface MarkdownProcessor {
+    public interface MarkdownProcessor {
         String marked(String s);
     }
 }

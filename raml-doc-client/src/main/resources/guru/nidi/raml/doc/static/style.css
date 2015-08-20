@@ -105,7 +105,6 @@ table.params {
 }
 
 table.params td {
-    overflow: auto;
     padding: .2em;
     margin: 0;
     border-bottom: 1px solid #ccc;

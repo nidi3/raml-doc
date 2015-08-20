@@ -61,6 +61,14 @@ var rd = (function () {
         return res;
     }
 
+    function queryEscape(value) {
+        return '"' + value.replace(/"/g, '\\\\"') + '"';
+    }
+
+    function queryAttr(name, value) {
+        return '[' + name + '=' + queryEscape(value) + ']';
+    }
+
     var items = {
         load: function (name) {
             var val = sessionStorage.getItem(name);
@@ -349,7 +357,7 @@ var rd = (function () {
             var inputs, i, q, foldables, expanded, query = parseQuery(document.location.search);
             for (q in query) {
                 if (q.charAt(1) === '_') {
-                    inputs = document.querySelectorAll('input[name=' + q + ']');
+                    inputs = document.querySelectorAll('input' + queryAttr('name', q));
                     for (i = 0; i < inputs.length; i++) {
                         inputs[i].value = query[q];
                     }
@@ -358,7 +366,7 @@ var rd = (function () {
             if (query['method']) {
                 var method = query['method'].toUpperCase();
                 rd.showActionDetail(document.querySelector('.actionHeader.bg_' + method));
-                if (query['run']) {
+                if (query['run'] !== undefined) {
                     document.querySelector('.try.' + method).click();
                 }
             }
@@ -386,8 +394,7 @@ var rd = (function () {
                 end = loc.length - 5;
             }
             var path = decodeURIComponent(loc.substring(start, end)),
-                escPath = path.replace(/\//g, '\\/').replace(/\{/g, '\\{').replace(/\}/g, '\\}'),
-                link = document.querySelector('a[title=' + escPath + ']');
+                link = document.querySelector('a' + queryAttr('title', path));
             if (link) {
                 link.classList.add('active');
             }
