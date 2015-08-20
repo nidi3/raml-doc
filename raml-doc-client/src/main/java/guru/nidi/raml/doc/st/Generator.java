@@ -136,7 +136,6 @@ public class Generator {
         group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
 
         group.registerRenderer(String.class, new StringRenderer(raml));
-        group.registerRenderer(Boolean.class, new BooleanRenderer());
         group.registerRenderer(AbstractParam.class, new ParamRenderer());
         group.registerRenderer(Raml.class, new RamlRenderer());
 
