@@ -1,4 +1,4 @@
-##Search issues
+## Search issues
 
 Find issues by state and keyword. (This method returns up to 100 results per page.)
 

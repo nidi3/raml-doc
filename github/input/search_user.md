@@ -1,4 +1,4 @@
-##Search users
+## Search users
 
 Find users via various criteria. (This method returns up to 100 results per page.)
 

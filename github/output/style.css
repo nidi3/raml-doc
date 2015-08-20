@@ -62,14 +62,6 @@ a, a:visited, a:active, a:hover {
     padding: .5em;
 }
 
-.paramBool {
-    width: 2em;
-}
-
-.paramType {
-    width: 5em;
-}
-
 ul {
     padding-left: 2em;
 }
@@ -93,6 +85,8 @@ th {
     padding: .2em;
     border-bottom: 1px solid black;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 table.params input {
@@ -111,7 +105,6 @@ table.params {
 }
 
 table.params td {
-    overflow: auto;
     padding: .2em;
     margin: 0;
     border-bottom: 1px solid #ccc;

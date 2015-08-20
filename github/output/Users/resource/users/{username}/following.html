@@ -1,243 +1,189 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<link href="../../.././../style.css" rel="stylesheet">
-<link href="../../.././../prettify-default.css" rel="stylesheet">
-<link href="../../.././../favicon.ico" rel="icon" type="image/png">
-<title>Users</title>
-</head>
-
-<body>
-<script src="../../.././../script.js"></script>
-<script src="../../.././../run_prettify.js"></script>
-<script src="../../.././../beautify.js"></script>
-
-<header>
-<div class="right">
-<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
-<script>rd.initGlobalSecData(document.currentScript);</script>
-</div>
-<h1><a href="../../.././index.html">Users</a></h1>
-<p>Version v1</p>
-<div class="clear"/>
-<p class="left">https://api.github.com</p>
- <a class="right" href="../../.././Users.zip">Download RAML</a> 
-<div class="clear"/>
-</header>
-
-<div class="resources">
-<div class="clear">
-<a href="../../.././../Miscellaneous/index.html" title="Miscellaneous">
-Miscellaneous
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<a href="../../.././../Miscellaneous/resource/emojis.html" title="/emojis">
-/emojis
-</a>
-</div>
-<div class="clear">
-<span class="foldable collapsed" name="/gitignore/templates" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../../.././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates">
-/gitignore/templates
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}">
-/{language}
-</a>
-</div>
-
-</div>
-<div class="clear">
-<span class="foldable collapsed" name="/markdown" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../../.././../Miscellaneous/resource/markdown.html" title="/markdown">
-/markdown
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../../.././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw">
-/raw
-</a>
-</div>
-
-</div>
-
-</div>
-</div><div class="clear">
-<a href="../../.././../Search/index.html" title="Search">
-Search
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<span class="foldable collapsed" name="/search" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../../.././../Search/resource/search.html" title="/search">
-/search
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../../.././../Search/resource/search/repositories.html" title="/search/repositories">
-/repositories
-</a>
-</div>
-<div class="clear">
-<a href="../../.././../Search/resource/search/code.html" title="/search/code">
-/code
-</a>
-</div>
-<div class="clear">
-<a href="../../.././../Search/resource/search/issues.html" title="/search/issues">
-/issues
-</a>
-</div>
-<div class="clear">
-<a href="../../.././../Search/resource/search/users.html" title="/search/users">
-/users
-</a>
-</div>
-
-</div>
-
-</div>
-</div><div class="clear">
-<a href="../../.././../Users/index.html" title="Users">
-Users
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<span class="foldable collapsed" name="/users" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../../.././../Users/resource/users.html" title="/users">
-/users
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../../.././../Users/resource/users/{username}.html" title="/users/{username}">
-/{username}
-</a>
-</div>
-<div class="clear subLink ">
-<div class="clear">
-<a href="../../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers">
-/followers
-</a>
-</div>
-<div class="clear">
-<a href="../../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following">
-/following
-</a>
-</div>
-<div class="clear subLink ">
-<div class="clear">
-<a href="../../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}">
-/{target_user}
-</a>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-</div>
-<div class="content">
-<div class="title mainTitle">/users/{username}/following</div>
-
-<div class="desc">
-<p>List who a user is following</p>
-
-<div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">
-<div class="badge badge_GET">
-GET
-</div>
-<div class="actionDesc">
-</div>
-</div>
-
-<div class="actionDetail invisible bg_GET">
-<div class="title">Request</div>
-<form>
-<div class="desc">
-
-<table class="params">
-<thead>
-<tr>
-<th>Name</th>
- <th>Value</th> 
-<th class="paramDesc">Description</th>
-<th>Example</th>
-<th class="paramType">Type</th>
-<th>Constraint</th>
-<th class="paramBool">Req</th>
-<th class="paramBool">Rep</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td colspan=" 9 ">
-<span class="title">URI parameters</span>
-</td>
-</tr>
-<tr>
-<td> username </td>
- <td><input name="u_username"></td> 
-<td></td>
-<td onclick="rd.useExample(this)" class="example"></td>
-<td> STRING </td>
-<td>
-</td>
-<td class="center">X</td>
-<td class="center"></td>
-<td></td>
-</tr> 
-
-</tbody>
-</table>
-</div>
-
-<div class="title">Responses</div>
-<div class="desc">
-<table class="params">
-<thead>
-<tr>
-<th>Code</th>
-<th class="paramDesc">Description</th>
-<th>Headers</th>
-<th>Body</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>200</td>
-<td></td>
-<td></td>
-<td>
-<select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
-<option>application/json</option>
-</select>
-<br/><br/>
-<div class="body application/json">
-<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
-<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
-<div class="model">
-<pre class="code prettyprint"></pre>
-</div>
-<div class="example invisible" onclick="rd.useExample(this)">
-<div class="invisible rawExample">[{
+ <head> 
+  <meta charset="utf-8"> 
+  <link href="../../.././../style.css" rel="stylesheet"> 
+  <link href="../../.././../prettify-default.css" rel="stylesheet"> 
+  <link href="../../.././../favicon.ico" rel="icon" type="image/png"> 
+  <title>Users</title> 
+ </head> 
+ <body> 
+  <script src="../../.././../script.js"></script> 
+  <script src="../../.././../run_prettify.js"></script> 
+  <script src="../../.././../beautify.js"></script> 
+  <header> 
+   <div class="right"> 
+    <button name="logout" onclick="rd.logout(this,true); return false;">logout</button> 
+    <script>rd.initGlobalSecData(document.currentScript);</script> 
+   </div> 
+   <h1><a href="../../.././index.html">Users</a></h1> 
+   <p>Version v1</p> 
+   <div class="clear"></div> 
+   <p class="left">https://api.github.com</p> 
+   <a class="right" href="../../.././Users.zip">Download RAML</a> 
+   <div class="clear"></div> 
+  </header> 
+  <div class="resources"> 
+   <div class="clear"> 
+    <a href="../../.././../Miscellaneous/index.html" title="Miscellaneous"> Miscellaneous </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <a href="../../.././../Miscellaneous/resource/emojis.html" title="/emojis"> /emojis </a> 
+     </div> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/gitignore/templates" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../../.././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates"> /gitignore/templates </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}"> /{language} </a> 
+      </div> 
+     </div> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/markdown" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../../.././../Miscellaneous/resource/markdown.html" title="/markdown"> /markdown </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../../.././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw"> /raw </a> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+   <div class="clear"> 
+    <a href="../../.././../Search/index.html" title="Search"> Search </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/search" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../../.././../Search/resource/search.html" title="/search"> /search </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../../.././../Search/resource/search/repositories.html" title="/search/repositories"> /repositories </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../../.././../Search/resource/search/code.html" title="/search/code"> /code </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../../.././../Search/resource/search/issues.html" title="/search/issues"> /issues </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../../.././../Search/resource/search/users.html" title="/search/users"> /users </a> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+   <div class="clear"> 
+    <a href="../../.././../Users/index.html" title="Users"> Users </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/users" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../../.././../Users/resource/users.html" title="/users"> /users </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../../.././../Users/resource/users/{username}.html" title="/users/{username}"> /{username} </a> 
+      </div> 
+      <div class="clear subLink "> 
+       <div class="clear"> 
+        <a href="../../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers"> /followers </a> 
+       </div> 
+       <div class="clear"> 
+        <a href="../../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following"> /following </a> 
+       </div> 
+       <div class="clear subLink "> 
+        <div class="clear"> 
+         <a href="../../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}"> /{target_user} </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="content"> 
+   <div class="title mainTitle">
+    /users/{username}/following
+   </div> 
+   <div class="desc"> 
+    <p>List who a user is following</p> 
+    <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)"> 
+     <div class="badge badge_GET">
+       GET 
+     </div> 
+     <div class="actionDesc"> 
+     </div> 
+    </div> 
+    <div class="actionDetail invisible bg_GET"> 
+     <div class="title">
+      Request
+     </div> 
+     <form> 
+      <div class="desc"> 
+       <table class="params"> 
+        <thead> 
+         <tr> 
+          <th><span title="Name">Name</span></th> 
+          <th><span title="Value">Value</span></th> 
+          <th style="width:0em;"><span title="Description">Description</span></th> 
+          <th style="width:0em;"><span title="Example">Example</span></th> 
+          <th style="width:6em;"><span title="Type">Type</span></th> 
+          <th style="width:0em;"><span title="Constraints">Constraints</span></th> 
+          <th style="width:0em;"><span title="Default">Default</span></th> 
+         </tr> 
+        </thead> 
+        <tbody> 
+         <tr> 
+          <td colspan=" 7 "> <span class="title">URI parameters</span> </td> 
+         </tr> 
+         <tr> 
+          <td> username </td> 
+          <td><input name="u_username"></td> 
+          <td></td> 
+          <td onclick="rd.useExample(this)" class="example"></td> 
+          <td>string</td> 
+          <td> </td> 
+          <td></td> 
+         </tr> 
+        </tbody> 
+       </table> 
+      </div> 
+      <div class="title">
+       Responses
+      </div> 
+      <div class="desc"> 
+       <table class="params"> 
+        <thead> 
+         <tr> 
+          <th style="width:3em;"><span title="Code">Code</span></th> 
+          <th style="width:0em;"><span title="Description">Description</span></th> 
+          <th style="width:0em;"><span title="Headers">Headers</span></th> 
+          <th><span title="Body">Body</span></th> 
+         </tr> 
+        </thead> 
+        <tbody> 
+         <tr> 
+          <td>200</td> 
+          <td></td> 
+          <td></td> 
+          <td> <select class="contentType" onchange="rd.showBodyWithId(this,this.value)"> <option>application/json</option> </select> <br><br> 
+           <div class="body application/json"> 
+            <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> | 
+            <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span> 
+            <div class="model"> 
+             <pre class="code prettyprint"></pre> 
+            </div> 
+            <div class="example invisible" onclick="rd.useExample(this)"> 
+             <div class="invisible rawExample">
+              [{ "login": "octocat", "id": 1, "avatar_url": "https://github.com/images/error/octocat_happy.gif", "gravatar_id": "", "url": "https://api.github.com/users/octocat", "html_url": "https://github.com/octocat", "followers_url": "https://api.github.com/users/octocat/followers", "following_url": "https://api.github.com/users/octocat/following{/other_user}", "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}", "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}", "subscriptions_url": "https://api.github.com/users/octocat/subscriptions", "organizations_url": "https://api.github.com/users/octocat/orgs", "repos_url": "https://api.github.com/users/octocat/repos", "events_url": "https://api.github.com/users/octocat/events{/privacy}", "received_events_url": "https://api.github.com/users/octocat/received_events", "type": "User", "site_admin": false }]
+             </div> 
+             <pre class="code prettyprint">[{
     "login": "octocat",
     "id": 1,
     "avatar_url": "https://github.com/images/error/octocat_happy.gif",
@@ -255,51 +201,28 @@ GET
     "received_events_url": "https://api.github.com/users/octocat/received_events",
     "type": "User",
     "site_admin": false
-}]</div>
-<pre class="code prettyprint">[{
-    "login": "octocat",
-    "id": 1,
-    "avatar_url": "https://github.com/images/error/octocat_happy.gif",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/octocat",
-    "html_url": "https://github.com/octocat",
-    "followers_url": "https://api.github.com/users/octocat/followers",
-    "following_url": "https://api.github.com/users/octocat/following{/other_user}",
-    "gists_url": "https://api.github.com/users/octocat/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/octocat/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/octocat/subscriptions",
-    "organizations_url": "https://api.github.com/users/octocat/orgs",
-    "repos_url": "https://api.github.com/users/octocat/repos",
-    "events_url": "https://api.github.com/users/octocat/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/octocat/received_events",
-    "type": "User",
-    "site_admin": false
-}]</pre>
-</div>
-</div>
-<script>rd.showBodyWithId(document.currentScript,'application/json');</script>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<button class="try GET" onclick="rd.tryOut(this,'GET','/users/{username}/following',''); return false;">
-Try it!
-</button>
-<img src="../../.././../ajax-loader.gif" class="invisible loader"/>
-<div class="invisible response">
-Request URL <pre name="requestUrl" class="tryData border_GET"> </pre>
-Request Headers <pre name="requestHeaders" class="tryData border_GET"> </pre>
-<br/>
-Response Code <pre name="responseCode" class="tryData border_GET"> </pre>
-Response Headers <pre name="responseHeaders" class="tryData border_GET"> </pre>
-Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
-</div>
-</form>
-</div>
-</div>
-</div>
-<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
-</body>
+}]</pre> 
+            </div> 
+           </div> <script>rd.showBodyWithId(document.currentScript,'application/json');</script> </td> 
+         </tr> 
+        </tbody> 
+       </table> 
+      </div> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/users/{username}/following',''); return false;"> Try it! </button> 
+      <img src="../../.././../ajax-loader.gif" class="invisible loader"> 
+      <div class="invisible response">
+        Request URL 
+       <pre name="requestUrl" class="tryData border_GET"> </pre> Request Headers 
+       <pre name="requestHeaders" class="tryData border_GET"> </pre> 
+       <br> Response Code 
+       <pre name="responseCode" class="tryData border_GET"> </pre> Response Headers 
+       <pre name="responseHeaders" class="tryData border_GET"> </pre> Response Body 
+       <pre name="responseBody" class="tryData border_GET"> </pre> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+  </div> 
+  <script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>  
+ </body>
 </html>

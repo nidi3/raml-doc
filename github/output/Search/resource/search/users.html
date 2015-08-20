@@ -1,274 +1,218 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset="utf-8"/>
-<link href="../.././../style.css" rel="stylesheet">
-<link href="../.././../prettify-default.css" rel="stylesheet">
-<link href="../.././../favicon.ico" rel="icon" type="image/png">
-<title>Search</title>
-</head>
-
-<body>
-<script src="../.././../script.js"></script>
-<script src="../.././../run_prettify.js"></script>
-<script src="../.././../beautify.js"></script>
-
-<header>
-<div class="right">
-<button name="logout" onclick="rd.logout(this,true); return false;">logout</button>
-<script>rd.initGlobalSecData(document.currentScript);</script>
-</div>
-<h1><a href="../.././index.html">Search</a></h1>
-<p>Version v1</p>
-<div class="clear"/>
-<p class="left">https://api.github.com</p>
- <a class="right" href="../.././Search.zip">Download RAML</a> 
-<div class="clear"/>
-</header>
-
-<div class="resources">
-<div class="clear">
-<a href="../.././../Miscellaneous/index.html" title="Miscellaneous">
-Miscellaneous
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<a href="../.././../Miscellaneous/resource/emojis.html" title="/emojis">
-/emojis
-</a>
-</div>
-<div class="clear">
-<span class="foldable collapsed" name="/gitignore/templates" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../.././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates">
-/gitignore/templates
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}">
-/{language}
-</a>
-</div>
-
-</div>
-<div class="clear">
-<span class="foldable collapsed" name="/markdown" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../.././../Miscellaneous/resource/markdown.html" title="/markdown">
-/markdown
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../.././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw">
-/raw
-</a>
-</div>
-
-</div>
-
-</div>
-</div><div class="clear">
-<a href="../.././../Search/index.html" title="Search">
-Search
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<span class="foldable collapsed" name="/search" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../.././../Search/resource/search.html" title="/search">
-/search
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../.././../Search/resource/search/repositories.html" title="/search/repositories">
-/repositories
-</a>
-</div>
-<div class="clear">
-<a href="../.././../Search/resource/search/code.html" title="/search/code">
-/code
-</a>
-</div>
-<div class="clear">
-<a href="../.././../Search/resource/search/issues.html" title="/search/issues">
-/issues
-</a>
-</div>
-<div class="clear">
-<a href="../.././../Search/resource/search/users.html" title="/search/users">
-/users
-</a>
-</div>
-
-</div>
-
-</div>
-</div><div class="clear">
-<a href="../.././../Users/index.html" title="Users">
-Users
-</a>
-</div>
-<div class="subLink">
-<div class="subLink">
-<div class="clear">
-<span class="foldable collapsed" name="/users" onclick="rd.switchFoldable(this)">&#9660;</span>
-<a href="../.././../Users/resource/users.html" title="/users">
-/users
-</a>
-</div>
-<div class="clear subLink  invisible ">
-<div class="clear">
-<a href="../.././../Users/resource/users/{username}.html" title="/users/{username}">
-/{username}
-</a>
-</div>
-<div class="clear subLink ">
-<div class="clear">
-<a href="../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers">
-/followers
-</a>
-</div>
-<div class="clear">
-<a href="../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following">
-/following
-</a>
-</div>
-<div class="clear subLink ">
-<div class="clear">
-<a href="../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}">
-/{target_user}
-</a>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
-</div>
-<div class="content">
-<div class="title mainTitle">/search/users</div>
-
-<div class="desc">
-<h2>Search users</h2><p>Find users via various criteria. (This method returns up to 100 results per page.)</p><p>The <code>q</code> search term can also contain any combination of the supported user search qualifiers as described by the in-browser user search documentation and search syntax documentation:</p>
-<ul>
-  <li><p><code>type</code> With this qualifier you can restrict the search to just personal accounts (user) or just organization accounts (org).</p></li>
-  <li><p><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to just the username (login), public email (email), full name (fullname), or any combination of these.</p></li>
-  <li><p><code>repos</code> Filters users based on the number of repositories they have.</p></li>
-  <li><p><code>location</code> Filter users by the location indicated in their profile.</p></li>
-  <li><p><code>language</code> Search for users that have repositories that match a certain language.</p></li>
-  <li><p><code>created</code> Filter users based on when they joined.</p></li>
-  <li><p><code>followers</code> Filter users based on the number of followers they have.</p></li>
-</ul>
-
-<div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)">
-<div class="badge badge_GET">
-GET
-</div>
-<div class="actionDesc">
-</div>
-</div>
-
-<div class="actionDetail invisible bg_GET">
-<div class="title">Request</div>
-<form>
-<div class="desc">
-
-<table class="params">
-<thead>
-<tr>
-<th>Name</th>
- <th>Value</th> 
-<th class="paramDesc">Description</th>
-<th>Example</th>
-<th class="paramType">Type</th>
-<th>Constraint</th>
-<th class="paramBool">Req</th>
-<th class="paramBool">Rep</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td colspan=" 9 ">
-<span class="title">Query parameters</span>
-</td>
-</tr>
-<tr>
-<td> q </td>
- <td><input name="q_q"></td> 
-<td><p>The search terms.</p></td>
-<td onclick="rd.useExample(this)" class="example">tom+repos:%3E42+followers:%3E1000</td>
-<td> STRING </td>
-<td>
-</td>
-<td class="center"></td>
-<td class="center"></td>
-<td></td>
-</tr> <tr>
-<td> sort </td>
- <td><input name="q_sort"></td> 
-<td><p>The sort field. Can be <code>followers</code>, <code>repositories</code>, or <code>joined</code>. Default: results are sorted by best match.</p></td>
-<td onclick="rd.useExample(this)" class="example"></td>
-<td> STRING </td>
-<td>
-</td>
-<td class="center"></td>
-<td class="center"></td>
-<td></td>
-</tr> <tr>
-<td> order </td>
- <td><input name="q_order"></td> 
-<td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p></td>
-<td onclick="rd.useExample(this)" class="example"></td>
-<td> STRING </td>
-<td>
-</td>
-<td class="center"></td>
-<td class="center"></td>
-<td>desc</td>
-</tr> 
-
-</tbody>
-</table>
-</div>
-
-<div class="title">Responses</div>
-<div class="desc">
-<table class="params">
-<thead>
-<tr>
-<th>Code</th>
-<th class="paramDesc">Description</th>
-<th>Headers</th>
-<th>Body</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>200</td>
-<td></td>
-<td></td>
-<td>
-<select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
-<option>application/json</option>
-</select>
-<br/><br/>
-<div class="body application/json">
-<span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
-<span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
-<div class="model">
-<pre class="code prettyprint"></pre>
-</div>
-<div class="example invisible" onclick="rd.useExample(this)">
-<div class="invisible rawExample">{
+ <head> 
+  <meta charset="utf-8"> 
+  <link href="../.././../style.css" rel="stylesheet"> 
+  <link href="../.././../prettify-default.css" rel="stylesheet"> 
+  <link href="../.././../favicon.ico" rel="icon" type="image/png"> 
+  <title>Search</title> 
+ </head> 
+ <body> 
+  <script src="../.././../script.js"></script> 
+  <script src="../.././../run_prettify.js"></script> 
+  <script src="../.././../beautify.js"></script> 
+  <header> 
+   <div class="right"> 
+    <button name="logout" onclick="rd.logout(this,true); return false;">logout</button> 
+    <script>rd.initGlobalSecData(document.currentScript);</script> 
+   </div> 
+   <h1><a href="../.././index.html">Search</a></h1> 
+   <p>Version v1</p> 
+   <div class="clear"></div> 
+   <p class="left">https://api.github.com</p> 
+   <a class="right" href="../.././Search.zip">Download RAML</a> 
+   <div class="clear"></div> 
+  </header> 
+  <div class="resources"> 
+   <div class="clear"> 
+    <a href="../.././../Miscellaneous/index.html" title="Miscellaneous"> Miscellaneous </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <a href="../.././../Miscellaneous/resource/emojis.html" title="/emojis"> /emojis </a> 
+     </div> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/gitignore/templates" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../.././../Miscellaneous/resource/gitignore/templates.html" title="/gitignore/templates"> /gitignore/templates </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}"> /{language} </a> 
+      </div> 
+     </div> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/markdown" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../.././../Miscellaneous/resource/markdown.html" title="/markdown"> /markdown </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../.././../Miscellaneous/resource/markdown/raw.html" title="/markdown/raw"> /raw </a> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+   <div class="clear"> 
+    <a href="../.././../Search/index.html" title="Search"> Search </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/search" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../.././../Search/resource/search.html" title="/search"> /search </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../.././../Search/resource/search/repositories.html" title="/search/repositories"> /repositories </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../.././../Search/resource/search/code.html" title="/search/code"> /code </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../.././../Search/resource/search/issues.html" title="/search/issues"> /issues </a> 
+      </div> 
+      <div class="clear"> 
+       <a href="../.././../Search/resource/search/users.html" title="/search/users"> /users </a> 
+      </div> 
+     </div> 
+    </div> 
+   </div>
+   <div class="clear"> 
+    <a href="../.././../Users/index.html" title="Users"> Users </a> 
+   </div> 
+   <div class="subLink"> 
+    <div class="subLink"> 
+     <div class="clear"> 
+      <span class="foldable collapsed" name="/users" onclick="rd.switchFoldable(this)">▼</span> 
+      <a href="../.././../Users/resource/users.html" title="/users"> /users </a> 
+     </div> 
+     <div class="clear subLink  invisible "> 
+      <div class="clear"> 
+       <a href="../.././../Users/resource/users/{username}.html" title="/users/{username}"> /{username} </a> 
+      </div> 
+      <div class="clear subLink "> 
+       <div class="clear"> 
+        <a href="../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers"> /followers </a> 
+       </div> 
+       <div class="clear"> 
+        <a href="../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following"> /following </a> 
+       </div> 
+       <div class="clear subLink "> 
+        <div class="clear"> 
+         <a href="../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}"> /{target_user} </a> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="content"> 
+   <div class="title mainTitle">
+    /search/users
+   </div> 
+   <div class="desc"> 
+    <h2 id="search-users">Search users</h2> 
+    <p>Find users via various criteria. (This method returns up to 100 results per page.)</p> 
+    <p>The <code>q</code> search term can also contain any combination of the supported user search qualifiers as described by the in-browser user search documentation and search syntax documentation:</p> 
+    <ul> 
+     <li><code>type</code> With this qualifier you can restrict the search to just personal accounts (user) or just organization accounts (org).</li> 
+     <li><code>in</code> Qualifies which fields are searched. With this qualifier you can restrict the search to just the username (login), public email (email), full name (fullname), or any combination of these.</li> 
+     <li><code>repos</code> Filters users based on the number of repositories they have.</li> 
+     <li><code>location</code> Filter users by the location indicated in their profile.</li> 
+     <li><code>language</code> Search for users that have repositories that match a certain language.</li> 
+     <li><code>created</code> Filter users based on when they joined.</li> 
+     <li><code>followers</code> Filter users based on the number of followers they have.</li> 
+    </ul> 
+    <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)"> 
+     <div class="badge badge_GET">
+       GET 
+     </div> 
+     <div class="actionDesc"> 
+     </div> 
+    </div> 
+    <div class="actionDetail invisible bg_GET"> 
+     <div class="title">
+      Request
+     </div> 
+     <form> 
+      <div class="desc"> 
+       <table class="params"> 
+        <thead> 
+         <tr> 
+          <th><span title="Name">Name</span></th> 
+          <th><span title="Value">Value</span></th> 
+          <th><span title="Description">Description</span></th> 
+          <th><span title="Example">Example</span></th> 
+          <th style="width:7em;"><span title="Type">Type</span></th> 
+          <th style="width:0em;"><span title="Constraints">Constraints</span></th> 
+          <th style="width:4em;"><span title="Default">Default</span></th> 
+         </tr> 
+        </thead> 
+        <tbody> 
+         <tr> 
+          <td colspan=" 7 "> <span class="title">Query parameters</span> </td> 
+         </tr> 
+         <tr> 
+          <td> q </td> 
+          <td><input name="q_q"></td> 
+          <td><p>The search terms.</p> </td> 
+          <td onclick="rd.useExample(this)" class="example">tom+repos:%3E42+followers:%3E1000</td> 
+          <td>string?</td> 
+          <td> </td> 
+          <td></td> 
+         </tr> 
+         <tr> 
+          <td> sort </td> 
+          <td><input name="q_sort"></td> 
+          <td><p>The sort field. Can be <code>followers</code>, <code>repositories</code>, or <code>joined</code>. Default: results are sorted by best match.</p> </td> 
+          <td onclick="rd.useExample(this)" class="example"></td> 
+          <td>string?</td> 
+          <td> </td> 
+          <td></td> 
+         </tr> 
+         <tr> 
+          <td> order </td> 
+          <td><input name="q_order"></td> 
+          <td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p> </td> 
+          <td onclick="rd.useExample(this)" class="example"></td> 
+          <td>string?</td> 
+          <td> </td> 
+          <td>desc</td> 
+         </tr> 
+        </tbody> 
+       </table> 
+      </div> 
+      <div class="title">
+       Responses
+      </div> 
+      <div class="desc"> 
+       <table class="params"> 
+        <thead> 
+         <tr> 
+          <th style="width:3em;"><span title="Code">Code</span></th> 
+          <th style="width:0em;"><span title="Description">Description</span></th> 
+          <th style="width:0em;"><span title="Headers">Headers</span></th> 
+          <th><span title="Body">Body</span></th> 
+         </tr> 
+        </thead> 
+        <tbody> 
+         <tr> 
+          <td>200</td> 
+          <td></td> 
+          <td></td> 
+          <td> <select class="contentType" onchange="rd.showBodyWithId(this,this.value)"> <option>application/json</option> </select> <br><br> 
+           <div class="body application/json"> 
+            <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> | 
+            <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span> 
+            <div class="model"> 
+             <pre class="code prettyprint"></pre> 
+            </div> 
+            <div class="example invisible" onclick="rd.useExample(this)"> 
+             <div class="invisible rawExample">
+              { "total_count": 12, "incomplete_results": false, "items": [{ "login": "mojombo", "id": 1, "avatar_url": "https://secure.gravatar.com/avatar/25c7c18223fb42a4c6ae1c8db6f50f9b?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png", "gravatar_id": "", "url": "https://api.github.com/users/mojombo", "html_url": "https://github.com/mojombo", "followers_url": "https://api.github.com/users/mojombo/followers", "subscriptions_url": "https://api.github.com/users/mojombo/subscriptions", "organizations_url": "https://api.github.com/users/mojombo/orgs", "repos_url": "https://api.github.com/users/mojombo/repos", "received_events_url": "https://api.github.com/users/mojombo/received_events", "type": "User", "score": 105.47857 }] }
+             </div> 
+             <pre class="code prettyprint">{
     "total_count": 12,
     "incomplete_results": false,
     "items": [{
@@ -286,51 +230,28 @@ GET
         "type": "User",
         "score": 105.47857
     }]
-}</div>
-<pre class="code prettyprint">{
-    "total_count": 12,
-    "incomplete_results": false,
-    "items": [{
-        "login": "mojombo",
-        "id": 1,
-        "avatar_url": "https://secure.gravatar.com/avatar/25c7c18223fb42a4c6ae1c8db6f50f9b?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png",
-        "gravatar_id": "",
-        "url": "https://api.github.com/users/mojombo",
-        "html_url": "https://github.com/mojombo",
-        "followers_url": "https://api.github.com/users/mojombo/followers",
-        "subscriptions_url": "https://api.github.com/users/mojombo/subscriptions",
-        "organizations_url": "https://api.github.com/users/mojombo/orgs",
-        "repos_url": "https://api.github.com/users/mojombo/repos",
-        "received_events_url": "https://api.github.com/users/mojombo/received_events",
-        "type": "User",
-        "score": 105.47857
-    }]
-}</pre>
-</div>
-</div>
-<script>rd.showBodyWithId(document.currentScript,'application/json');</script>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-<button class="try GET" onclick="rd.tryOut(this,'GET','/search/users',''); return false;">
-Try it!
-</button>
-<img src="../.././../ajax-loader.gif" class="invisible loader"/>
-<div class="invisible response">
-Request URL <pre name="requestUrl" class="tryData border_GET"> </pre>
-Request Headers <pre name="requestHeaders" class="tryData border_GET"> </pre>
-<br/>
-Response Code <pre name="responseCode" class="tryData border_GET"> </pre>
-Response Headers <pre name="responseHeaders" class="tryData border_GET"> </pre>
-Response Body <pre name="responseBody" class="tryData border_GET"> </pre>
-</div>
-</form>
-</div>
-</div>
-</div>
-<script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>
-</body>
+}</pre> 
+            </div> 
+           </div> <script>rd.showBodyWithId(document.currentScript,'application/json');</script> </td> 
+         </tr> 
+        </tbody> 
+       </table> 
+      </div> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/search/users',''); return false;"> Try it! </button> 
+      <img src="../.././../ajax-loader.gif" class="invisible loader"> 
+      <div class="invisible response">
+        Request URL 
+       <pre name="requestUrl" class="tryData border_GET"> </pre> Request Headers 
+       <pre name="requestHeaders" class="tryData border_GET"> </pre> 
+       <br> Response Code 
+       <pre name="responseCode" class="tryData border_GET"> </pre> Response Headers 
+       <pre name="responseHeaders" class="tryData border_GET"> </pre> Response Body 
+       <pre name="responseBody" class="tryData border_GET"> </pre> 
+      </div> 
+     </form> 
+    </div> 
+   </div> 
+  </div> 
+  <script>rd.urls=["/emojis", "/gitignore/templates", "/gitignore/templates/{language}", "/markdown", "/markdown/raw", "/search", "/search/repositories", "/search/code", "/search/issues", "/search/users", "/users", "/users/{username}", "/users/{username}/followers", "/users/{username}/following", "/users/{username}/following/{target_user}", ]; rd.relPath='../../.'; rd.setBaseUri('https://api.github.com'); rd.applyQuery();</script>  
+ </body>
 </html>

@@ -1,8 +1,8 @@
-##Search code
+## Search code
 Find file contents via various criteria. 
 (This method returns up to 100 results per page.)
 
-###Considerations for code search
+### Considerations for code search
 Due to the complexity of searching code, there are a few restrictions on how searches are performed:
 
 - Only the default branch is considered. In most cases, this will be the master branch.
