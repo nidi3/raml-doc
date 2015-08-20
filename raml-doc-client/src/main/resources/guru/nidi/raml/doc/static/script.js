@@ -97,11 +97,16 @@ var rd = (function () {
         },
 
         showTrWithId: function (elem, id) {
-            var show = null;
+            var show, found = false;
             doWithChildren(findParent(elem, 'tbody'), function (tr) {
-                if (tr.nodeName === 'TR' && (hasClass(tr, 'bodyType') || show != null)) {
-                    show = hasClass(tr, id);
-                    tr.style.display = show ? 'table-row' : 'none';
+                if (tr.nodeName === 'TR') {
+                    if (hasClass(tr, 'bodyType')) {
+                        found = true;
+                        show = hasClass(tr, id);
+                    }
+                    if (found) {
+                        tr.style.display = show ? 'table-row' : 'none';
+                    }
                 }
             });
         },
@@ -374,7 +379,7 @@ var rd = (function () {
             var start, end,
                 loc = document.location.pathname;
             if (loc.substring(loc.length - 11) === '/index.html') {
-                start = loc.lastIndexOf('/', loc.length - 12)+1;
+                start = loc.lastIndexOf('/', loc.length - 12) + 1;
                 end = loc.length - 11;
             } else {
                 start = loc.indexOf('resource') + 8;

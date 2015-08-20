@@ -18,8 +18,8 @@ res(response) ::= <<
     $response.description;format="markdown"$
 
     $/namedParams/header(false)$
-    $/namedParams/namedParamsElemShort("Headers",response.headers,false,"h")$
-    $/namedParams/namedParamsBody(response.body,false)$
+        $/namedParams/namedParamsElemShort("Headers",response.headers,false,"h")$
+        $/namedParams/namedParamsBody(response.body,false)$
     $/namedParams/footer()$
 >>
 
@@ -27,10 +27,10 @@ header() ::= <<
     <table class="params">
         <thead>
         <tr>
-            <th>Code</th>
-            <th class="paramDesc">Description</th>
-            <th>Headers</th>
-            <th>Body</th>
+            <th><span title="Code">Code</span></th>
+            <th><span title="Description">Description</span></th>
+            <th><span title="Headers">Headers</span></th>
+            <th><span title="Body">Body</span></th>
         </tr>
         </thead>
         <tbody>

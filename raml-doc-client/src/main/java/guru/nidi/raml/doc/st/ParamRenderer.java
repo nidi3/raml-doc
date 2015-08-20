@@ -51,6 +51,13 @@ class ParamRenderer implements AttributeRenderer {
                     s += "<=" + param.getMaxLength();
                 }
                 return s;
+            case "type":
+                return (param.getType() == null
+                        ? "string"
+                        : param.getType().toString().toLowerCase()) +
+                        (param.isRequired()
+                                ? param.isRepeat() ? "+" : ""
+                                : param.isRepeat() ? "*" : "?");
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }

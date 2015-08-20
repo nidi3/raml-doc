@@ -17,6 +17,7 @@ package guru.nidi.raml.doc.st;
 
 import guru.nidi.loader.Loader;
 import guru.nidi.raml.doc.GeneratorConfig;
+import guru.nidi.raml.doc.HtmlOptimizer;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
@@ -155,6 +156,7 @@ public class Generator {
         set(template, "template", sub);
         set(template, "relPath", relPath);
         render(template, target);
+        new HtmlOptimizer().optimizeColumnWidths(target);
     }
 
     private void render(ST template, File file) throws IOException {

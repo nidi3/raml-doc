@@ -60,6 +60,19 @@ documentation:
   description: nix
   securedBy: [oauth_1_0,simple]
   get:
+    queryParameters:
+      q:
+        enum: [kjsfksdhfalkshfakls, hfklsadfklsdjhafks]
+        default: kjhdksdhlsajhdlkasjhdl
+    responses:
+      200:
+        description: small
+        body:
+          application/json:
+            schema: |
+              {"type":"string"}
+            example: "hab"
+
 /data:
   displayName: TheData
   description: |
@@ -163,6 +176,8 @@ documentation:
     headers:
       h:
         type: boolean
+        required: true
+        repeat: true
     body:
       text/plain:
         schema: |
@@ -186,7 +201,7 @@ documentation:
             example: +14158675309
     responses:
       200:
-        description: Everything ok
+        description: Everything ok123456
         headers:
           bla:
             description: The bla dfskj sddfö dsflkjasdflk jhdfkj hfkj.ds kf skjf akfsdfkjsah ö

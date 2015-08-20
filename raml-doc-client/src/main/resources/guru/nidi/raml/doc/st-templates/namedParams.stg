@@ -2,15 +2,13 @@ header(baseUri) ::= <<
     <table class="params">
         <thead>
         <tr>
-            <th>Name</th>
-            $if(baseUri)$ <th>Value</th> $endif$
-            <th class="paramDesc">Description</th>
-            <th>Example</th>
-            <th class="paramType">Type</th>
-            <th>Constraint</th>
-            <th class="paramBool">Req</th>
-            <th class="paramBool">Rep</th>
-            <th>Default</th>
+            <th><span title="Name">Name</span></th>
+            $if(baseUri)$ <th><span title="Value">Value</span></th> $endif$
+            <th><span title="Description">Description</span></th>
+            <th><span title="Example">Example</span></th>
+            <th><span title="Type">Type</span></th>
+            <th><span title="Constraints">Constraints</span></th>
+            <th><span title="Default">Default</span></th>
         </tr>
         </thead>
         <tbody>
@@ -25,7 +23,7 @@ namedParams(title,params,baseUri,type) ::= <<
     $if(params)$
         <div class="title">$title$</div>
             $header(baseUri)$
-            $params.entrySet:paramEntry(baseUri,type)$
+                $params.entrySet:paramEntry(baseUri,type)$
             $footer()$
     $endif$
 >>
@@ -48,7 +46,7 @@ namedParamsBody(body,baseUri) ::= <<
                     $body.keys:{key | <option>$key$</option>}$
                 </select>
             </td>
-            <td colspan="6"></td>
+            <td colspan="4"></td>
         </tr>
         $body.entrySet:{entry | $mime(body.keys,entry.key,entry.value,baseUri)$}$
         <script>rd.showTrWithId(document.currentScript,'$first(body.keys)$');</script>
@@ -56,6 +54,8 @@ namedParamsBody(body,baseUri) ::= <<
 >>
 
 mime(keys,key,body,baseUri) ::= <<
+    <tr class="bodyType invisible $key$"></tr>
+    $namedParamsElem("Form parameters",body.formParameters,baseUri,"f")$
     <tr class="bodyType invisible $key$">
         <td></td>
         $if(baseUri)$
@@ -66,11 +66,10 @@ mime(keys,key,body,baseUri) ::= <<
             <td></td>
         $endif$
         <td></td>
-        <td colspan="5" style="vertical-align: top">
+        <td colspan="3" style="vertical-align: top">
             $schemaExample(body)$
         </td>
     </tr>
-    $namedParamsElem("Form parameters",body.formParameters,baseUri,"f")$
 >>
 
 schemaExample(value) ::= <<
@@ -87,7 +86,7 @@ schemaExample(value) ::= <<
 
 title(title,baseUri) ::= <<
     <tr>
-        <td colspan="$if(baseUri)$ 9 $else$ 8 $endif$">
+        <td colspan="$if(baseUri)$ 7 $else$ 6 $endif$">
             <span class="title">$title$</span>
         </td>
     </tr>
@@ -103,15 +102,13 @@ param(key,param,baseUri,type) ::= <<
         $if(baseUri)$ <td><input name="$type$_$key$"></td> $endif$
         <td>$param.description;format="markdown"$</td>
         <td onclick="rd.useExample(this)" class="example">$param.example$</td>
-        <td>$def(param.type,"STRING")$</td>
+        <td>$param;format="type"$</td>
         <td>
-            $if (param.enumeration)$ <p>$param.enumeration:{e|$e$,}$</p> $endif$
+            $if (param.enumeration)$ <p>$param.enumeration:{e|$e$, }$</p> $endif$
             $if (param.pattern)$ <p>$param.pattern$</p> $endif$
             $if (param.minLength || param.maxLength)$ <p>$param;format="strLimit"$</p> $endif$
             $if (param.minimum || param.maximum)$ <p>$param;format="intLimit"$</p> $endif$
         </td>
-        <td class="center">$param.required;format="x"$</td>
-        <td class="center">$param.repeat;format="x"$</td>
         <td>$param.defaultValue$</td>
     </tr>
 >>
