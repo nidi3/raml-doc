@@ -10,7 +10,7 @@
       "type": "string"
     },
     "b": {
-      "$ref": "#/string"
+      "$ref": "#/sub/subrefd.json"
     }
   }
 }

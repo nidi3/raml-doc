@@ -100,7 +100,9 @@ public class GeneratorConfig {
         for (String loc : ramlLocations.split(",")) {
             try {
                 final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
-                final Raml raml = new RamlLoad(new InterceptingLoader(new UriLoader(new FileLoader(new File("."))), sli)).load(loc);
+                final InterceptingLoader loader = new InterceptingLoader(new UriLoader(new FileLoader(new File("."))), sli);
+                final Raml raml = new RamlLoad(loader).load(loc);
+                new SchemaLoader(raml, loc, loader).loadSchemas();
                 ramls.add(raml);
 //            sli.writeDataToFiles(new File(getEffectiveTarget(), "raml"));
                 sli.writeDataToZip(new File(generator.getTarget(raml), raml.getTitle() + ".zip"));
@@ -133,7 +135,7 @@ public class GeneratorConfig {
         public void writeDataToFiles(File dir) throws IOException {
             dir.mkdirs();
             for (Map.Entry<String, byte[]> d : data.entrySet()) {
-                final String path = normalize(d.getKey());
+                final String path = IoUtil.normalizePath(d.getKey());
                 try (final InputStream in = new ByteArrayInputStream(d.getValue());
                      final OutputStream out = new FileOutputStream(new File(dir, path))) {
                     byte[] buf = new byte[10000];
@@ -145,27 +147,11 @@ public class GeneratorConfig {
             }
         }
 
-        private String normalize(String path) {
-            String res = path;
-            int pos;
-            while ((pos = res.indexOf("../")) >= 0) {
-                int last = res.lastIndexOf("/", pos - 2);
-                if (last >= 0) {
-                    res = res.substring(0, last + 1) + res.substring(pos + 3);
-                } else if (pos > 1) {
-                    res = res.substring(pos + 3);
-                } else {
-                    throw new IllegalStateException("Invalid path '" + path + "'");
-                }
-            }
-            return res;
-        }
-
         public void writeDataToZip(File file) throws IOException {
             file.getParentFile().mkdirs();
             try (final ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file))) {
                 for (Map.Entry<String, byte[]> d : data.entrySet()) {
-                    final String path = normalize(d.getKey());
+                    final String path = IoUtil.normalizePath(d.getKey());
                     out.putNextEntry(new ZipEntry(path));
                     try (final InputStream in = new ByteArrayInputStream(d.getValue())) {
                         byte[] buf = new byte[10000];

@@ -1,4 +1,6 @@
 {
+  "id": "https://api.unbounce.com:443/raml/v0.4/schema/accounts.json",
   "title": "refd",
-  "type": "string"
+  "type": "string",
+  "$ref": "common/entities_v2.0.json#/collection_metadata"
 }
