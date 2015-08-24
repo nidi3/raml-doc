@@ -49,7 +49,7 @@ resEntry(key,value) ::= <<
                 <br/><br/>
             $endif$
             $value.body.entrySet:{entry | $body(entry.key,entry.value)$}$
-            <script>rd.showBodyWithId(document.currentScript,'$first(value.body.keys)$');</script>
+            <script>rd.showBodyWithId(rd.currentScript(),'$first(value.body.keys)$');</script>
         </td>
     </tr>
 >>

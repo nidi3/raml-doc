@@ -82,11 +82,15 @@ table.params {
 }
 
 th {
-    padding: .2em;
     border-bottom: 1px solid black;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+th span {
+    padding: .2em;
+    display: block;
 }
 
 table.params input {

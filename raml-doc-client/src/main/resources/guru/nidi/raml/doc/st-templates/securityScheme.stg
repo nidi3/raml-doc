@@ -26,7 +26,7 @@ secScheme(name,scheme) ::= <<
                     $/namedParams/namedParamsElem("Query Parameters",scheme.describedBy.queryParameters,baseUri,"q")$
                 $/namedParams/footer()$
 
-                <script>rd.initSecData(document.currentScript);</script>
+                <script>rd.initSecData(rd.currentScript());</script>
             </form>
 
             <div class="title">Settings</div>

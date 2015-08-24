@@ -41,11 +41,12 @@ class StringRenderer implements AttributeRenderer {
         final Invocable invocable = (Invocable) engine;
         try {
             engine.eval("var window=this;");
-            //beautify.js: changed default operators like 'bla || 0' into 'bla | 0'
+            //beautify.js: changed default operators like 'bla || 0' into 'bla | 0' (jdk 6)
             engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/static/beautify.js"), "utf-8"));
             engine.eval("jsBeautify=js_beautify;");
             jsBeautifyer = invocable.getInterface(JsBeautifyer.class);
 
+            //marked.js: commented lines 723,727 because of unrecognized unicode chars (jdk 6)
             engine.eval("Inline=null;");
             engine.eval(new InputStreamReader(getClass().getResourceAsStream("/guru/nidi/raml/doc/marked.js"), "utf-8"));
             markdownProcessor = invocable.getInterface(MarkdownProcessor.class);
