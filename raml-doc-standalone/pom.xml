@@ -4,7 +4,7 @@
     <parent>
         <groupId>guru.nidi.raml</groupId>
         <artifactId>raml-doc</artifactId>
-        <version>0.0.5</version>
+        <version>0.0.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>raml-doc-standalone</artifactId>
