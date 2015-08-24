@@ -14,7 +14,7 @@
   <header> 
    <div class="right"> 
     <button name="logout" onclick="rd.logout(this,true); return false;">logout</button> 
-    <script>rd.initGlobalSecData(document.currentScript);</script> 
+    <script>rd.initGlobalSecData(rd.currentScript());</script> 
    </div> 
    <h1><a href="../../../.././index.html">Users</a></h1> 
    <p>Version v1</p> 
@@ -181,13 +181,13 @@
           <td>204</td> 
           <td><p>user follows target user</p> </td> 
           <td></td> 
-          <td> <script>rd.showBodyWithId(document.currentScript,'');</script> </td> 
+          <td> <script>rd.showBodyWithId(rd.currentScript(),'');</script> </td> 
          </tr>
          <tr> 
           <td>404</td> 
           <td><p>user does not follow target user</p> </td> 
           <td></td> 
-          <td> <script>rd.showBodyWithId(document.currentScript,'');</script> </td> 
+          <td> <script>rd.showBodyWithId(rd.currentScript(),'');</script> </td> 
          </tr> 
         </tbody> 
        </table> 

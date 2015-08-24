@@ -14,7 +14,7 @@
   <header> 
    <div class="right"> 
     <button name="logout" onclick="rd.logout(this,true); return false;">logout</button> 
-    <script>rd.initGlobalSecData(document.currentScript);</script> 
+    <script>rd.initGlobalSecData(rd.currentScript());</script> 
    </div> 
    <h1><a href="../.././index.html">Miscellaneous</a></h1> 
    <p>Version v1</p> 
@@ -173,7 +173,7 @@
             <pre class="code prettyprint"></pre> 
            </div> </td> 
          </tr> 
-         <script>rd.showTrWithId(document.currentScript,'text/plain');</script> 
+         <script>rd.showTrWithId(rd.currentScript(),'text/plain');</script> 
         </tbody> 
        </table> 
       </div> 
@@ -206,7 +206,7 @@
              <div class="invisible rawExample"></div> 
              <pre class="code prettyprint"></pre> 
             </div> 
-           </div> <script>rd.showBodyWithId(document.currentScript,'application/json');</script> </td> 
+           </div> <script>rd.showBodyWithId(rd.currentScript(),'application/json');</script> </td> 
          </tr> 
         </tbody> 
        </table> 

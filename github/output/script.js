@@ -84,6 +84,12 @@ var rd = (function () {
     };
 
     return {
+        currentScript: function () {
+            return document.currentScript || (function () {
+                    var scripts = document.getElementsByTagName('script');
+                    return scripts[scripts.length - 1];
+                }());
+        },
         setBaseUri: function (uri) {
             var href = window.location.href,
                 hostPos = href.indexOf('://'),
