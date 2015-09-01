@@ -15,6 +15,8 @@
  */
 package guru.nidi.raml.doc.st;
 
+import biz.gabrys.lesscss.compiler.CompilerException;
+import biz.gabrys.lesscss.compiler.LessCompilerImpl;
 import guru.nidi.loader.Loader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.HtmlOptimizer;
@@ -39,7 +41,7 @@ import java.util.Map;
  *
  */
 public class Generator {
-    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif", "style.css",
+    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif", "style.less",
             "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
 
     private final GeneratorConfig config;
@@ -145,6 +147,7 @@ public class Generator {
     private void generateBase(Raml raml, STGroupDir group) throws IOException {
         copyStaticResource(config.getTarget(), STATIC_FILES);
         copyCustomResource(config.getTarget(), "favicon.ico");
+        transformLessResources(config.getTarget());
 
         final ST index = group.getInstanceOf("main/index");
         index.add("firstIndex", raml.getTitle() + "/index.html");
@@ -200,6 +203,22 @@ public class Generator {
                 copy(in, out);
             } catch (Loader.ResourceNotFoundException e) {
                 //ignore
+            }
+        }
+    }
+
+    private void transformLessResources(File base) throws IOException {
+        final LessCompilerImpl compiler = new LessCompilerImpl();
+        for (File file : base.listFiles()) {
+            final String name = file.getName();
+            try {
+                if (name.endsWith(".less")) {
+                    try (final Writer out = new OutputStreamWriter(new FileOutputStream(new File(file.getParentFile(), name.substring(0, name.length() - 5) + ".css")), "utf-8")) {
+                        out.write(compiler.compile(file));
+                    }
+                }
+            } catch (CompilerException e) {
+                throw new IOException("Could not compile less file '" + name + "'", e);
             }
         }
     }

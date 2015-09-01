@@ -12,7 +12,7 @@ secScheme(name,scheme) ::= <<
     <div class="desc">
         $scheme.description;format="markdown"$
 
-        <div class="securityDetail">
+        <div class="bg_SECURITY border_SECURITY">
             <form>
                 $if(baseUri)$
                     <div class="right">

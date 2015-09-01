@@ -1,0 +1,377 @@
+@header-back: #333;
+@header-fore: #fff;
+@link: #888;
+@raw-link: blue;
+@table-line: #ccc;
+@table-head-line: #000;
+@code-back: #fff;
+@batch-fore: #fff;
+
+@GET-fore: #0f6ab4;
+@GET-border: lighten(@GET-fore, 45%);
+@GET-back: lighten(@GET-fore, 55%);
+
+@POST-fore: #10a04a;
+@POST-border: lighten(@POST-fore, 45%);
+@POST-back: lighten(@POST-fore, 55%);
+
+@PUT-fore: #9b6a22;
+@PUT-border: lighten(@PUT-fore, 45%);
+@PUT-back: lighten(@PUT-fore, 55%);
+
+@DELETE-fore: #a41e22;
+@DELETE-border: lighten(@DELETE-fore, 45%);
+@DELETE-back: lighten(@DELETE-fore, 55%);
+
+@PATCH-fore: #02b0e2;
+@PATCH-border: lighten(@PATCH-fore, 45%);
+@PATCH-back: lighten(@PATCH-fore, 55%);
+
+@SECURITY-fore: #cb00cb;
+@SECURITY-border: lighten(@SECURITY-fore, 45%);
+@SECURITY-back: lighten(@SECURITY-fore, 55%);
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 85%;
+  line-height: 1.4;
+}
+
+header {
+  background-color: @header-back;
+  color: @header-fore;
+  padding: 1em 2em;
+  margin-bottom: 1em;
+
+  h1 {
+    margin-top: 0;
+  }
+
+  a, a:visited, a:active, a:hover {
+    color: @header-fore;
+  }
+}
+
+a, a:visited, a:active, a:hover {
+  color: @link;
+}
+
+.resources {
+  white-space: nowrap;
+  line-height: 150%;
+  width: 22em;
+  float: left;
+  padding-left: 1em;
+  overflow: auto;
+}
+
+.content {
+  margin-left: 24em;
+  padding-right: 1em;
+}
+
+.desc {
+  margin: 1em;
+}
+
+.title {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+.mainTitle {
+  font-size: 125%;
+}
+
+.actionHeader {
+  margin-top: 1em;
+  min-height: 1.8em;
+  cursor: pointer;
+  padding: .5em;
+}
+
+ul {
+  padding-left: 2em;
+}
+
+.actionDetail {
+  padding: .5em;
+}
+
+.bg_SECURITY {
+  padding: .5em;
+  background-color: @SECURITY-back;
+}
+
+.border_SECURITY {
+  border: 1px solid @SECURITY-border;
+}
+
+th {
+  border-bottom: 1px solid @table-head-line;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th span {
+  padding: .2em;
+  display: block;
+}
+
+table.params {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 10em;
+  }
+
+  td {
+    padding: .2em;
+    margin: 0;
+    border-bottom: 1px solid @table-line;
+  }
+}
+
+td.center {
+  text-align: center;
+}
+
+.actionDesc {
+  margin-left: 6em;
+}
+
+.badge {
+  float: left;
+  border-radius: 0;
+  color: @batch-fore;
+  text-align: center;
+  text-transform: uppercase;
+  width: 4em;
+  padding: .3em;
+}
+
+.badge_GET {
+  background-color: @GET-fore;
+}
+
+.border_GET {
+  border: 1px solid @GET-border;
+}
+
+.bg_GET {
+  background-color: @GET-back;
+}
+
+.badge_POST {
+  background-color: @POST-fore;
+}
+
+.border_POST {
+  border: 1px solid @POST-border;
+}
+
+.bg_POST {
+  background-color: @POST-back;
+}
+
+.badge_PUT {
+  background-color: @PUT-fore;
+}
+
+.border_PUT {
+  border: 1px solid @PUT-border;
+}
+
+.bg_PUT {
+  background-color: @PUT-back;
+}
+
+.badge_DELETE {
+  background-color: @DELETE-fore;
+}
+
+.border_DELETE {
+  border: 1px solid @DELETE-border;
+}
+
+.bg_DELETE {
+  background-color: @DELETE-back;
+}
+
+.badge_PATCH {
+  background-color: @PATCH-fore;
+}
+
+.border_PATCH {
+  border: 1px solid @PATCH-border;
+}
+
+.bg_PATCH {
+  background-color: @PATCH-back;
+}
+
+.badge_CONNECT {
+  background-color: #e48f0a;
+}
+
+.badge_TRACE {
+  background-color: #98b805;
+}
+
+.code {
+  max-height: 25em;
+  overflow: auto;
+  background-color: @code-back;
+}
+
+code {
+  white-space: nowrap;
+  padding: .2em .4em;
+  border-radius: .4em;
+  background-color: @code-back;
+}
+
+pre code {
+  display: block;
+  padding: 1em;
+  border: .1em solid @table-line;
+  margin-bottom: .5em;
+}
+
+.tryData {
+  width: 100%;
+  min-height: 1em;
+  max-height: 25em;
+  overflow: auto;
+  background-color: @code-back;
+  font-family: inherit;
+  margin-bottom: .8em;
+}
+
+button {
+  padding: .7em;
+  border-radius: .6em;
+  border-style: outset;
+  cursor: pointer;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.invisible {
+  display: none;
+}
+
+.active:hover, .inactive:hover {
+  text-decoration: underline;
+}
+
+.active, .inactive, .example, .foldable {
+  cursor: pointer;
+}
+
+.active {
+  font-weight: bolder;
+}
+
+select.contentType {
+  width: 100%;
+}
+
+.response {
+  margin-top: 1em;
+}
+
+.link {
+  color: @raw-link;
+}
+
+.subLink {
+  margin-left: 1em;
+}
+
+.subLink span, .subLink a {
+  float: left;
+}
+
+.foldable {
+  display: inline-block;
+  font-size: 80%;
+  color: @link;
+  margin-left: -1em;
+}
+
+.collapsed {
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+
+  transform: rotate(-90deg);
+}
+
+h1, h2, h3 {
+  margin-top: .6em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: .3em;
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 260%;
+}
+
+h2 {
+  font-size: 210%;
+}
+
+h3 {
+  font-size: 170%;
+}
+
+h4 {
+  font-size: 130%;
+}
+
+h5 {
+  font-size: 100%;
+}
+
+h6 {
+  font-size: 85%;
+}
+
+p {
+  margin-bottom: .3em;
+}
+
+ol {
+  padding-left: 2em;
+}
