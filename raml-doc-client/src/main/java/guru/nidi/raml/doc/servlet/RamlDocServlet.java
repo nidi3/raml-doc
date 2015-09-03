@@ -163,12 +163,8 @@ public class RamlDocServlet extends HttpServlet {
         }
         try {
             latch.await();
-            if (req.getPathInfo() == null) {
-                res.sendRedirect(req.getRequestURL().append("/" + baseDir + "/index.html").toString());
-                return;
-            }
-            if (req.getPathInfo().length() == 1) {
-                res.sendRedirect(req.getRequestURL().append(baseDir + "/index.html").toString());
+            if (req.getPathInfo() == null || req.getPathInfo().length() <= 1) {
+                res.sendRedirect(req.getRequestURL().append("/" + baseDir + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
                 return;
             }
             final File source = new File(docDir(), req.getPathInfo());
