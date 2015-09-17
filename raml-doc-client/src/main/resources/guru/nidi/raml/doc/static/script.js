@@ -208,11 +208,11 @@ var rd = (function () {
                         handler(r, url, req);
                     }
                 };
-                req.responseType = r.type;
                 req.addEventListener("load", hideLoader, false);
                 req.addEventListener("error", hideLoader, false);
                 req.addEventListener("abort", hideLoader, false);
                 req.open(type, url, true);
+                req.responseType = r.type;
                 for (h in r.header) {
                     req.setRequestHeader(h, r.header[h]);
                     req.requestHeaders = r.header;
@@ -227,7 +227,7 @@ var rd = (function () {
             function handleResponse(r, url, req) {
                 var response = nextSiblingWithClass(button, 'response'),
                     mimeType = req.getResponseHeader('Content-Type'),
-                    isImage = simpleMimeType(mimeType).startsWith('image/'),
+                    isImage = startsWith(simpleMimeType(mimeType), 'image/'),
                     reqHeaderStr = '', i;
 
                 if (isImage && r.type !== 'arraybuffer') {
