@@ -14,7 +14,6 @@ response(key,res) ::= <<
 
 
 res(response) ::= <<
-
     $response.description;format="markdown"$
 
     $/namedParams/header(false)$

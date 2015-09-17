@@ -152,7 +152,7 @@ var rd = (function () {
             function createRequest(uri, securitySchemes) {
                 var i, prop,
                     req = {
-                        uri: uri, body: null, query: '', header: {}
+                        type: 'text', uri: uri, body: null, query: '', header: {}
                     },
                     form = findParent(button, 'form'),
                     creds = items.load('creds');
@@ -205,9 +205,10 @@ var rd = (function () {
                     req = new XMLHttpRequest();
                 req.onreadystatechange = function () {
                     if (req.readyState === 4) {
-                        handler(url, req);
+                        handler(r, url, req);
                     }
                 };
+                req.responseType = r.type;
                 req.addEventListener("load", hideLoader, false);
                 req.addEventListener("error", hideLoader, false);
                 req.addEventListener("abort", hideLoader, false);
@@ -223,28 +224,72 @@ var rd = (function () {
                 }
             }
 
-            function handleResponse(url, req) {
+            function handleResponse(r, url, req) {
                 var response = nextSiblingWithClass(button, 'response'),
-                    i, reqHeaderStr = '';
+                    mimeType = req.getResponseHeader('Content-Type'),
+                    isImage = simpleMimeType(mimeType).startsWith('image/'),
+                    reqHeaderStr = '', i;
+
+                if (isImage && r.type !== 'arraybuffer') {
+                    r.type = 'arraybuffer';
+                    sendRequest(r, handleResponse);
+                    return;
+                }
+
                 for (i in req.requestHeaders) {
                     reqHeaderStr += i + ': ' + req.requestHeaders[i] + '\n';
                 }
                 response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
                 response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
                 var resBody = response.querySelector('[name=responseBody]'),
-                    resText = req.responseText;
-                if (resText.length > 100000) {
-                    resText = resText.substring(0, 100000) + '...';
-                }
-                if (isJson(req.getResponseHeader('Content-Type'))) {
-                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
-                    linkify(resBody);
+                    resHtml = response.querySelector('[name=responseHtml]'),
+                    resImage = response.querySelector('[name=responseImage]');
+
+                if (isImage) {
+                    bodyTabs('preview', false, true);
+                    bodyContent(false, false, true);
+                    resImage.src = 'data:' + mimeType + ';base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(req.response)));
                 } else {
-                    resBody.firstChild.nodeValue = resText;
+                    bodyTabs('response', true, false);
+                    bodyContent(true, false, false);
+                    var resText = req.responseText;
+                    if (resText.length > 100000) {
+                        resText = resText.substring(0, 100000) + '...';
+                    }
+                    if (isJson(mimeType)) {
+                        resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
+                        linkify(resBody);
+                    } else {
+                        resBody.firstChild.nodeValue = resText;
+                        if (simpleMimeType(mimeType) === 'text/html') {
+                            bodyTabs('preview', true, true);
+                            bodyContent(true, true, false);
+                            resHtml.style.height = (Math.max(resBody.offsetWidth, resHtml.offsetWidth) * .75) + 'px';
+                            resHtml.contentDocument.write(resText);
+                            resHtml.contentDocument.close();
+                        }
+                    }
                 }
                 response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
                 response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
+
+                function bodyTabs(select, showResponse, showPreview) {
+                    var resContent = response.querySelector('.responseContent'),
+                        responseTab = response.querySelector('.tab.response'),
+                        previewTab = response.querySelector('.tab.preview');
+
+                    rd.showTab(resContent, select);
+                    responseTab.style.display = showResponse ? 'inline' : 'none';
+                    previewTab.style.display = showPreview ? 'inline' : 'none';
+                }
+
+                function bodyContent(text, html, image) {
+                    resBody.style.display = text ? 'block' : 'none';
+                    resHtml.style.display = html ? 'block' : 'none';
+                    resImage.style.display = image ? 'block' : 'none';
+                }
             }
+
 
             function linkify(resBody) {
                 var i, p, a, url, known, strings = resBody.querySelectorAll('.str');
@@ -299,10 +344,14 @@ var rd = (function () {
             }
 
             function isJson(mimeType) {
+                mimeType = simpleMimeType(mimeType);
+                return mimeType === 'application/json' || mimeType.substring(mimeType.length - 5) === '+json';
+            }
+
+            function simpleMimeType(mimeType) {
                 mimeType = mimeType || '';
                 var pos = mimeType.indexOf(';');
-                mimeType = pos >= 0 ? mimeType.substring(0, pos) : mimeType;
-                return mimeType === 'application/json' || mimeType.substring(mimeType.length - 5) === '+json';
+                return pos >= 0 ? mimeType.substring(0, pos) : mimeType;
             }
         },
         login: function (button, name) {
@@ -348,11 +397,18 @@ var rd = (function () {
                 logout = findParent(script, 'div').querySelector('[name=logout]');
             logout.style.display = data ? 'inline' : 'none';
         },
-        showModel: function (span, model) {
-            span.parentNode.querySelector('.modelTitle').className = (model ? 'active' : 'inactive') + ' modelTitle';
-            span.parentNode.querySelector('.exampleTitle').className = (model ? 'inactive' : 'active') + ' exampleTitle';
-            span.parentNode.querySelector('.model').style.display = model ? 'block' : 'none';
-            span.parentNode.querySelector('.example').style.display = model ? 'none' : 'block';
+        showTab: function (span, name) {
+            var i, base = span.parentNode,
+                tabs = base.querySelectorAll('.tab'),
+                bodies = base.querySelectorAll('.tab-body');
+
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active', 'inactive');
+                tabs[i].classList.add(hasClass(tabs[i], name) ? 'active' : 'inactive');
+            }
+            for (i = 0; i < bodies.length; i++) {
+                bodies[i].style.display = hasClass(tabs[i], name) ? 'block' : 'none';
+            }
         },
         useExample: function (div) {
             var input, code, rawExample = div.querySelector('.rawExample');
@@ -386,7 +442,7 @@ var rd = (function () {
                 var tree = items.load('tree') || {};
                 foldables = document.querySelectorAll('.foldable');
                 for (i = 0; i < foldables.length; i++) {
-                    var expanded = tree[foldables[i].getAttribute('name')];
+                    expanded = tree[foldables[i].getAttribute('name')];
                     rd.switchFoldable(foldables[i], expanded === undefined ? false : expanded);
                 }
             }

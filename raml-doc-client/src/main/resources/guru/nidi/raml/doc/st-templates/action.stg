@@ -35,7 +35,18 @@ action(action) ::= <<
                     <br/>
                     Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>
                     Response Headers <pre name="responseHeaders" class="tryData border_$action.type$"> </pre>
-                    Response Body <pre name="responseBody" class="tryData border_$action.type$"> </pre>
+
+                    <div class="responseContent">
+                        <span class="response tab active" onclick="rd.showTab(this,'response')">Response</span> |
+                        <span class="preview tab inactive" onclick="rd.showTab(this,'preview')">Preview</span>
+                        <div class="tab-body response">
+                            <pre name="responseBody" class="tryData border_$action.type$"> </pre>
+                        </div>
+                        <div class="tab-body preview invisible">
+                            <iframe name="responseHtml" class="tryData border_$action.type$"></iframe>
+                            <img name="responseImage" class="tryData border_$action.type$"></img>
+                        </div>
+                    </div>
                 </div>
             $endif$
         </form>

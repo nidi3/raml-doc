@@ -40,7 +40,6 @@ resource(res) ::= <<
 
         <div class="desc">
             $res.description;format="markdown"$
-
             $res.actions.values:/action/action()$
         </div>
     </div>

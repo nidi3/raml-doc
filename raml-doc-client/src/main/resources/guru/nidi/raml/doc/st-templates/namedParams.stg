@@ -73,12 +73,12 @@ mime(keys,key,body,baseUri) ::= <<
 >>
 
 schemaExample(value) ::= <<
-    <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> |
-    <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span>
-    <div class="model">
+    <span class="model tab active" onclick="rd.showTab(this,'model')">model</span> |
+    <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span>
+    <div class="model tab-body">
         <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
     </div>
-    <div class="example invisible" onclick="rd.useExample(this)">
+    <div class="example tab-body invisible" onclick="rd.useExample(this)">
         <div class="invisible rawExample">$value.example;format="js"$</div>
         <pre class="code prettyprint">$value.example;format="js"$</pre>
     </div>

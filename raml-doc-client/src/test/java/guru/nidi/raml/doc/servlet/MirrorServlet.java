@@ -18,13 +18,11 @@ package guru.nidi.raml.doc.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -33,27 +31,48 @@ import java.util.*;
 public class MirrorServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        final PrintWriter out = res.getWriter();
-        if ("json".equals(req.getParameter("q"))) {
-            res.setContentType("application/json");
-            final ObjectMapper mapper = new ObjectMapper();
-            final Map<String, Object> map = new HashMap<>();
-            map.put("method", req.getMethod());
-            map.put("url", req.getRequestURL().toString());
-            map.put("headers", headers(req));
-            map.put("query", query(req));
-            mapper.writeValue(out, map);
+        if ("png".equals(req.getParameter("q"))) {
+            final ServletOutputStream out = res.getOutputStream();
+            res.setContentType("image/png");
+            copy(getClass().getClassLoader().getResourceAsStream("data/google.png"), out);
         } else {
-            out.println(req.getMethod() + " " + req.getRequestURL());
-            headers(req, out);
-            query(req, out);
-            copy(req.getReader(), out);
+            final PrintWriter out = res.getWriter();
+            if ("html".equals(req.getParameter("q"))) {
+                res.setContentType("text/html");
+                out.print("<html><body><ul>");
+                for (int i = 0; i < 50; i++) {
+                    out.println("<li>" + i + "</li>");
+                }
+                out.print("</ul></body></html>");
+            } else if ("json".equals(req.getParameter("q"))) {
+                res.setContentType("application/json");
+                final ObjectMapper mapper = new ObjectMapper();
+                final Map<String, Object> map = new HashMap<>();
+                map.put("method", req.getMethod());
+                map.put("url", req.getRequestURL().toString());
+                map.put("headers", headers(req));
+                map.put("query", query(req));
+                mapper.writeValue(out, map);
+            } else {
+                out.println(req.getMethod() + " " + req.getRequestURL());
+                headers(req, out);
+                query(req, out);
+                copy(req.getReader(), out);
+            }
         }
         res.flushBuffer();
     }
 
     private void copy(Reader in, Writer out) throws IOException {
         final char[] buf = new char[10000];
+        int read;
+        while ((read = in.read(buf)) > 0) {
+            out.write(buf, 0, read);
+        }
+    }
+
+    private void copy(InputStream in, OutputStream out) throws IOException {
+        final byte[] buf = new byte[10000];
         int read;
         while ((read = in.read(buf)) > 0) {
             out.write(buf, 0, read);
