@@ -28,7 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -68,8 +70,7 @@ public class RamlDocServlet extends HttpServlet {
         }
     }
 
-    private final CountDownLatch latch = new CountDownLatch(1);
-    private String baseDir;
+    private Initer initer;
 
     @Override
     public void init() throws ServletException {
@@ -77,22 +78,12 @@ public class RamlDocServlet extends HttpServlet {
         if (!unknown.isEmpty()) {
             log.warn("Unknown init-parameters: " + unknown);
         }
-        if (features().contains(Feature.ONLINE)) {
-            final Thread creator = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        baseDir = createGeneratorConfig().generate();
-                    } catch (Exception e) {
-                        log.error("Could not create RAML documentation", e);
-                    } finally {
-                        latch.countDown();
-                    }
-                }
-            });
-            creator.setDaemon(true);
-            creator.start();
-        }
+        initer = new Initer();
+    }
+
+    @Override
+    public void destroy() {
+        initer.destroy();
     }
 
     protected List<String> unknownParameters() {
@@ -157,30 +148,25 @@ public class RamlDocServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (!features().contains(Feature.ONLINE)) {
+        if (!initer.waitReady()) {
             super.doGet(req, res);
             return;
         }
-        try {
-            latch.await();
-            if (req.getPathInfo() == null || req.getPathInfo().length() <= 1) {
-                res.sendRedirect(req.getRequestURL().append("/" + baseDir + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
-                return;
-            }
-            final File source = new File(docDir(), req.getPathInfo());
-            if (!source.exists() || !source.isFile()) {
-                res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else {
-                setContentType(res, source.getName());
-                try (final InputStream in = new FileInputStream(source);
-                     final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
-                    copy(in, out);
-                }
-            }
-            res.flushBuffer();
-        } catch (InterruptedException e) {
-            //ignore
+        if (req.getPathInfo() == null || req.getPathInfo().length() <= 1) {
+            res.sendRedirect(req.getRequestURL().append("/" + initer.baseDir + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
+            return;
         }
+        final File source = new File(docDir(), req.getPathInfo());
+        if (!source.exists() || !source.isFile()) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            setContentType(res, source.getName());
+            try (final InputStream in = new FileInputStream(source);
+                 final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
+                copy(in, out);
+            }
+        }
+        res.flushBuffer();
     }
 
     private void setContentType(HttpServletResponse res, String source) {
@@ -199,6 +185,44 @@ public class RamlDocServlet extends HttpServlet {
         int read;
         while ((read = in.read(buf)) > 0) {
             out.write(buf, 0, read);
+        }
+    }
+
+    private class Initer {
+        private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        private String baseDir;
+
+        public Initer() {
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        baseDir = createGeneratorConfig().generate();
+                    } catch (Exception e) {
+                        log.error("Could not create RAML documentation", e);
+                    }
+                }
+            }, 10, TimeUnit.SECONDS);
+            executor.shutdown();
+        }
+
+        public boolean waitReady() {
+            if (!features().contains(Feature.ONLINE)) {
+                return false;
+            }
+            if (!executor.isTerminated()) {
+                try {
+                    executor.awaitTermination(1, TimeUnit.MINUTES);
+                    executor.shutdownNow();
+                } catch (InterruptedException e) {
+                    //ignore
+                }
+            }
+            return true;
+        }
+
+        public void destroy() {
+            executor.shutdownNow();
         }
     }
 }
