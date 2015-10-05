@@ -17,7 +17,7 @@ will generate a new subfolder containing the HTML documentation of the RAML file
 
 Add this to web.xml
 
-```
+```xml
 <servlet>
     <servlet-name>raml-doc</servlet-name>
     <servlet-class>guru.nidi.raml.doc.servlet.RamlDocServlet</servlet-class>
