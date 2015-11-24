@@ -31,33 +31,46 @@ import java.util.*;
 public class MirrorServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if ("png".equals(req.getParameter("q"))) {
+        final int delay = req.getParameter("delay") == null ? 0 : Integer.parseInt(req.getParameter("delay"));
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            //ignore
+        }
+        final String q = req.getParameter("q") == null ? "" : req.getParameter("q");
+        if (q.equals("png")) {
             final ServletOutputStream out = res.getOutputStream();
             res.setContentType("image/png");
             copy(getClass().getClassLoader().getResourceAsStream("data/google.png"), out);
         } else {
             final PrintWriter out = res.getWriter();
-            if ("html".equals(req.getParameter("q"))) {
-                res.setContentType("text/html");
-                out.print("<html><body><ul>");
-                for (int i = 0; i < 50; i++) {
-                    out.println("<li>" + i + "</li>");
-                }
-                out.print("</ul></body></html>");
-            } else if ("json".equals(req.getParameter("q"))) {
-                res.setContentType("application/json");
-                final ObjectMapper mapper = new ObjectMapper();
-                final Map<String, Object> map = new HashMap<>();
-                map.put("method", req.getMethod());
-                map.put("url", req.getRequestURL().toString());
-                map.put("headers", headers(req));
-                map.put("query", query(req));
-                mapper.writeValue(out, map);
-            } else {
-                out.println(req.getMethod() + " " + req.getRequestURL());
-                headers(req, out);
-                query(req, out);
-                copy(req.getReader(), out);
+            switch (q) {
+                case "html":
+                    res.setContentType("text/html");
+                    out.print("<html><body><ul>");
+                    for (int i = 0; i < 50; i++) {
+                        out.println("<li>" + i + "</li>");
+                    }
+                    out.print("</ul></body></html>");
+                    break;
+                case "json":
+                    res.setContentType("application/json");
+                    final ObjectMapper mapper = new ObjectMapper();
+                    final Map<String, Object> map = new HashMap<>();
+                    map.put("method", req.getMethod());
+                    map.put("url", req.getRequestURL().toString());
+                    map.put("headers", headers(req));
+                    map.put("query", query(req));
+                    mapper.writeValue(out, map);
+                    break;
+                case "error":
+                    res.sendError(500, "Dummy error message");
+                    break;
+                default:
+                    out.println(req.getMethod() + " " + req.getRequestURL());
+                    headers(req, out);
+                    query(req, out);
+                    copy(req.getReader(), out);
             }
         }
         res.flushBuffer();

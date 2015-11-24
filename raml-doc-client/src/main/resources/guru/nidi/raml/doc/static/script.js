@@ -145,6 +145,8 @@ var rd = (function () {
             }
         },
         tryOut: function (button, type, path, securitySchemes) {
+            var response = nextSiblingWithClass(button, 'response');
+
             showLoader(true);
             showResponse();
             sendRequest(createRequest(rd.baseUri + path, securitySchemes), handleResponse);
@@ -215,8 +217,14 @@ var rd = (function () {
                 req.responseType = r.type;
                 for (h in r.header) {
                     req.setRequestHeader(h, r.header[h]);
-                    req.requestHeaders = r.header;
                 }
+                showRequestUrl(url);
+                showRequestHeaders(r.header);
+                showResponseCode('');
+                showResponseHeaders('');
+                showResponseImage();
+                showResponseText();
+
                 try {
                     req.send(r.body);
                 } catch (e) {
@@ -225,10 +233,8 @@ var rd = (function () {
             }
 
             function handleResponse(r, url, req) {
-                var response = nextSiblingWithClass(button, 'response'),
-                    mimeType = req.getResponseHeader('Content-Type'),
-                    isImage = startsWith(simpleMimeType(mimeType), 'image/'),
-                    reqHeaderStr = '', i;
+                var mimeType = req.getResponseHeader('Content-Type'),
+                    isImage = startsWith(simpleMimeType(mimeType), 'image/');
 
                 if (isImage && r.type !== 'arraybuffer') {
                     r.type = 'arraybuffer';
@@ -236,42 +242,15 @@ var rd = (function () {
                     return;
                 }
 
-                for (i in req.requestHeaders) {
-                    reqHeaderStr += i + ': ' + req.requestHeaders[i] + '\n';
-                }
-                response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
-                response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
-                var resBody = response.querySelector('[name=responseBody]'),
-                    resHtml = response.querySelector('[name=responseHtml]'),
-                    resImage = response.querySelector('[name=responseImage]');
-
+                showResponseCode(req.status + ' ' + req.statusText);
+                showResponseHeaders(req.getAllResponseHeaders());
                 if (isImage) {
                     bodyTabs('preview', false, true);
-                    bodyContent(false, false, true);
-                    resImage.src = 'data:' + mimeType + ';base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(req.response)));
+                    showResponseImage(mimeType, req.response);
                 } else {
-                    bodyTabs('response', true, false);
-                    bodyContent(true, false, false);
-                    var resText = req.responseText;
-                    if (resText.length > 100000) {
-                        resText = resText.substring(0, 100000) + '...';
-                    }
-                    if (isJson(mimeType)) {
-                        resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
-                        linkify(resBody);
-                    } else {
-                        resBody.firstChild.nodeValue = resText;
-                        if (simpleMimeType(mimeType) === 'text/html') {
-                            bodyTabs('preview', true, true);
-                            bodyContent(true, true, false);
-                            resHtml.style.height = (Math.max(resBody.offsetWidth, resHtml.offsetWidth) * .75) + 'px';
-                            resHtml.contentDocument.write(resText);
-                            resHtml.contentDocument.close();
-                        }
-                    }
+                    bodyTabs('response', true, simpleMimeType(mimeType) === 'text/html');
+                    showResponseText(mimeType, req.responseText);
                 }
-                response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
-                response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
 
                 function bodyTabs(select, showResponse, showPreview) {
                     var resContent = response.querySelector('.responseContent'),
@@ -282,14 +261,64 @@ var rd = (function () {
                     responseTab.style.display = showResponse ? 'inline' : 'none';
                     previewTab.style.display = showPreview ? 'inline' : 'none';
                 }
+            }
 
-                function bodyContent(text, html, image) {
-                    resBody.style.display = text ? 'block' : 'none';
-                    resHtml.style.display = html ? 'block' : 'none';
-                    resImage.style.display = image ? 'block' : 'none';
+            function showRequestUrl(url) {
+                response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
+            }
+
+            function showRequestHeaders(headers) {
+                var h, str = '';
+                for (h in headers) {
+                    str += h + ': ' + headers[h] + '\n';
+                }
+                response.querySelector('[name=requestHeaders]').firstChild.nodeValue = str;
+            }
+
+            function showResponseCode(code) {
+                response.querySelector('[name=responseCode]').firstChild.nodeValue = code;
+            }
+
+            function showResponseHeaders(headers) {
+                response.querySelector('[name=responseHeaders]').firstChild.nodeValue = headers;
+            }
+
+            function showResponseImage(mimeType, data) {
+                var resImage = response.querySelector('[name=responseImage]');
+                if (data) {
+                    resImage.src = 'data:' + mimeType + ';base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
+                    resImage.style.display = 'block';
+                } else {
+                    resImage.style.display = 'none';
                 }
             }
 
+            function showResponseText(mimeType, text) {
+                var resBody = response.querySelector('[name=responseBody]'),
+                    resHtml = response.querySelector('[name=responseHtml]');
+
+                if (text) {
+                    if (text.length > 100000) {
+                        text = text.substring(0, 100000) + '...';
+                    }
+                    resBody.style.display = 'block';
+                    if (isJson(mimeType)) {
+                        resBody.innerHTML = PR.prettyPrintOne(js_beautify(text));
+                        linkify(resBody);
+                    } else {
+                        resBody.firstChild.nodeValue = text;
+                        if (simpleMimeType(mimeType) === 'text/html') {
+                            resHtml.style.display = 'block';
+                            resHtml.style.height = (Math.max(resBody.offsetWidth, resHtml.offsetWidth) * .75) + 'px';
+                            resHtml.contentDocument.write(text);
+                            resHtml.contentDocument.close();
+                        }
+                    }
+                } else {
+                    resBody.style.display = 'none';
+                    resHtml.style.display = 'none';
+                }
+            }
 
             function linkify(resBody) {
                 var i, p, a, url, known, strings = resBody.querySelectorAll('.str');
