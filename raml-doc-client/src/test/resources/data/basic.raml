@@ -165,7 +165,10 @@ documentation:
          and use your API key as the username, leaving the password field blank.
   put:
     description: nix
+    body:
+      text/plain:
   delete:
+    body:
   post:
     description: |
       Get the thing! sfdkj hdsfklj sdfdf jlkflkj hfkj ffjk fjkl asdhfjks dh
@@ -221,7 +224,17 @@ documentation:
           application/xml:
             schema: |
               xml
-
+      400:
+        description: Error
+      401:
+        description: Error
+        body:
+      404:
+        description: Not found
+        body:
+          application/x:
+            schema: schschsch
+            example: This is an example
       500:
         description: error
         body:

@@ -28,8 +28,12 @@ import java.util.Map;
 class EntrySetMapModelAdaptor extends MapModelAdaptor {
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        if ("entrySet".equals(propertyName)) {
-            return ((Map<?, ?>) o).entrySet();
+        final Map<?, ?> map = (Map<?, ?>) o;
+        switch (propertyName) {
+            case "entrySet":
+                return map.entrySet();
+            case "hasSingleValue":
+                return map.size() == 1;
         }
         return super.getProperty(interp, self, o, property, propertyName);
     }

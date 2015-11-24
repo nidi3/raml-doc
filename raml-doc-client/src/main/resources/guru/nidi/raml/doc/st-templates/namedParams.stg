@@ -42,9 +42,13 @@ namedParamsBody(body,baseUri) ::= <<
                 <span class="title">Body</span>
             </td>
             <td colspan="$if(baseUri)$ 2 $else$ 1 $endif$">
-                <select class="request contentType" onchange="rd.showTrWithId(this,this.value)">
-                    $body.keys:{key | <option>$key$</option>}$
-                </select>
+                $if(body.hasSingleValue)$
+                    $first(body.keys)$
+                $else$
+                    <select class="request contentType" onchange="rd.showTrWithId(this,this.value)">
+                        $body.keys:{key | <option>$key$</option>}$
+                    </select>
+                $endif$
             </td>
             <td colspan="4"></td>
         </tr>

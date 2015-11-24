@@ -42,9 +42,13 @@ resEntry(key,value) ::= <<
         <td>$value.headers.entrySet:{h | $headerParam(h.key,h.value)$}$</td>
         <td>
             $if(value.body)$
-                <select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
-                    $value.body.keys:{key | <option>$key$</option>}$
-                </select>
+                $if(value.body.hasSingleValue)$
+                    $first(value.body.keys)$
+                $else$
+                    <select class="contentType" onchange="rd.showBodyWithId(this,this.value)">
+                        $value.body.keys:{key | <option>$key$</option>}$
+                    </select>
+                $endif$
                 <br/><br/>
             $endif$
             $value.body.entrySet:{entry | $body(entry.key,entry.value)$}$
