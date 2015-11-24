@@ -104,7 +104,7 @@ param(key,param,baseUri,type) ::= <<
         <td onclick="rd.useExample(this)" class="example">$param.example$</td>
         <td>$param;format="type"$</td>
         <td>
-            $if (param.enumeration)$ <p>$param.enumeration:{e|$e$, }$</p> $endif$
+            $if (param.enumeration)$ <p>$param;format="enum"$</p> $endif$
             $if (param.pattern)$ <p>$param.pattern$</p> $endif$
             $if (param.minLength || param.maxLength)$ <p>$param;format="strLimit"$</p> $endif$
             $if (param.minimum || param.maximum)$ <p>$param;format="intLimit"$</p> $endif$

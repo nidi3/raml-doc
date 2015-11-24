@@ -15,6 +15,7 @@
  */
 package guru.nidi.raml.doc.st;
 
+import org.apache.commons.lang.StringUtils;
 import org.raml.model.parameter.AbstractParam;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -58,6 +59,8 @@ class ParamRenderer implements AttributeRenderer {
                         (param.isRequired()
                                 ? param.isRepeat() ? "+" : ""
                                 : param.isRepeat() ? "*" : "?");
+            case "enum":
+                return StringUtils.join(param.getEnumeration(), ", ");
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }
