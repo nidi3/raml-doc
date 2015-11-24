@@ -407,7 +407,7 @@ var rd = (function () {
                 tabs[i].classList.add(hasClass(tabs[i], name) ? 'active' : 'inactive');
             }
             for (i = 0; i < bodies.length; i++) {
-                bodies[i].style.display = hasClass(tabs[i], name) ? 'block' : 'none';
+                bodies[i].style.display = hasClass(bodies[i], name) ? 'block' : 'none';
             }
         },
         useExample: function (div) {

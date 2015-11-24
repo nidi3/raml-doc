@@ -73,15 +73,22 @@ mime(keys,key,body,baseUri) ::= <<
 >>
 
 schemaExample(value) ::= <<
-    <span class="model tab active" onclick="rd.showTab(this,'model')">model</span> |
-    <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span>
-    <div class="model tab-body">
-        <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
-    </div>
-    <div class="example tab-body invisible" onclick="rd.useExample(this)">
-        <div class="invisible rawExample">$value.example;format="js"$</div>
-        <pre class="code prettyprint">$value.example;format="js"$</pre>
-    </div>
+    $if(value.schema || value.example)$
+        $if(value.schema)$
+            <span class="model tab active" onclick="rd.showTab(this,'model')">model</span>
+        $endif$
+        |
+        $if(value.example)$
+            <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span>
+        $endif$
+        <div class="model tab-body $if(!value.schema)$ invisible $endif$">
+            <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
+        </div>
+        <div class="example tab-body $if(value.schema)$ invisible $endif$" onclick="rd.useExample(this)">
+            <div class="invisible rawExample">$value.example;format="js"$</div>
+            <pre class="code prettyprint">$value.example;format="js"$</pre>
+        </div>
+    $endif$
 >>
 
 title(title,baseUri) ::= <<
