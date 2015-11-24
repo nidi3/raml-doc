@@ -105,10 +105,15 @@ public class Generator {
 
     private void checkTargetEmpty(File target, List<Raml> ramls) {
         for (final String name : target.list()) {
-            if (!("index.html".equals(name) || STATIC_FILES.contains(name) || existsTitle(name, ramls))) {
+            if (!isAllowedInTarget(name, ramls)) {
                 throw new IllegalStateException("Target directory '" + target + "' is not empty. Contains file " + name);
             }
         }
+    }
+
+    private boolean isAllowedInTarget(String name, List<Raml> ramls) {
+        return "index.html".equals(name) || existsTitle(name, ramls) ||
+                STATIC_FILES.contains(name) || (name.endsWith(".css") && STATIC_FILES.contains(name.substring(0, name.length() - 4) + ".less"));
     }
 
     private boolean existsTitle(String name, List<Raml> ramls) {
