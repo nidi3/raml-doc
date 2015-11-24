@@ -467,6 +467,11 @@ var rd = (function () {
                 if (query['run'] !== undefined) {
                     document.querySelector('.try.' + method).click();
                 }
+            } else {
+                var actions = document.querySelectorAll('.actionHeader');
+                if (actions.length === 1) {
+                    rd.showActionDetail(actions[0]);
+                }
             }
             if ((expanded = query['expanded']) !== undefined) {
                 var ex = (expanded || '').split(',');
