@@ -18,6 +18,7 @@ package guru.nidi.raml.doc.servlet;
 import guru.nidi.loader.Loader;
 import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.raml.doc.GeneratorConfig;
+import guru.nidi.raml.doc.IoUtil;
 import guru.nidi.raml.doc.st.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,7 +154,7 @@ public class RamlDocServlet extends HttpServlet {
             return;
         }
         if (req.getPathInfo() == null || req.getPathInfo().length() <= 1) {
-            res.sendRedirect(req.getRequestURL().append("/" + initer.baseDir + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
+            res.sendRedirect(req.getRequestURL().append("/" + IoUtil.urlEncoded(initer.baseDir) + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
             return;
         }
         final File source = new File(docDir(), req.getPathInfo());

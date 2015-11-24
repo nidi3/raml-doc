@@ -31,12 +31,15 @@ import java.util.Map;
 class ResourceAdaptor extends ObjectModelAdaptor {
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        if ("resolvedUriParameters".equals(propertyName)) {
-            final Map<String, UriParameter> params = new HashMap<>();
-            getAllResources((Resource) o, params);
-            return params;
+        final Resource res = (Resource) o;
+        switch (propertyName) {
+            case "resolvedUriParameters":
+                final Map<String, UriParameter> params = new HashMap<>();
+                getAllResources(res, params);
+                return params;
+            default:
+                return super.getProperty(interp, self, o, property, propertyName);
         }
-        return super.getProperty(interp, self, o, property, propertyName);
     }
 
     public void getAllResources(Resource resource, Map<String, UriParameter> res) {

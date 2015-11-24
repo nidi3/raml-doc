@@ -20,6 +20,7 @@ import biz.gabrys.lesscss.compiler.LessCompilerImpl;
 import guru.nidi.loader.Loader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.HtmlOptimizer;
+import guru.nidi.raml.doc.IoUtil;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
@@ -51,7 +52,11 @@ public class Generator {
     }
 
     public File getTarget(Raml raml) {
-        return new File(config.getTarget(), raml.getTitle());
+        return new File(config.getTarget(), filenameFor(raml));
+    }
+
+    private String filenameFor(Raml raml) {
+        return IoUtil.safeName(raml.getTitle());
     }
 
     public void generate(Raml raml) throws IOException {
@@ -98,7 +103,7 @@ public class Generator {
     private void renderResources(Raml raml, ST main, File target) throws IOException {
         for (Resource resource : new RamlAdaptor().getAllResources(raml)) {
             set(main, "param", resource);
-            final File file = new File(target, "resource/" + resource.getUri() + ".html");
+            final File file = new File(target, "resource" + IoUtil.safePath(resource.getUri()) + ".html");
             render(main, "/resource/resource", depth(resource.getUri()), file);
         }
     }
@@ -118,7 +123,7 @@ public class Generator {
 
     private boolean existsTitle(String name, List<Raml> ramls) {
         for (final Raml raml : ramls) {
-            if (name.equals(raml.getTitle())) {
+            if (name.equals(filenameFor(raml))) {
                 return true;
             }
         }
@@ -155,7 +160,7 @@ public class Generator {
         transformLessResources(config.getTarget());
 
         final ST index = group.getInstanceOf("main/index");
-        index.add("firstIndex", raml.getTitle() + "/index.html");
+        index.add("firstIndex", filenameFor(raml) + "/index.html");
         render(index, new File(config.getTarget(), "index.html"));
     }
 

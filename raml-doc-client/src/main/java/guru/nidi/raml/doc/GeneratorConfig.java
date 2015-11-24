@@ -105,7 +105,7 @@ public class GeneratorConfig {
                 new SchemaLoader(raml, loc, loader).loadSchemas();
                 ramls.add(raml);
 //            sli.writeDataToFiles(new File(getEffectiveTarget(), "raml"));
-                sli.writeDataToZip(new File(generator.getTarget(raml), raml.getTitle() + ".zip"));
+                sli.writeDataToZip(new File(generator.getTarget(raml),IoUtil.safeName(raml.getTitle()) + ".zip"));
             } catch (Exception e) {
                 throw new IOException("Problem loading RAML from '" + loc + "'", e);
             }

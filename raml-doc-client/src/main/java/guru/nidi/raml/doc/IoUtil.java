@@ -15,10 +15,16 @@
  */
 package guru.nidi.raml.doc;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  *
  */
 public class IoUtil {
+    private static final String FILE_SYSTEM_UNSAFE = "\\/:*?\"<>|!";
+    private static final String URL_UNSAFE = ":/?#[]@!$&'()*+,;=\"\\{}% ";
+
     private IoUtil() {
     }
 
@@ -36,5 +42,40 @@ public class IoUtil {
             }
         }
         return res;
+    }
+
+
+    public static String safeName(String name) {
+        return safe(name, false);
+    }
+
+    public static String safePath(String name) {
+        return safe(name, true);
+    }
+
+    public static String urlEncodedSafePath(String name) {
+        return urlEncoded(safePath(name)).replace("%2F", "/"); //undo url encoding for "/"
+    }
+
+    public static String urlEncodedSafeName(String name) {
+        return urlEncoded(safeName(name));
+    }
+
+    private static String safe(String name, boolean allowSlash) {
+        final StringBuilder s = new StringBuilder();
+        for (int i = 0; i < name.length(); i++) {
+            final char c = name.charAt(i);
+            final boolean ok = (allowSlash && c == '/') || (FILE_SYSTEM_UNSAFE.indexOf(c) < 0 && URL_UNSAFE.indexOf(c) < 0);
+            s.append(ok ? c : '-');
+        }
+        return s.toString();
+    }
+
+    public static String urlEncoded(String name) {
+        try {
+            return URLEncoder.encode(name, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new AssertionError("Cannot happen");
+        }
     }
 }

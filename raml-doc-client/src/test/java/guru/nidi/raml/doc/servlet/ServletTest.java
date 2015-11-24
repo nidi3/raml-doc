@@ -110,7 +110,7 @@ public class ServletTest {
         final HttpGet get = new HttpGet("http://localhost:8080/api");
         final HttpResponse response = client.execute(get);
         assertEquals(200, response.getStatusLine().getStatusCode());
-        final HttpGet getIndex = new HttpGet("http://localhost:8080/api/basic/index.html");
+        final HttpGet getIndex = new HttpGet("http://localhost:8080/api/second/index.html");
         final HttpResponse responseIndex = client.execute(getIndex);
         assertEquals(200, responseIndex.getStatusLine().getStatusCode());
         if ("/Users/nidi".equals(System.getenv("HOME"))) {

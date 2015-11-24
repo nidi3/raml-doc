@@ -15,6 +15,7 @@
  */
 package guru.nidi.raml.doc.st;
 
+import guru.nidi.raml.doc.IoUtil;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -77,6 +78,10 @@ class StringRenderer implements AttributeRenderer {
                 return schema(s);
             case "js":
                 return js(s);
+            case "nameUrl":
+                return IoUtil.urlEncodedSafeName(s);
+            case "pathUrl":
+                return IoUtil.urlEncodedSafePath(s);
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }
