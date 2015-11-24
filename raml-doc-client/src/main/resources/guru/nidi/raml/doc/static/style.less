@@ -31,6 +31,8 @@
 @SECURITY-border: lighten(@SECURITY-fore, 45%);
 @SECURITY-back: lighten(@SECURITY-fore, 55%);
 
+@tryDataPadding: .2em;
+
 * {
   padding: 0;
   margin: 0;
@@ -262,6 +264,7 @@ pre code {
   background-color: @code-back;
   font-family: inherit;
   margin-bottom: .8em;
+  padding: @tryDataPadding;
 }
 
 button {
@@ -305,6 +308,7 @@ select.contentType {
 
 .response {
   margin-top: 1em;
+  margin-right: 2*@tryDataPadding;
 }
 
 .link {
@@ -335,8 +339,14 @@ select.contentType {
   transform: rotate(-90deg);
 }
 
-.tab-body{
+.tab-body {
   margin-bottom: 1em;
+}
+
+.header-name {
+  display: inline-block;
+  width: 50%;
+  max-width: 20em;
 }
 
 h1, h2, h3 {

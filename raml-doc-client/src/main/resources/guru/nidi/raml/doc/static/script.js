@@ -270,9 +270,9 @@ var rd = (function () {
             function showRequestHeaders(headers) {
                 var h, str = '';
                 for (h in headers) {
-                    str += h + ': ' + headers[h] + '\n';
+                    str += '<div><span class="header-name">' + h + '</span><span>' + headers[h] + '</span></div>';
                 }
-                response.querySelector('[name=requestHeaders]').firstChild.nodeValue = str;
+                response.querySelector('[name=requestHeaders]').innerHTML = str;
             }
 
             function showResponseCode(code) {
@@ -280,7 +280,14 @@ var rd = (function () {
             }
 
             function showResponseHeaders(headers) {
-                response.querySelector('[name=responseHeaders]').firstChild.nodeValue = headers;
+                var i, pos, str = '', parts = headers.split('\n');
+                for (i = 0; i < parts.length; i++) {
+                    pos = parts[i].indexOf(':');
+                    if (pos > 0) {
+                        str += '<div><span class="header-name">' + parts[i].substring(0, pos) + '</span><span>' + parts[i].substring(pos + 1) + '</span></div>';
+                    }
+                }
+                response.querySelector('[name=responseHeaders]').innerHTML = str;
             }
 
             function showResponseImage(mimeType, data) {
