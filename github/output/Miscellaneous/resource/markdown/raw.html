@@ -38,7 +38,7 @@
      </div> 
      <div class="clear subLink  invisible "> 
       <div class="clear"> 
-       <a href="../.././../Miscellaneous/resource/gitignore/templates/{language}.html" title="/gitignore/templates/{language}"> /{language} </a> 
+       <a href="../.././../Miscellaneous/resource/gitignore/templates/-language-.html" title="/gitignore/templates/{language}"> /{language} </a> 
       </div> 
      </div> 
      <div class="clear"> 
@@ -88,18 +88,18 @@
      </div> 
      <div class="clear subLink  invisible "> 
       <div class="clear"> 
-       <a href="../.././../Users/resource/users/{username}.html" title="/users/{username}"> /{username} </a> 
+       <a href="../.././../Users/resource/users/-username-.html" title="/users/{username}"> /{username} </a> 
       </div> 
       <div class="clear subLink "> 
        <div class="clear"> 
-        <a href="../.././../Users/resource/users/{username}/followers.html" title="/users/{username}/followers"> /followers </a> 
+        <a href="../.././../Users/resource/users/-username-/followers.html" title="/users/{username}/followers"> /followers </a> 
        </div> 
        <div class="clear"> 
-        <a href="../.././../Users/resource/users/{username}/following.html" title="/users/{username}/following"> /following </a> 
+        <a href="../.././../Users/resource/users/-username-/following.html" title="/users/{username}/following"> /following </a> 
        </div> 
        <div class="clear subLink "> 
         <div class="clear"> 
-         <a href="../.././../Users/resource/users/{username}/following/{target_user}.html" title="/users/{username}/following/{target_user}"> /{target_user} </a> 
+         <a href="../.././../Users/resource/users/-username-/following/-target_user-.html" title="/users/{username}/following/{target_user}"> /{target_user} </a> 
         </div> 
        </div> 
       </div> 
@@ -134,7 +134,7 @@
           <th><span title="Value">Value</span></th> 
           <th><span title="Description">Description</span></th> 
           <th style="width:0em;"><span title="Example">Example</span></th> 
-          <th><span title="Type">Type</span></th> 
+          <th style="width:0em;"><span title="Type">Type</span></th> 
           <th><span title="Constraints">Constraints</span></th> 
           <th><span title="Default">Default</span></th> 
          </tr> 
@@ -150,28 +150,14 @@
           <td></td> 
           <td colspan="2" style="vertical-align:top"> <textarea name="body"></textarea> </td> 
           <td></td> 
-          <td colspan="3" style="vertical-align: top"> <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> | <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span> 
-           <div class="model"> 
-            <pre class="code prettyprint"></pre> 
-           </div> 
-           <div class="example invisible" onclick="rd.useExample(this)"> 
-            <div class="invisible rawExample"></div> 
-            <pre class="code prettyprint"></pre> 
-           </div> </td> 
+          <td colspan="3" style="vertical-align: top"> </td> 
          </tr>
          <tr class="bodyType invisible text/x-markdown"></tr> 
          <tr class="bodyType invisible text/x-markdown"> 
           <td></td> 
           <td colspan="2" style="vertical-align:top"> <textarea name="body"></textarea> </td> 
           <td></td> 
-          <td colspan="3" style="vertical-align: top"> <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> | <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span> 
-           <div class="model"> 
-            <pre class="code prettyprint"></pre> 
-           </div> 
-           <div class="example invisible" onclick="rd.useExample(this)"> 
-            <div class="invisible rawExample"></div> 
-            <pre class="code prettyprint"></pre> 
-           </div> </td> 
+          <td colspan="3" style="vertical-align: top"> </td> 
          </tr> 
          <script>rd.showTrWithId(rd.currentScript(),'text/plain');</script> 
         </tbody> 
@@ -195,17 +181,8 @@
           <td>200</td> 
           <td></td> 
           <td></td> 
-          <td> <select class="contentType" onchange="rd.showBodyWithId(this,this.value)"> <option>application/json</option> </select> <br><br> 
+          <td> application/json <br><br> 
            <div class="body application/json"> 
-            <span class="modelTitle active" onclick="rd.showModel(this,true)">model</span> | 
-            <span class="exampleTitle inactive" onclick="rd.showModel(this,false)">example</span> 
-            <div class="model"> 
-             <pre class="code prettyprint"></pre> 
-            </div> 
-            <div class="example invisible" onclick="rd.useExample(this)"> 
-             <div class="invisible rawExample"></div> 
-             <pre class="code prettyprint"></pre> 
-            </div> 
            </div> <script>rd.showBodyWithId(rd.currentScript(),'application/json');</script> </td> 
          </tr> 
         </tbody> 
@@ -219,8 +196,18 @@
        <pre name="requestHeaders" class="tryData border_POST"> </pre> 
        <br> Response Code 
        <pre name="responseCode" class="tryData border_POST"> </pre> Response Headers 
-       <pre name="responseHeaders" class="tryData border_POST"> </pre> Response Body 
-       <pre name="responseBody" class="tryData border_POST"> </pre> 
+       <pre name="responseHeaders" class="tryData border_POST"> </pre> 
+       <div class="responseContent"> 
+        <span class="response tab active" onclick="rd.showTab(this,'response')">Response</span> | 
+        <span class="preview tab inactive" onclick="rd.showTab(this,'preview')">Preview</span> 
+        <div class="tab-body response"> 
+         <pre name="responseBody" class="tryData border_POST"> </pre> 
+        </div> 
+        <div class="tab-body preview invisible"> 
+         <iframe name="responseHtml" class="tryData border_POST"></iframe> 
+         <img name="responseImage" class="tryData border_POST"> 
+        </div> 
+       </div> 
       </div> 
      </form> 
     </div> 

@@ -145,6 +145,8 @@ var rd = (function () {
             }
         },
         tryOut: function (button, type, path, securitySchemes) {
+            var response = nextSiblingWithClass(button, 'response');
+
             showLoader(true);
             showResponse();
             sendRequest(createRequest(rd.baseUri + path, securitySchemes), handleResponse);
@@ -152,7 +154,7 @@ var rd = (function () {
             function createRequest(uri, securitySchemes) {
                 var i, prop,
                     req = {
-                        uri: uri, body: null, query: '', header: {}
+                        type: 'text', uri: uri, body: null, query: '', header: {}
                     },
                     form = findParent(button, 'form'),
                     creds = items.load('creds');
@@ -205,17 +207,24 @@ var rd = (function () {
                     req = new XMLHttpRequest();
                 req.onreadystatechange = function () {
                     if (req.readyState === 4) {
-                        handler(url, req);
+                        handler(r, url, req);
                     }
                 };
                 req.addEventListener("load", hideLoader, false);
                 req.addEventListener("error", hideLoader, false);
                 req.addEventListener("abort", hideLoader, false);
                 req.open(type, url, true);
+                req.responseType = r.type;
                 for (h in r.header) {
                     req.setRequestHeader(h, r.header[h]);
-                    req.requestHeaders = r.header;
                 }
+                showRequestUrl(url);
+                showRequestHeaders(r.header);
+                showResponseCode('');
+                showResponseHeaders('');
+                showResponseImage();
+                showResponseText();
+
                 try {
                     req.send(r.body);
                 } catch (e) {
@@ -223,27 +232,99 @@ var rd = (function () {
                 }
             }
 
-            function handleResponse(url, req) {
-                var response = nextSiblingWithClass(button, 'response'),
-                    i, reqHeaderStr = '';
-                for (i in req.requestHeaders) {
-                    reqHeaderStr += i + ': ' + req.requestHeaders[i] + '\n';
+            function handleResponse(r, url, req) {
+                var mimeType = req.getResponseHeader('Content-Type'),
+                    isImage = startsWith(simpleMimeType(mimeType), 'image/');
+
+                if (isImage && r.type !== 'arraybuffer') {
+                    r.type = 'arraybuffer';
+                    sendRequest(r, handleResponse);
+                    return;
                 }
-                response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
-                response.querySelector('[name=requestHeaders]').firstChild.nodeValue = reqHeaderStr;
-                var resBody = response.querySelector('[name=responseBody]'),
-                    resText = req.responseText;
-                if (resText.length > 100000) {
-                    resText = resText.substring(0, 100000) + '...';
-                }
-                if (isJson(req.getResponseHeader('Content-Type'))) {
-                    resBody.innerHTML = PR.prettyPrintOne(js_beautify(resText));
-                    linkify(resBody);
+
+                showResponseCode(req.status + ' ' + req.statusText);
+                showResponseHeaders(req.getAllResponseHeaders());
+                if (isImage) {
+                    bodyTabs('preview', false, true);
+                    showResponseImage(mimeType, req.response);
                 } else {
-                    resBody.firstChild.nodeValue = resText;
+                    bodyTabs('response', true, simpleMimeType(mimeType) === 'text/html');
+                    showResponseText(mimeType, req.responseText);
                 }
-                response.querySelector('[name=responseCode]').firstChild.nodeValue = req.status + ' ' + req.statusText;
-                response.querySelector('[name=responseHeaders]').firstChild.nodeValue = req.getAllResponseHeaders();
+
+                function bodyTabs(select, showResponse, showPreview) {
+                    var resContent = response.querySelector('.responseContent'),
+                        responseTab = response.querySelector('.tab.response'),
+                        previewTab = response.querySelector('.tab.preview');
+
+                    rd.showTab(resContent, select);
+                    responseTab.style.display = showResponse ? 'inline' : 'none';
+                    previewTab.style.display = showPreview ? 'inline' : 'none';
+                }
+            }
+
+            function showRequestUrl(url) {
+                response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
+            }
+
+            function showRequestHeaders(headers) {
+                var h, str = '';
+                for (h in headers) {
+                    str += '<div><span class="header-name">' + h + '</span><span>' + headers[h] + '</span></div>';
+                }
+                response.querySelector('[name=requestHeaders]').innerHTML = str;
+            }
+
+            function showResponseCode(code) {
+                response.querySelector('[name=responseCode]').firstChild.nodeValue = code;
+            }
+
+            function showResponseHeaders(headers) {
+                var i, pos, str = '', parts = headers.split('\n');
+                for (i = 0; i < parts.length; i++) {
+                    pos = parts[i].indexOf(':');
+                    if (pos > 0) {
+                        str += '<div><span class="header-name">' + parts[i].substring(0, pos) + '</span><span>' + parts[i].substring(pos + 1) + '</span></div>';
+                    }
+                }
+                response.querySelector('[name=responseHeaders]').innerHTML = str;
+            }
+
+            function showResponseImage(mimeType, data) {
+                var resImage = response.querySelector('[name=responseImage]');
+                if (data) {
+                    resImage.src = 'data:' + mimeType + ';base64,' + btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
+                    resImage.style.display = 'block';
+                } else {
+                    resImage.style.display = 'none';
+                }
+            }
+
+            function showResponseText(mimeType, text) {
+                var resBody = response.querySelector('[name=responseBody]'),
+                    resHtml = response.querySelector('[name=responseHtml]');
+
+                if (text) {
+                    if (text.length > 100000) {
+                        text = text.substring(0, 100000) + '...';
+                    }
+                    resBody.style.display = 'block';
+                    if (isJson(mimeType)) {
+                        resBody.innerHTML = PR.prettyPrintOne(js_beautify(text));
+                        linkify(resBody);
+                    } else {
+                        resBody.firstChild.nodeValue = text;
+                        if (simpleMimeType(mimeType) === 'text/html') {
+                            resHtml.style.display = 'block';
+                            resHtml.style.height = (Math.max(resBody.offsetWidth, resHtml.offsetWidth) * .75) + 'px';
+                            resHtml.contentDocument.write(text);
+                            resHtml.contentDocument.close();
+                        }
+                    }
+                } else {
+                    resBody.style.display = 'none';
+                    resHtml.style.display = 'none';
+                }
             }
 
             function linkify(resBody) {
@@ -299,10 +380,14 @@ var rd = (function () {
             }
 
             function isJson(mimeType) {
+                mimeType = simpleMimeType(mimeType);
+                return mimeType === 'application/json' || mimeType.substring(mimeType.length - 5) === '+json';
+            }
+
+            function simpleMimeType(mimeType) {
                 mimeType = mimeType || '';
                 var pos = mimeType.indexOf(';');
-                mimeType = pos >= 0 ? mimeType.substring(0, pos) : mimeType;
-                return mimeType === 'application/json' || mimeType.substring(mimeType.length - 5) === '+json';
+                return pos >= 0 ? mimeType.substring(0, pos) : mimeType;
             }
         },
         login: function (button, name) {
@@ -348,11 +433,18 @@ var rd = (function () {
                 logout = findParent(script, 'div').querySelector('[name=logout]');
             logout.style.display = data ? 'inline' : 'none';
         },
-        showModel: function (span, model) {
-            span.parentNode.querySelector('.modelTitle').className = (model ? 'active' : 'inactive') + ' modelTitle';
-            span.parentNode.querySelector('.exampleTitle').className = (model ? 'inactive' : 'active') + ' exampleTitle';
-            span.parentNode.querySelector('.model').style.display = model ? 'block' : 'none';
-            span.parentNode.querySelector('.example').style.display = model ? 'none' : 'block';
+        showTab: function (span, name) {
+            var i, base = span.parentNode,
+                tabs = base.querySelectorAll('.tab'),
+                bodies = base.querySelectorAll('.tab-body');
+
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active', 'inactive');
+                tabs[i].classList.add(hasClass(tabs[i], name) ? 'active' : 'inactive');
+            }
+            for (i = 0; i < bodies.length; i++) {
+                bodies[i].style.display = hasClass(bodies[i], name) ? 'block' : 'none';
+            }
         },
         useExample: function (div) {
             var input, code, rawExample = div.querySelector('.rawExample');
@@ -375,6 +467,11 @@ var rd = (function () {
                 if (query['run'] !== undefined) {
                     document.querySelector('.try.' + method).click();
                 }
+            } else {
+                var actions = document.querySelectorAll('.actionHeader');
+                if (actions.length === 1) {
+                    rd.showActionDetail(actions[0]);
+                }
             }
             if ((expanded = query['expanded']) !== undefined) {
                 var ex = (expanded || '').split(',');
@@ -386,7 +483,7 @@ var rd = (function () {
                 var tree = items.load('tree') || {};
                 foldables = document.querySelectorAll('.foldable');
                 for (i = 0; i < foldables.length; i++) {
-                    var expanded = tree[foldables[i].getAttribute('name')];
+                    expanded = tree[foldables[i].getAttribute('name')];
                     rd.switchFoldable(foldables[i], expanded === undefined ? false : expanded);
                 }
             }
