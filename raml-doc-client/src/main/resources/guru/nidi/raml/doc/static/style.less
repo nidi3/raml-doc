@@ -32,6 +32,7 @@
 @SECURITY-back: lighten(@SECURITY-fore, 55%);
 
 @tryDataPadding: .2em;
+@resourcesWith: 22em;
 
 * {
   padding: 0;
@@ -66,14 +67,14 @@ a, a:visited, a:active, a:hover {
 .resources {
   white-space: nowrap;
   line-height: 150%;
-  width: 22em;
+  width: @resourcesWith;
   float: left;
   padding-left: 1em;
   overflow: auto;
 }
 
 .content {
-  margin-left: 24em;
+  margin-left: @resourcesWith+2em;
   padding-right: 1em;
 }
 
