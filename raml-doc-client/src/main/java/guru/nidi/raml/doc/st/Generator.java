@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class Generator {
     private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif", "style.less",
-            "script.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+            "script.js", "tryout.js", "run_prettify.js", "beautify.js", "prettify-default.css");
 
     private final GeneratorConfig config;
 

@@ -11,6 +11,7 @@ main(raml,ramls,template,param,relPath,baseUri,download) ::= <<
 
     <body>
     <script src="$relPath$/../script.js"></script>
+    <script src="$relPath$/../tryout.js"></script>
     <script src="$relPath$/../run_prettify.js"></script>
     <script src="$relPath$/../beautify.js"></script>
 
