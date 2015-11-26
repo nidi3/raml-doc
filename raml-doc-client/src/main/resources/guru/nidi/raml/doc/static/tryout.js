@@ -1,12 +1,25 @@
-rd.tryOut = function (button, type, path, securitySchemes) {
-    var response = rd.dom.nextSiblingWithClass(button, 'response');
+rd.showModifiedTry = function (e) {
+    var tryModified = rd.dom.nextSiblingWithClass(e.parentNode.parentNode.firstChild, 'try-modified');
+    tryModified.style.display = 'inline';
+};
+
+rd.tryOutModified = function (button, type, path, securitySchemes) {
+    rd.tryOut(button, type, path, securitySchemes, true);
+};
+rd.tryOut = function (button, type, path, securitySchemes, useModifiedUrl) {
+    var response = rd.dom.nextSiblingWithClass(button, 'response'),
+        tryModified = rd.dom.nextSiblingWithClass(button, 'try-modified');
+
+    if (!useModifiedUrl) {
+        tryModified.style.display = 'none';
+    }
 
     showLoader(true);
     showResponse();
-    sendRequest(createRequest(rd.baseUri + path, securitySchemes), handleResponse);
+    sendRequest(createRequest(rd.baseUri + path, securitySchemes, useModifiedUrl), handleResponse);
 
-    function createRequest(uri, securitySchemes) {
-        var i, prop,
+    function createRequest(uri, securitySchemes, useModifiedUrl) {
+        var i, prop, url,
             req = {
                 type: 'text', uri: uri, body: null, query: '', header: {}
             },
@@ -21,6 +34,17 @@ rd.tryOut = function (button, type, path, securitySchemes) {
         }
         for (i = 0; i < form.elements.length; i++) {
             setRequestValue(req, form.elements[i]);
+        }
+        if (useModifiedUrl) {
+            url = form.requestUrl.value;
+            i = url.indexOf('?');
+            if (i < 0) {
+                req.uri = url;
+                req.query = '';
+            } else {
+                req.uri = url.substring(0, i);
+                req.query = url.substring(i + 1);
+            }
         }
         return req;
     }
@@ -118,7 +142,7 @@ rd.tryOut = function (button, type, path, securitySchemes) {
     }
 
     function showRequestUrl(url) {
-        response.querySelector('[name=requestUrl]').firstChild.nodeValue = url;
+        response.querySelector('[name=requestUrl]').value = url;
     }
 
     function showRequestHeaders(headers) {

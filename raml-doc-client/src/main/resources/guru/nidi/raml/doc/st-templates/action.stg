@@ -26,11 +26,14 @@ action(action) ::= <<
 
             $if(baseUri)$
                 <button class="try $action.type$" onclick="rd.tryOut(this,'$action.type$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
-                Try it!
+                Send request
+                </button>
+                <button class="try try-modified $action.type$ invisible" onclick="rd.tryOutModified(this,'$action.type$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
+                Use modified URL
                 </button>
                 <img src="$relPath$/../ajax-loader.gif" class="invisible loader"/>
                 <div class="invisible response">
-                    Request URL <pre name="requestUrl" class="tryData border_$action.type$"> </pre>
+                    Request URL <input name="requestUrl" class="tryData border_$action.type$" onkeypress="rd.showModifiedTry(this);">
                     Request Headers <pre name="requestHeaders" class="tryData border_$action.type$"> </pre>
                     <br/>
                     Response Code <pre name="responseCode" class="tryData border_$action.type$"> </pre>
