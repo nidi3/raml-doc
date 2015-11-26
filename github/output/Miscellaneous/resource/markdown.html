@@ -9,6 +9,7 @@
  </head> 
  <body> 
   <script src=".././../script.js"></script> 
+  <script src=".././../tryout.js"></script> 
   <script src=".././../run_prettify.js"></script> 
   <script src=".././../beautify.js"></script> 
   <header> 
@@ -208,11 +209,12 @@ title = "This is another issue" &gt; #1&lt;/a&gt;!&lt;/p&gt;</pre>
         </tbody> 
        </table> 
       </div> 
-      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown',''); return false;"> Try it! </button> 
+      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown',''); return false;"> Send request </button> 
+      <button class="try try-modified POST invisible" onclick="rd.tryOutModified(this,'POST','/markdown',''); return false;"> Use modified URL </button> 
       <img src=".././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 
-       <pre name="requestUrl" class="tryData border_POST"> </pre> Request Headers 
+       <input name="requestUrl" class="tryData border_POST" onkeypress="rd.showModifiedTry(this);"> Request Headers 
        <pre name="requestHeaders" class="tryData border_POST"> </pre> 
        <br> Response Code 
        <pre name="responseCode" class="tryData border_POST"> </pre> Response Headers 

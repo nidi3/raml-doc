@@ -56,28 +56,11 @@ a:hover {
   cursor: pointer;
   padding: .5em;
 }
-ul {
-  padding-left: 2em;
-}
 .actionDetail {
   padding: .5em;
 }
-.bg_SECURITY {
-  padding: .5em;
-  background-color: #ffe4ff;
-}
-.border_SECURITY {
-  border: 1px solid #ffb2ff;
-}
-th {
-  border-bottom: 1px solid #000000;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-th span {
-  padding: .2em;
-  display: block;
+.actionDesc {
+  margin-left: 6em;
 }
 table.params {
   width: 100%;
@@ -99,11 +82,12 @@ table.params td {
   margin: 0;
   border-bottom: 1px solid #cccccc;
 }
+table.params ul,
+table.params ol {
+  padding-left: 1.2em;
+}
 td.center {
   text-align: center;
-}
-.actionDesc {
-  margin-left: 6em;
 }
 .badge {
   float: left;
@@ -159,11 +143,17 @@ td.center {
 .bg_PATCH {
   background-color: #feffff;
 }
-.badge_CONNECT {
-  background-color: #e48f0a;
+.badge_SECURITY {
+  background-color: #cb00cb;
 }
-.badge_TRACE {
-  background-color: #98b805;
+.border_SECURITY {
+  border: 1px solid #ffb2ff;
+}
+.bg_SECURITY {
+  background-color: #ffe4ff;
+}
+.bg_SECURITY {
+  padding: .5em;
 }
 .code {
   max-height: 25em;
@@ -189,8 +179,12 @@ pre code {
   overflow: auto;
   background-color: #ffffff;
   font-family: inherit;
+  font-size: 100%;
   margin-bottom: .8em;
   padding: 0.2em;
+}
+input.tryData {
+  height: 1.4em;
 }
 button {
   padding: .7em;
@@ -217,7 +211,8 @@ button {
 .active,
 .inactive,
 .example,
-.foldable {
+.foldable,
+.clickable {
   cursor: pointer;
 }
 .active {
@@ -261,6 +256,14 @@ select.contentType {
   width: 50%;
   max-width: 20em;
 }
+.add:before {
+  content: '\2295';
+  font-size: 125%;
+}
+.remove:before {
+  content: '\2297';
+  font-size: 125%;
+}
 h1,
 h2,
 h3 {
@@ -296,7 +299,18 @@ h6 {
 p {
   margin-bottom: .3em;
 }
+ul,
 ol {
   padding-left: 2em;
+}
+th {
+  border-bottom: 1px solid #000000;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+th span {
+  padding: .2em;
+  display: block;
 }
 

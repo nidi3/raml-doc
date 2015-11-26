@@ -9,6 +9,7 @@
  </head> 
  <body> 
   <script src="../.././../script.js"></script> 
+  <script src="../.././../tryout.js"></script> 
   <script src="../.././../run_prettify.js"></script> 
   <script src="../.././../beautify.js"></script> 
   <header> 
@@ -162,7 +163,7 @@
           <td colspan=" 7 "> <span class="title">Query parameters</span> </td> 
          </tr> 
          <tr> 
-          <td> q </td> 
+          <td>q</td> 
           <td><input name="q_q"></td> 
           <td><p>The search terms.</p> </td> 
           <td onclick="rd.useExample(this)" class="example">addClass+in:file+language:js+repo:jquery/jquery</td> 
@@ -171,7 +172,7 @@
           <td></td> 
          </tr> 
          <tr> 
-          <td> sort </td> 
+          <td>sort</td> 
           <td><input name="q_sort"></td> 
           <td><p>The sort field. Can only be <code>indexed</code>, which indicates how recently a file has been indexed by the GitHub search infrastructure. Default: results are sorted by best match.</p> </td> 
           <td onclick="rd.useExample(this)" class="example"></td> 
@@ -180,7 +181,7 @@
           <td></td> 
          </tr> 
          <tr> 
-          <td> order </td> 
+          <td>order</td> 
           <td><input name="q_order"></td> 
           <td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p> </td> 
           <td onclick="rd.useExample(this)" class="example"></td> 
@@ -302,11 +303,12 @@
         </tbody> 
        </table> 
       </div> 
-      <button class="try GET" onclick="rd.tryOut(this,'GET','/search/code',''); return false;"> Try it! </button> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/search/code',''); return false;"> Send request </button> 
+      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/search/code',''); return false;"> Use modified URL </button> 
       <img src="../.././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 
-       <pre name="requestUrl" class="tryData border_GET"> </pre> Request Headers 
+       <input name="requestUrl" class="tryData border_GET" onkeypress="rd.showModifiedTry(this);"> Request Headers 
        <pre name="requestHeaders" class="tryData border_GET"> </pre> 
        <br> Response Code 
        <pre name="responseCode" class="tryData border_GET"> </pre> Response Headers 

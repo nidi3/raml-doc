@@ -9,6 +9,7 @@
  </head> 
  <body> 
   <script src="../../.././../script.js"></script> 
+  <script src="../../.././../tryout.js"></script> 
   <script src="../../.././../run_prettify.js"></script> 
   <script src="../../.././../beautify.js"></script> 
   <header> 
@@ -143,7 +144,7 @@
           <td colspan=" 7 "> <span class="title">URI parameters</span> </td> 
          </tr> 
          <tr> 
-          <td> username </td> 
+          <td>username*</td> 
           <td><input name="u_username"></td> 
           <td></td> 
           <td onclick="rd.useExample(this)" class="example"></td> 
@@ -208,11 +209,12 @@
         </tbody> 
        </table> 
       </div> 
-      <button class="try GET" onclick="rd.tryOut(this,'GET','/users/{username}/following',''); return false;"> Try it! </button> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/users/{username}/following',''); return false;"> Send request </button> 
+      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/users/{username}/following',''); return false;"> Use modified URL </button> 
       <img src="../../.././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 
-       <pre name="requestUrl" class="tryData border_GET"> </pre> Request Headers 
+       <input name="requestUrl" class="tryData border_GET" onkeypress="rd.showModifiedTry(this);"> Request Headers 
        <pre name="requestHeaders" class="tryData border_GET"> </pre> 
        <br> Response Code 
        <pre name="responseCode" class="tryData border_GET"> </pre> Response Headers 
