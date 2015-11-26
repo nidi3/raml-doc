@@ -83,24 +83,12 @@ a, a:visited, a:active, a:hover {
   padding: .5em;
 }
 
-ul, ol {
-  padding-left: 2em;
-}
-
 .actionDetail {
   padding: .5em;
 }
 
-th {
-  border-bottom: 1px solid @table-head-line-color;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-th span {
-  padding: .2em;
-  display: block;
+.actionDesc {
+  margin-left: 6em;
 }
 
 table.params {
@@ -133,10 +121,6 @@ table.params {
 
 td.center {
   text-align: center;
-}
-
-.actionDesc {
-  margin-left: 6em;
 }
 
 .badge {
@@ -268,13 +252,17 @@ select.contentType {
   margin-left: -1em;
 }
 
-.collapsed {
-  -moz-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  -webkit-transform: rotate(-90deg);
+.transform(@value){
+  -moz-transform: @value;
+  -ms-transform: @value;
+  -o-transform: @value;
+  -webkit-transform: @value;
 
-  transform: rotate(-90deg);
+  transform: @value;
+}
+
+.collapsed {
+  .transform(rotate(-90deg));
 }
 
 .tab-body {
@@ -322,6 +310,22 @@ h6 {
 
 p {
   margin-bottom: .3em;
+}
+
+ul, ol {
+  padding-left: 2em;
+}
+
+th {
+  border-bottom: 1px solid @table-head-line-color;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th span {
+  padding: .2em;
+  display: block;
 }
 
 @import "custom-style";
