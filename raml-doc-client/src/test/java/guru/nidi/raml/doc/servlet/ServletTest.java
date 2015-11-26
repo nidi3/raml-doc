@@ -70,7 +70,7 @@ public class ServletTest {
         final Wrapper multiRaml = ctx.createWrapper();
         multiRaml.setServletClass(RamlDocServlet.class.getName());
         multiRaml.setName("app");
-        multiRaml.addInitParameter("ramlLocations", "classpath://data/basic.raml,classpath://data/second.raml");
+        multiRaml.addInitParameter("ramlLocations", "classpath://data/basic.raml,classpath://data/second.raml,classpath://data/markdown.raml");
         multiRaml.addInitParameter("features", "online,tryout,download");
         multiRaml.addInitParameter("baseUriParameters", "host=$host/$path,path=mirror");
         multiRaml.addInitParameter("customization", "classpath://");

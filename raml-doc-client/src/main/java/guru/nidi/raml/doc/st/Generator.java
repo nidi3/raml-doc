@@ -68,10 +68,16 @@ public class Generator {
     }
 
     public void generate(Raml raml) throws IOException {
-        generate(raml, Collections.singletonList(raml));
+        generate(Collections.singletonList(raml));
     }
 
-    public void generate(Raml raml, List<Raml> ramls) throws IOException {
+    public void generate(List<Raml> ramls) throws IOException {
+        for (final Raml raml : ramls) {
+            doGenerate(raml, ramls);
+        }
+    }
+
+    private void doGenerate(Raml raml, List<Raml> ramls) throws IOException {
         final STGroupDir group = initSTGroup(raml);
 
         if (raml == ramls.get(0)) {

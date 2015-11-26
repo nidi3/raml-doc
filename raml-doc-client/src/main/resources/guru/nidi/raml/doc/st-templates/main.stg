@@ -45,7 +45,7 @@ htmlHead() ::= <<
         <p>Version $raml.version$</p>
         <div class="clear"/>
         <p class="left">$raml;format="baseUri"$</p>
-        $if(download)$ <a class="right" href="$relPath$/$raml.title$.zip">Download RAML</a> $endif$
+        $if(download)$ <a class="right" href="$relPath$/$raml.title;format="nameUrl"$.zip">Download RAML</a> $endif$
         <div class="clear"/>
     </header>
 >>
