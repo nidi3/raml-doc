@@ -15,9 +15,9 @@ action(action) ::= <<
                 $/main/line("Secured by",action.securitySchemes:securityScheme())$
 
                 $/namedParams/header(baseUri)$
-                    $/namedParams/namedParamsElem("URI parameters",action.resource.resolvedUriParameters,baseUri,"u")$
-                    $/namedParams/namedParamsElem("Query parameters",action.queryParameters,baseUri,"q")$
-                    $/namedParams/namedParamsElem("Headers",action.headers,baseUri,"h")$
+                    $/namedParams/namedParamsElem("URI parameters",action.resource.resolvedUriParameters,baseUri,"u",false)$
+                    $/namedParams/namedParamsElem("Query parameters",action.queryParameters,baseUri,"q",false)$
+                    $/namedParams/namedParamsElem("Headers",action.headers,baseUri,"h",true)$
                     $/namedParams/namedParamsBody(action.body,baseUri)$
                 $/namedParams/footer()$
             </div>

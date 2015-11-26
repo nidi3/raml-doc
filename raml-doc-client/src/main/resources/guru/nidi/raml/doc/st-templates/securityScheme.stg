@@ -22,8 +22,8 @@ secScheme(name,scheme) ::= <<
                 $endif$
 
                 $/namedParams/header(baseUri)$
-                    $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,baseUri,"h")$
-                    $/namedParams/namedParamsElem("Query Parameters",scheme.describedBy.queryParameters,baseUri,"q")$
+                    $/namedParams/namedParamsElem("Headers",scheme.describedBy.headers,baseUri,"h",false)$
+                    $/namedParams/namedParamsElem("Query Parameters",scheme.describedBy.queryParameters,baseUri,"q",false)$
                 $/namedParams/footer()$
 
                 <script>rd.initSecData(rd.currentScript());</script>

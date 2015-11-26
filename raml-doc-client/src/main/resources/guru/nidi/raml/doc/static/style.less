@@ -222,7 +222,7 @@ button {
   text-decoration: underline;
 }
 
-.active, .inactive, .example, .foldable {
+.active, .inactive, .example, .foldable, .clickable {
   cursor: pointer;
 }
 
@@ -279,6 +279,16 @@ select.contentType {
   display: inline-block;
   width: 50%;
   max-width: 20em;
+}
+
+.add:before{
+  content: '\2295';
+  font-size: 125%;
+}
+
+.remove:before{
+  content: '\2297';
+  font-size: 125%;
 }
 
 h1, h2, h3 {

@@ -1,3 +1,27 @@
+rd.addHeader = function (e) {
+    var tr = rd.dom.findParent(e, 'tr'),
+        next = document.createElement('tr');
+    next.innerHTML = '<td>' +
+        ' <select onchange="rd.setHeaderName(this)">'+
+        '  <option>Accept</option><option>Accept-Charset</option><option>Accept-Language</option>'+
+        '  <option>Cache-Control</option><option>Pragma</option><option>User-Agent</option></select>' +
+        ' <span class="remove clickable" onclick="rd.removeHeader(this)"/>' +
+        '</td>' +
+        '<td class="additional-header"><input></td>';
+    rd.dom.insertAfter(tr, next);
+    rd.setHeaderName(next.querySelector('select'));
+};
+
+rd.setHeaderName = function (e) {
+    var input = rd.dom.nextSiblingWithClass(e.parentNode, 'additional-header').querySelector('input');
+    input.name = 'h_' + e.value;
+};
+
+rd.removeHeader = function (e) {
+    var tr = rd.dom.findParent(e, 'tr');
+    tr.parentNode.removeChild(tr);
+};
+
 rd.showModifiedTry = function (e) {
     var tryModified = rd.dom.nextSiblingWithClass(e.parentNode.parentNode.firstChild, 'try-modified');
     tryModified.style.display = 'inline';
@@ -6,6 +30,7 @@ rd.showModifiedTry = function (e) {
 rd.tryOutModified = function (button, type, path, securitySchemes) {
     rd.tryOut(button, type, path, securitySchemes, true);
 };
+
 rd.tryOut = function (button, type, path, securitySchemes, useModifiedUrl) {
     var response = rd.dom.nextSiblingWithClass(button, 'response'),
         tryModified = rd.dom.nextSiblingWithClass(button, 'try-modified');

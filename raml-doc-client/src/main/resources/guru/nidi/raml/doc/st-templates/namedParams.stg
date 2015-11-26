@@ -22,15 +22,15 @@ footer() ::= <<
 namedParams(title,params,baseUri,type) ::= <<
     $if(params)$
         <div class="title">$title$</div>
-            $header(baseUri)$
-                $params.entrySet:paramEntry(baseUri,type)$
-            $footer()$
+        $header(baseUri)$
+            $params.entrySet:paramEntry(baseUri,type)$
+        $footer()$
     $endif$
 >>
 
-namedParamsElem(title,params,baseUri,type) ::= <<
+namedParamsElem(title,params,baseUri,type,addable) ::= <<
     $if(params)$
-        $title(title,baseUri)$
+        $title(title,baseUri,addable)$
         $params.entrySet:paramEntry(baseUri,type)$
     $endif$
 >>
@@ -59,7 +59,7 @@ namedParamsBody(body,baseUri) ::= <<
 
 mime(keys,key,body,baseUri) ::= <<
     <tr class="bodyType invisible $key$"></tr>
-    $namedParamsElem("Form parameters",body.formParameters,baseUri,"f")$
+    $namedParamsElem("Form parameters",body.formParameters,baseUri,"f",false)$
     <tr class="bodyType invisible $key$">
         <td></td>
         $if(baseUri)$
@@ -95,10 +95,11 @@ schemaExample(value) ::= <<
     $endif$
 >>
 
-title(title,baseUri) ::= <<
+title(title,baseUri,addable) ::= <<
     <tr>
         <td colspan="$if(baseUri)$ 7 $else$ 6 $endif$">
             <span class="title">$title$</span>
+            $if(baseUri && addable)$ <span class="add clickable" onclick="rd.addHeader(this)"/> $endif$
         </td>
     </tr>
 >>

@@ -41,6 +41,14 @@ var rd = {
             } else {
                 parent.appendChild(wrapper);
             }
+        },
+        insertAfter: function (node, newNode) {
+            var next = node.nextSibling, parent = node.parentNode;
+            if (next) {
+                parent.insertBefore(newNode, next);
+            } else {
+                parent.appendChild(newNode);
+            }
         }
     },
 
