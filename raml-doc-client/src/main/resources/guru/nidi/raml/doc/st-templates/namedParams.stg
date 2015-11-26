@@ -29,7 +29,7 @@ namedParams(title,params,baseUri,type) ::= <<
 >>
 
 namedParamsElem(title,params,baseUri,type,addable) ::= <<
-    $if(params)$
+    $if(params || (baseUri && addable))$
         $title(title,baseUri,addable)$
         $params.entrySet:paramEntry(baseUri,type)$
     $endif$
