@@ -1,41 +1,23 @@
-@header-back: #333;
-@header-fore: #fff;
-@link: #888;
-@raw-link: blue;
-@table-line: #ccc;
-@table-head-line: #000;
-@code-back: #fff;
-@batch-fore: #fff;
+@title-back-color: #333;
+@title-color: #fff;
+@link-color: #888;
+@code-link-color: blue;
+@table-line-color: #ccc;
+@table-head-line-color: #000;
+@code-back-color: #fff;
+@badge-text-color: #fff;
 
-@GET-fore: #0f6ab4;
-@POST-fore: #10a04a;
-@PUT-fore: #9b6a22;
-@DELETE-fore: #a41e22;
-@PATCH-fore: #02b0e2;
-@SECURITY-fore: #cb00cb;
+@get-color: #0f6ab4;
+@post-color: #10a04a;
+@put-color: #9b6a22;
+@delete-color: #a41e22;
+@patch-color: #02b0e2;
+@security-color: #cb00cb;
 
-@tryDataPadding: .2em;
-@resourcesWith: 22em;
+@try-data-padding: .2em;
+@resources-with: 22em;
 
 @import "custom-variables";
-
-@GET-border: lighten(@GET-fore, 45%);
-@GET-back: lighten(@GET-fore, 55%);
-
-@POST-border: lighten(@POST-fore, 45%);
-@POST-back: lighten(@POST-fore, 55%);
-
-@PUT-border: lighten(@PUT-fore, 45%);
-@PUT-back: lighten(@PUT-fore, 55%);
-
-@DELETE-border: lighten(@DELETE-fore, 45%);
-@DELETE-back: lighten(@DELETE-fore, 55%);
-
-@PATCH-border: lighten(@PATCH-fore, 45%);
-@PATCH-back: lighten(@PATCH-fore, 55%);
-
-@SECURITY-border: lighten(@SECURITY-fore, 45%);
-@SECURITY-back: lighten(@SECURITY-fore, 55%);
 
 * {
   padding: 0;
@@ -49,8 +31,8 @@ body {
 }
 
 header {
-  background-color: @header-back;
-  color: @header-fore;
+  background-color: @title-back-color;
+  color: @title-color;
   padding: 1em 2em;
   margin-bottom: 1em;
 
@@ -59,25 +41,25 @@ header {
   }
 
   a, a:visited, a:active, a:hover {
-    color: @header-fore;
+    color: @title-color;
   }
 }
 
 a, a:visited, a:active, a:hover {
-  color: @link;
+  color: @link-color;
 }
 
 .resources {
   white-space: nowrap;
   line-height: 150%;
-  width: @resourcesWith;
+  width: @resources-with;
   float: left;
   padding-left: 1em;
   overflow: auto;
 }
 
 .content {
-  margin-left: @resourcesWith+2em;
+  margin-left: @resources-with+2em;
   padding-right: 1em;
 }
 
@@ -101,7 +83,7 @@ a, a:visited, a:active, a:hover {
   padding: .5em;
 }
 
-ul {
+ul, ol {
   padding-left: 2em;
 }
 
@@ -109,17 +91,8 @@ ul {
   padding: .5em;
 }
 
-.bg_SECURITY {
-  padding: .5em;
-  background-color: @SECURITY-back;
-}
-
-.border_SECURITY {
-  border: 1px solid @SECURITY-border;
-}
-
 th {
-  border-bottom: 1px solid @table-head-line;
+  border-bottom: 1px solid @table-head-line-color;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -150,7 +123,11 @@ table.params {
   td {
     padding: .2em;
     margin: 0;
-    border-bottom: 1px solid @table-line;
+    border-bottom: 1px solid @table-line-color;
+  }
+
+  ul, ol{
+    padding-left: 1.2em;
   }
 }
 
@@ -165,98 +142,55 @@ td.center {
 .badge {
   float: left;
   border-radius: 0;
-  color: @batch-fore;
+  color: @badge-text-color;
   text-align: center;
   text-transform: uppercase;
   width: 4em;
   padding: .3em;
 }
 
-.badge_GET {
-  background-color: @GET-fore;
+.action(GET, @get-color);
+.action(POST, @post-color);
+.action(PUT, @put-color);
+.action(DELETE, @delete-color);
+.action(PATCH, @patch-color);
+.action(SECURITY, @security-color);
+
+.action(@name,@value) {
+  .badge_@{name} {
+    background-color: @value;
+  }
+
+  .border_@{name} {
+    border: 1px solid lighten(@value, 45%);
+  }
+
+  .bg_@{name} {
+    background-color: lighten(@value, 55%);
+  }
 }
 
-.border_GET {
-  border: 1px solid @GET-border;
-}
-
-.bg_GET {
-  background-color: @GET-back;
-}
-
-.badge_POST {
-  background-color: @POST-fore;
-}
-
-.border_POST {
-  border: 1px solid @POST-border;
-}
-
-.bg_POST {
-  background-color: @POST-back;
-}
-
-.badge_PUT {
-  background-color: @PUT-fore;
-}
-
-.border_PUT {
-  border: 1px solid @PUT-border;
-}
-
-.bg_PUT {
-  background-color: @PUT-back;
-}
-
-.badge_DELETE {
-  background-color: @DELETE-fore;
-}
-
-.border_DELETE {
-  border: 1px solid @DELETE-border;
-}
-
-.bg_DELETE {
-  background-color: @DELETE-back;
-}
-
-.badge_PATCH {
-  background-color: @PATCH-fore;
-}
-
-.border_PATCH {
-  border: 1px solid @PATCH-border;
-}
-
-.bg_PATCH {
-  background-color: @PATCH-back;
-}
-
-.badge_CONNECT {
-  background-color: #e48f0a;
-}
-
-.badge_TRACE {
-  background-color: #98b805;
+.bg_SECURITY {
+  padding: .5em;
 }
 
 .code {
   max-height: 25em;
   overflow: auto;
-  background-color: @code-back;
+  background-color: @code-back-color;
 }
 
 code {
   white-space: nowrap;
   padding: .2em .4em;
   border-radius: .4em;
-  background-color: @code-back;
+  background-color: @code-back-color;
 }
 
 pre code {
   display: block;
   padding: 1em;
-  border: .1em solid @table-line;
+  border: .1em solid @table-line-color;
   margin-bottom: .5em;
 }
 
@@ -265,10 +199,10 @@ pre code {
   min-height: 1em;
   max-height: 25em;
   overflow: auto;
-  background-color: @code-back;
+  background-color: @code-back-color;
   font-family: inherit;
   margin-bottom: .8em;
-  padding: @tryDataPadding;
+  padding: @try-data-padding;
 }
 
 button {
@@ -312,11 +246,11 @@ select.contentType {
 
 .response {
   margin-top: 1em;
-  margin-right: 2*@tryDataPadding;
+  margin-right: 2*@try-data-padding;
 }
 
 .link {
-  color: @raw-link;
+  color: @code-link-color;
 }
 
 .subLink {
@@ -330,7 +264,7 @@ select.contentType {
 .foldable {
   display: inline-block;
   font-size: 80%;
-  color: @link;
+  color: @link-color;
   margin-left: -1em;
 }
 
@@ -388,10 +322,6 @@ h6 {
 
 p {
   margin-bottom: .3em;
-}
-
-ol {
-  padding-left: 2em;
 }
 
 @import "custom-style";
