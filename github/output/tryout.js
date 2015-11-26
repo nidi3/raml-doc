@@ -2,12 +2,13 @@ rd.addHeader = function (e) {
     var tr = rd.dom.findParent(e, 'tr'),
         next = document.createElement('tr');
     next.innerHTML = '<td>' +
-        ' <select onchange="rd.setHeaderName(this)">'+
-        '  <option>Accept</option><option>Accept-Charset</option><option>Accept-Language</option>'+
+        ' <select onchange="rd.setHeaderName(this)">' +
+        '  <option>Accept</option><option>Accept-Charset</option><option>Accept-Language</option>' +
         '  <option>Cache-Control</option><option>Pragma</option><option>User-Agent</option></select>' +
         ' <span class="remove clickable" onclick="rd.removeHeader(this)"/>' +
         '</td>' +
-        '<td class="additional-header"><input></td>';
+        '<td class="additional-header"><input></td>' +
+        '<td colspan="5"></td>';
     rd.dom.insertAfter(tr, next);
     rd.setHeaderName(next.querySelector('select'));
 };
