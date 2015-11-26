@@ -43,7 +43,7 @@ ramlLocations | Comma separated list of RAML files. | Protocols like `file://`, 
 features | Comma separated list of features to enable. | Features are: <br>`online`: The RAML documentation is available through the application, <br>`download`: The documentation provides a download link to the RAML file, <br>`tryout`: The API can be tried out interactively from within the documentation.
 baseUri | The URL the test requests should be sent to (overrides the baseUri setting in the RAML file). |
 baseUriParameters | Set the parameter values of the baseUri in the RAML file. | The format is `parameter=value,...`. <br>Special values are `$host` and `$path` which are replaced by the actual host and path of the running servlet.
-customization | The location where the customized `favicon.ico` should be loaded from. | For the supported protocols, see ramlLocations parameter.
+customization | The location where the customized `favicon.ico`, `custom-variables.less`, `custom-style.less` should be loaded from. | For the supported protocols, see ramlLocations parameter. If not given, the first ramlLocation is used.
 
 Another possibility is to subclass RamlDocServlet and override the configuration methods.
 

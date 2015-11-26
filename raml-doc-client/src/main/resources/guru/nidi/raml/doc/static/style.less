@@ -8,31 +8,34 @@
 @batch-fore: #fff;
 
 @GET-fore: #0f6ab4;
-@GET-border: lighten(@GET-fore, 45%);
-@GET-back: lighten(@GET-fore, 55%);
-
 @POST-fore: #10a04a;
-@POST-border: lighten(@POST-fore, 45%);
-@POST-back: lighten(@POST-fore, 55%);
-
 @PUT-fore: #9b6a22;
-@PUT-border: lighten(@PUT-fore, 45%);
-@PUT-back: lighten(@PUT-fore, 55%);
-
 @DELETE-fore: #a41e22;
-@DELETE-border: lighten(@DELETE-fore, 45%);
-@DELETE-back: lighten(@DELETE-fore, 55%);
-
 @PATCH-fore: #02b0e2;
-@PATCH-border: lighten(@PATCH-fore, 45%);
-@PATCH-back: lighten(@PATCH-fore, 55%);
-
 @SECURITY-fore: #cb00cb;
-@SECURITY-border: lighten(@SECURITY-fore, 45%);
-@SECURITY-back: lighten(@SECURITY-fore, 55%);
 
 @tryDataPadding: .2em;
 @resourcesWith: 22em;
+
+@import "custom-variables";
+
+@GET-border: lighten(@GET-fore, 45%);
+@GET-back: lighten(@GET-fore, 55%);
+
+@POST-border: lighten(@POST-fore, 45%);
+@POST-back: lighten(@POST-fore, 55%);
+
+@PUT-border: lighten(@PUT-fore, 45%);
+@PUT-back: lighten(@PUT-fore, 55%);
+
+@DELETE-border: lighten(@DELETE-fore, 45%);
+@DELETE-back: lighten(@DELETE-fore, 55%);
+
+@PATCH-border: lighten(@PATCH-fore, 45%);
+@PATCH-back: lighten(@PATCH-fore, 55%);
+
+@SECURITY-border: lighten(@SECURITY-fore, 45%);
+@SECURITY-back: lighten(@SECURITY-fore, 55%);
 
 * {
   padding: 0;
@@ -390,3 +393,5 @@ p {
 ol {
   padding-left: 2em;
 }
+
+@import "custom-style";

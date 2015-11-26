@@ -41,16 +41,13 @@ public class OptionParser {
                 parseFeatures(cmd.getOptionValue('f')),
                 cmd.getOptionValue('b'),
                 cmd.getOptionValue('p'),
-                parseCustomization(cmd.getOptionValue('c')),
+                parseCustomization(cmd.getOptionValue('c'), cmd.getOptionValue('r')),
                 false);
     }
 
-
-    private Loader parseCustomization(String c) {
-        if (c == null) {
-            return null;
-        }
-        return new UriLoader(new FileLoader(new File(c)));
+    private Loader parseCustomization(String c, String ramlLocations) {
+        final String custom = (c != null ? c : GeneratorConfig.getBaseOfFirstRaml(ramlLocations));
+        return new UriLoader(new FileLoader(new File(custom)));
     }
 
     private File parseTarget(String t) {
@@ -68,7 +65,7 @@ public class OptionParser {
     protected Options createOptions() {
         final String features = StringUtils.join(EnumSet.allOf(Feature.class).toArray(), ", ").toLowerCase();
         return new Options()
-                .addOption(withDescription("The RAML resource\n" +
+                .addOption(withDescription("The RAML resource(s). Multiple values can be separated by comma.\n" +
                         "Format: filename,\n" +
                         "[user:pass@]http://, [user:pass@]https://,\n" +
                         "[token@]github://user/project/file, user:pass@apiportal://").isRequired(true).withArgName("URL").hasArg(true).create('r'))
@@ -76,7 +73,7 @@ public class OptionParser {
                 .addOption(withDescription("Enable features\nComma separated list of these features: " + features + "\nDefault: " + features).isRequired(false).hasArg(true).create('f'))
                 .addOption(withDescription("The base URI to use\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
                 .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'))
-                .addOption(withDescription("Customization location, favicon.ico is taken from here\nFormat: see -r").isRequired(false).withArgName("URL").hasArg(true).create('c'));
+                .addOption(withDescription("Customization location. favicon.ico, custom-variables.less, custom-style.less is taken from here\nDefault: Directory of -r\nFormat: see -r").isRequired(false).withArgName("URL").hasArg(true).create('c'));
     }
 
     public void showHelp() {

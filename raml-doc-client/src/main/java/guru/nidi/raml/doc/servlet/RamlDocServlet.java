@@ -124,7 +124,9 @@ public class RamlDocServlet extends HttpServlet {
     }
 
     protected Loader getCustomization() {
-        final String base = customization() == null ? "classpath://guru/nidi/raml/doc/custom" : customization();
+        final String base = customization() == null
+                ? GeneratorConfig.getBaseOfFirstRaml(getRamlLocations())
+                : customization();
         return new UriLoader() {
             @Override
             public InputStream fetchResource(String name, long ifModifiedSince) {

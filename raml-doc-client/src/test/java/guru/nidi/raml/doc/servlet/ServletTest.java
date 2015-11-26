@@ -73,7 +73,7 @@ public class ServletTest {
         multiRaml.addInitParameter("ramlLocations", "classpath://data/basic.raml,classpath://data/second.raml");
         multiRaml.addInitParameter("features", "online,tryout,download");
         multiRaml.addInitParameter("baseUriParameters", "host=$host/$path,path=mirror");
-        multiRaml.addInitParameter("customization", "classpath://data");
+        multiRaml.addInitParameter("customization", "classpath://");
         ctx.addChild(multiRaml);
         ctx.addServletMapping("/api/*", "app");
 

@@ -26,6 +26,8 @@ import org.raml.model.Raml;
 import org.raml.model.Resource;
 import org.raml.model.SecurityScheme;
 import org.raml.model.parameter.AbstractParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.NoIndentWriter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupDir;
@@ -42,8 +44,14 @@ import java.util.Map;
  *
  */
 public class Generator {
-    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif", "style.less",
+    private static final Logger log = LoggerFactory.getLogger(Generator.class);
+
+    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif",
+            "style.less", "custom-variables.less", "custom-style.less",
             "script.js", "tryout.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+
+    private static final List<String> CUSTOM_FILES = Arrays.asList(
+            "favicon.ico", "custom-variables.less", "custom-style.less");
 
     private final GeneratorConfig config;
 
@@ -111,7 +119,7 @@ public class Generator {
     private void checkTargetEmpty(File target, List<Raml> ramls) {
         for (final String name : target.list()) {
             if (!isAllowedInTarget(name, ramls)) {
-                throw new IllegalStateException("Target directory '" + target + "' is not empty. Contains file " + name);
+                throw new IllegalStateException("Cannot generate doc in folder '" + target + "' because it is not empty. Contains file " + name);
             }
         }
     }
@@ -155,8 +163,8 @@ public class Generator {
     }
 
     private void generateBase(Raml raml, STGroupDir group) throws IOException {
-        copyStaticResource(config.getTarget(), STATIC_FILES);
-        copyCustomResource(config.getTarget(), "favicon.ico");
+        copyStaticResources(config.getTarget(), STATIC_FILES);
+        copyCustomResources(config.getTarget(), CUSTOM_FILES);
         transformLessResources(config.getTarget());
 
         final ST index = group.getInstanceOf("main/index");
@@ -197,7 +205,7 @@ public class Generator {
         }
     }
 
-    private void copyStaticResource(File base, List<String> names) throws IOException {
+    private void copyStaticResources(File base, List<String> names) throws IOException {
         for (String name : names) {
             try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
@@ -206,11 +214,12 @@ public class Generator {
         }
     }
 
-    private void copyCustomResource(File base, String... names) throws IOException {
+    private void copyCustomResources(File base, List<String> names) throws IOException {
         for (String name : names) {
             try (final InputStream in = config.loadCustomization(name);
                  final FileOutputStream out = new FileOutputStream(new File(base, name))) {
                 copy(in, out);
+                log.info("Using custom " + name);
             } catch (Loader.ResourceNotFoundException e) {
                 //ignore
             }
@@ -228,9 +237,17 @@ public class Generator {
                     }
                 }
             } catch (CompilerException e) {
-                throw new IOException("Could not compile less file '" + name + "'", e);
+                log.error("Problem compiling '" + name + "'\n" + stackTraceWithoutCause(e));
             }
         }
+    }
+
+    private String stackTraceWithoutCause(Exception e) {
+        String s = e.toString() + "\n";
+        for (StackTraceElement traceElement : e.getStackTrace()) {
+            s += "\tat " + traceElement + "\n";
+        }
+        return s;
     }
 
     private void set(ST template, String name, Object value) {

@@ -75,6 +75,13 @@ public class GeneratorConfig {
         return customization.fetchResource(name, -1);
     }
 
+    public static String getBaseOfFirstRaml(String ramlLocations){
+        final int firstComma = ramlLocations.indexOf(',');
+        final int endFirst = firstComma < 0 ? ramlLocations.length() : firstComma;
+        final int pos = ramlLocations.lastIndexOf('/', endFirst);
+        return ramlLocations.substring(0, pos);
+    }
+
     public String getBaseUri(Raml raml) {
         if (baseUri != null) {
             return baseUri;
