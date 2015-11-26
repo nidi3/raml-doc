@@ -109,7 +109,7 @@ paramEntry(entry,baseUri,type) ::= <<
 
 param(key,param,baseUri,type) ::= <<
     <tr>
-        <td>$def(param.displayName,key)$</td>
+        <td>$def(param.displayName,key)$$if (param.required)$*$endif$</td>
         $if(baseUri)$ <td><input name="$type$_$key$"></td> $endif$
         <td>$param.description;format="markdown"$</td>
         <td onclick="rd.useExample(this)" class="example">$param.example$</td>
@@ -124,8 +124,12 @@ param(key,param,baseUri,type) ::= <<
     </tr>
 >>
 
-def(value,def) ::= <<
-    $if(value)$ $value$ $else$ $def$ $endif$
->>
+def(value,def) ::= <%
+$if(value)$
+    $value$
+$else$
+    $def$
+$endif$
+%>
 
 
