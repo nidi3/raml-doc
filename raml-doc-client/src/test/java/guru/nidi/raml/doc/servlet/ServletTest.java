@@ -114,7 +114,7 @@ public class ServletTest {
         final HttpResponse responseIndex = client.execute(getIndex);
         assertEquals(200, responseIndex.getStatusLine().getStatusCode());
         if ("/Users/nidi".equals(System.getenv("HOME"))) {
-            Thread.sleep(1000000);
+//            Thread.sleep(1000000);
         }
     }
 
