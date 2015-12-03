@@ -2,19 +2,27 @@ raml-doc [![Build Status](https://travis-ci.org/nidi3/raml-doc.svg?branch=master
 ===========
 Generate a HTML documentation of a RAML and allow to interactively test it.
 
-### Demo
-Documentation of a [subset of the GitHub API](http://nidi3.github.io/raml-doc/github/output/index.html).
-
 ### Usage as standalone tool
 
+The HTML documentation of a RAML file can be generated statically using the command line interface.
+ 
+#### maven 
+
+Download raml-doc-standalone either [manually](http://http://search.maven.org/remotecontent?filepath=guru/nidi/raml/raml-doc-standalone/0.0.8/raml-doc-standalone-0.0.8.jar) 
+or using maven, then execute  
 ```
-java -jar raml-doc-standalone.jar -r <raml-file>
+java -jar raml-doc-standalone.jar -r <raml-file> -t <output-folder>
 ```
 
-will generate a new subfolder containing the HTML documentation of the RAML file.
+#### npm
+
+Download raml-doc from npm with `sudo npm install raml-doc -g`.
+Run it with `raml-doc -r <raml-file> -t <output-folder>`.
+
 
 ### Usage as a servlet
 
+The HTML documentation of a RAML file can also be generated from within a web application.
 Add this to web.xml
 
 ```xml
@@ -33,7 +41,7 @@ Add this to web.xml
 </servlet-mapping>
 ```
 
-and the RAML documentation is available directly from your application.
+and the documentation is generated at startup and will be available directly from your application.
 
 The available config parameters are the following:
 
@@ -59,3 +67,6 @@ h_* | A header value to predefine.
 f_* | A form parameter value to predefine.
 method | Which method should be selected. | GET, POST, PUT, DELETE
 run | If a request of the selected method should be sent to the server. | none
+
+### Demo
+Documentation of a [subset of the GitHub API](http://nidi3.github.io/raml-doc/github/output/index.html).
