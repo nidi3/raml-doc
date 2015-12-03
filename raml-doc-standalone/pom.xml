@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>guru.nidi.raml</groupId>
@@ -75,7 +76,12 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <replaceregexp file="${basedir}/../raml-doc-npm/package.json" match="&quot;version&quot;: &quot;[^&quot;]*&quot;" replace="&quot;version&quot;: &quot;${project.version}&quot;" />
+                                        <replaceregexp file="${basedir}/../raml-doc-npm/package.json"
+                                            match="&quot;version&quot;: &quot;[^&quot;]*&quot;"
+                                            replace="&quot;version&quot;: &quot;${project.version}&quot;" />
+                                        <exec dir="${basedir}/../raml-doc-npm" executable="npm">
+                                            <arg value="install" />
+                                        </exec>
                                         <exec dir="${basedir}/../raml-doc-npm" executable="grunt" />
                                         <exec dir="${basedir}/../raml-doc-npm" executable="npm">
                                             <arg value="publish" />
