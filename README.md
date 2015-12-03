@@ -17,9 +17,9 @@ java -jar raml-doc-standalone.jar -r <raml-file> -t <output-folder>
 
 ##### npm
 
-Install raml-doc from npm with `sudo npm install raml-doc -g`.
+Install raml-doc from npm with `sudo npm install raml-doc -g`
 
-Run it with `raml-doc -r <raml-file> -t <output-folder>`.
+Run it with `raml-doc -r <raml-file> -t <output-folder>`
 
 
 ### Usage as a servlet
