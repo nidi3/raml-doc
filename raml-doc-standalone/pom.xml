@@ -76,9 +76,13 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <replaceregexp file="bin/src/main/java/guru/nidi/raml/doc/Version.java"
-                                            match="VERSION = &quot;[^&quot;]*&quot;"
-                                            replace="VERSION = &quot;${project.version}&quot;" />
+                                        <replaceregexp file="../raml-doc-npm/package.json"
+                                            match="&quot;version&quot;: &quot;[^&quot;]*&quot;"
+                                            replace="&quot;version&quot;: &quot;${project.version}&quot;" />
+                                        <exec dir="../raml-doc-npm" executable="grunt"/>
+                                        <exec dir="../raml-doc-npm" executable="npm">
+                                            <arg value="publish" />
+                                        </exec>
                                     </target>
                                 </configuration>
                             </execution>
