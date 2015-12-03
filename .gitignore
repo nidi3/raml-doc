@@ -4,3 +4,4 @@ target/
 bin/
 *.iml
 .DS_Store
+raml-doc-npm/README.md

@@ -2,7 +2,7 @@
   "name": "raml-doc",
   "title": "Create interactive documentation HTML for a RAML",
   "description": "Create interactive documentation HTML for a RAML",
-  "version": "0.0.8",
+  "version": "0.0.10-SNAPSHOT",
   "license": "Apache-2.0",
   "private": false,
   "author": {

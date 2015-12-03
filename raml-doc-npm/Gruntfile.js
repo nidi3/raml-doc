@@ -15,6 +15,11 @@ module.exports = function (grunt) {
                         expand: true,
                         src:['raml-doc'],
                         dest: 'bin'
+                    },{
+                        cwd: '..',
+                        expand: true,
+                        src:['README.md'],
+                        dest: '.'
                     }
                 ]
             }
