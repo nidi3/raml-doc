@@ -67,16 +67,19 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
                         <executions>
                             <execution>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
-                                <phase>install</phase>
                                 <configuration>
-                                    <tasks>
-                                        <echo message="${project.version}">${project.version}xxx</echo>
-                                    </tasks>
+                                    <target>
+                                        <replaceregexp file="bin/src/main/java/guru/nidi/raml/doc/Version.java"
+                                            match="VERSION = &quot;[^&quot;]*&quot;"
+                                            replace="VERSION = &quot;${project.version}&quot;" />
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>

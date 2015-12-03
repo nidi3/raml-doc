@@ -10,10 +10,10 @@
     "company": ""
   },
   "files": [
-    "raml-doc-standalone/bin"
+    "bin"
   ],
   "bin": {
-    "raml-doc": "raml-doc-standalone/bin/raml-doc"
+    "raml-doc": "bin/raml-doc"
   },
   "repository": {
     "type": "git",
