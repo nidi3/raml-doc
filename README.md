@@ -1,28 +1,30 @@
 raml-doc [![Build Status](https://travis-ci.org/nidi3/raml-doc.svg?branch=master)](https://travis-ci.org/nidi3/raml-doc)
 ===========
-Generate a HTML documentation of a RAML and allow to interactively test it.
+Generate an HTML documentation of a RAML file. 
+Send test requests to the service directly from within the documentation.
 
 ### Usage as standalone tool
 
-The HTML documentation of a RAML file can be generated statically using the command line interface.
+The documentation can be generated statically using the command line interface.
  
-#### maven 
+##### maven 
 
-Download raml-doc-standalone either [manually](http://http://search.maven.org/remotecontent?filepath=guru/nidi/raml/raml-doc-standalone/0.0.8/raml-doc-standalone-0.0.8.jar) 
+Download raml-doc-standalone either [manually](http://search.maven.org/remotecontent?filepath=guru/nidi/raml/raml-doc-standalone/0.0.8/raml-doc-standalone-0.0.8.jar) 
 or using maven, then execute  
 ```
 java -jar raml-doc-standalone.jar -r <raml-file> -t <output-folder>
 ```
 
-#### npm
+##### npm
 
-Download raml-doc from npm with `sudo npm install raml-doc -g`.
+Install raml-doc from npm with `sudo npm install raml-doc -g`.
+
 Run it with `raml-doc -r <raml-file> -t <output-folder>`.
 
 
 ### Usage as a servlet
 
-The HTML documentation of a RAML file can also be generated from within a web application.
+The documentation can also be generated from within a web application.
 Add this to web.xml
 
 ```xml
