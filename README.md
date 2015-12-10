@@ -9,7 +9,7 @@ The documentation can be generated statically using the command line interface.
  
 ##### maven 
 
-Download raml-doc-standalone either [manually](http://search.maven.org/remotecontent?filepath=guru/nidi/raml/raml-doc-standalone/0.0.8/raml-doc-standalone-0.0.8.jar) 
+Download raml-doc-standalone either [manually](http://repo1.maven.org/maven2/guru/nidi/raml/raml-doc-standalone/) 
 or using maven, then execute  
 ```
 java -jar raml-doc-standalone.jar -r <raml-file> -t <output-folder>
