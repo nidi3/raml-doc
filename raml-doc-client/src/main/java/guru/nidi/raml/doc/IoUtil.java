@@ -17,6 +17,7 @@ package guru.nidi.raml.doc;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -24,6 +25,7 @@ import java.net.URLEncoder;
 public class IoUtil {
     private static final String FILE_SYSTEM_UNSAFE = "\\/:*?\"<>|!";
     private static final String URL_UNSAFE = ":/?#[]@!$&'()*+,;=\"\\{}% ";
+    private static final Pattern HAS_PROTOCOL = Pattern.compile("\\w+://.+");
 
     private IoUtil() {
     }
@@ -37,6 +39,8 @@ public class IoUtil {
                 res = res.substring(0, last + 1) + res.substring(pos + 3);
             } else if (pos > 1) {
                 res = res.substring(pos + 3);
+            } else if (!hasProtocol(path)) {
+                break;
             } else {
                 throw new IllegalStateException("Invalid path '" + path + "'");
             }
@@ -44,6 +48,9 @@ public class IoUtil {
         return res;
     }
 
+    private static boolean hasProtocol(String path) {
+        return HAS_PROTOCOL.matcher(path).matches();
+    }
 
     public static String safeName(String name) {
         return safe(name, false);

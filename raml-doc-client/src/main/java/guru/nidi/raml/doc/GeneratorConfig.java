@@ -79,7 +79,8 @@ public class GeneratorConfig {
         final int firstComma = ramlLocations.indexOf(',');
         final int endFirst = firstComma < 0 ? ramlLocations.length() : firstComma;
         final int pos = ramlLocations.lastIndexOf('/', endFirst);
-        return ramlLocations.substring(0, pos);
+        //when there's no / in the raml location, suppose it's a filename
+        return pos < 0 ? "./" : ramlLocations.substring(0, pos);
     }
 
     public String getBaseUri(Raml raml) {
