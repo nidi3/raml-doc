@@ -12,14 +12,14 @@ The documentation can be generated statically using the command line interface.
 Download raml-doc-standalone either [manually](http://repo1.maven.org/maven2/guru/nidi/raml/raml-doc-standalone/) 
 or using maven, then execute  
 ```
-java -jar raml-doc-standalone.jar -r <raml-file> -t <output-folder>
+java -jar raml-doc-standalone.jar <raml-file>
 ```
 
 ##### npm
 
 Install raml-doc from npm with `sudo npm install raml-doc -g`
 
-Run it with `raml-doc -r <raml-file> -t <output-folder>`
+Run it with `raml-doc <raml-file>`
 
 
 ### Usage as a servlet

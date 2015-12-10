@@ -123,9 +123,10 @@ public class Generator {
     }
 
     private void checkTargetEmpty(File target, List<Raml> ramls) {
-        for (final String name : target.list()) {
-            if (!isAllowedInTarget(name, ramls)) {
-                throw new IllegalStateException("Cannot generate doc in folder '" + target + "' because it is not empty. Contains file " + name);
+        for (final File file : target.listFiles()) {
+            if (!isAllowedInTarget(file.getName(), ramls)) {
+                throw new IllegalStateException("Cannot generate doc in folder '" + target + "' because it is not empty. " +
+                        "Contains " + (file.isDirectory() ? "directory" : "file") + " '" + file.getName() + "'.");
             }
         }
     }

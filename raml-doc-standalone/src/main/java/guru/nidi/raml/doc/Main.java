@@ -26,6 +26,7 @@ public class Main {
         try {
             final GeneratorConfig config = new OptionParser().parse(args);
             config.generate();
+            System.out.println("Generated Documentation in '" + config.getTarget() + "'");
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             new OptionParser().showHelp();
