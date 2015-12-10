@@ -125,7 +125,7 @@ public class RamlDocServlet extends HttpServlet {
 
     protected Loader getCustomization() {
         final String base = customization() == null
-                ? GeneratorConfig.getBaseOfFirstRaml(getRamlLocations())
+                ? GeneratorConfig.getBaseOfRaml(getRamlLocations().get(0))
                 : customization();
         return new UriLoader() {
             @Override
@@ -139,9 +139,10 @@ public class RamlDocServlet extends HttpServlet {
         return new GeneratorConfig(getRamlLocations(), docDir(), features(), baseUri(), baseUriParameters(), getCustomization(), true);
     }
 
-    protected String getRamlLocations() {
+    protected List<String> getRamlLocations() {
         final String locations = ramlLocations();
-        return locations == null ? "classpath://api.raml" : locations;
+        final String locs = locations == null ? "classpath://api.raml" : locations;
+        return Arrays.asList(locs.split(","));
     }
 
     private File docDir() {

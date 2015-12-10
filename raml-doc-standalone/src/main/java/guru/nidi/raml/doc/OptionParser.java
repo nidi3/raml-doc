@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -34,25 +35,29 @@ import static org.apache.commons.cli.OptionBuilder.withDescription;
  */
 public class OptionParser {
     public GeneratorConfig parse(String[] args) throws ParseException {
-        final CommandLine cmd = new BasicParser().parse(createOptions(), expandArgs(args));
+        final String[][] ramlsAndOptions = preparseArgs(args);
+        if (ramlsAndOptions[0].length == 0) {
+            throw new ParseException("Missing RAML file");
+        }
+        final CommandLine cmd = new BasicParser().parse(createOptions(), ramlsAndOptions[1]);
         return new GeneratorConfig(
-                cmd.getOptionValue('r'),
+                Arrays.asList(ramlsAndOptions[0]),
                 parseTarget(cmd.getOptionValue('t')),
                 parseFeatures(cmd.getOptionValue('f')),
                 cmd.getOptionValue('b'),
                 cmd.getOptionValue('p'),
-                parseCustomization(cmd.getOptionValue('c'), cmd.getOptionValue('r')),
+                parseCustomization(cmd.getOptionValue('c'), ramlsAndOptions[0][0]),
                 false);
     }
 
-    private Loader parseCustomization(String c, String ramlLocations) {
-        final String custom = (c != null ? c : GeneratorConfig.getBaseOfFirstRaml(ramlLocations));
+    private Loader parseCustomization(String c, String ramlLocation) {
+        final String custom = (c != null ? c : GeneratorConfig.getBaseOfRaml(ramlLocation));
         return new UriLoader(new FileLoader(new File(custom)));
     }
 
     private File parseTarget(String t) {
         if (t == null) {
-            return new File(".");
+            return new File("raml-doc");
         }
         return new File(t);
     }
@@ -65,43 +70,57 @@ public class OptionParser {
     protected Options createOptions() {
         final String features = StringUtils.join(EnumSet.allOf(Feature.class).toArray(), ", ").toLowerCase();
         return new Options()
-                .addOption(withDescription("The RAML resource(s). Multiple values can be separated by comma.\n" +
-                        "Format: filename,\n" +
-                        "[user:pass@]http://, [user:pass@]https://,\n" +
-                        "[token@]github://user/project/file, user:pass@apiportal://").isRequired(true).withArgName("URL").hasArg(true).create('r'))
-                .addOption(withDescription("Target directory to write the output\nDefault: current directory").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
-                .addOption(withDescription("Enable features\nComma separated list of these features: " + features + "\nDefault: " + features).isRequired(false).hasArg(true).create('f'))
-                .addOption(withDescription("The base URI to use\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
-                .addOption(withDescription("Base URI parameters\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'))
-                .addOption(withDescription("Customization location. favicon.ico, custom-variables.less, custom-style.less is taken from here\nDefault: Directory of -r\nFormat: see -r").isRequired(false).withArgName("URL").hasArg(true).create('c'));
+                .addOption(withDescription("Target directory to write the output.\nDefault: raml-doc").isRequired(false).withArgName("Directory").hasArg(true).create('t'))
+                .addOption(withDescription("Features to enable.\nComma separated list of these features: " + features + "\nDefault: " + features).isRequired(false).withArgName("Features").hasArg(true).create('f'))
+                .addOption(withDescription("The base URI to use.\nDefault: As defined in RAML").isRequired(false).withArgName("URI").hasArg(true).create('b'))
+                .addOption(withDescription("Base URI parameters.\nFormat: parameter=value,...").isRequired(false).withArgName("Parameters").hasArg(true).create('p'))
+                .addOption(withDescription("Customization location.\nfavicon.ico, custom-variables.less, custom-style.less are taken from there, if existing\nDefault: Location of RAML-1").isRequired(false).withArgName("Directory").hasArg(true).create('c'));
     }
 
     public void showHelp() {
         HelpFormatter formatter = new HelpFormatter();
         formatter.setWidth(80);
         formatter.setOptionComparator(optionComparator());
-        formatter.printHelp("java -jar raml-doc-standalone.jar", helpHeader(), createOptions(), "", true);
+        formatter.printHelp("java -jar raml-doc-standalone.jar RAML-1 [RAML-2 ...] [options]", helpHeader(), createOptions(), "", false);
     }
 
     protected String helpHeader() {
-        return "";
+        return "\nRAML files can be referenced by different protocols:\n" +
+                "- filename\n" +
+                "- [user:pass@]http(s)://\n" +
+                "- [token@]github://user/project/file\n" +
+                "- user:pass@apiportal://\n" +
+                "Options:\n";
     }
 
     protected OptionComparator optionComparator() {
-        return new OptionComparator("rtfbpc");
+        return new OptionComparator("tfbpc");
     }
 
-    protected String[] expandArgs(String[] args) {
-        final List<String> res = new ArrayList<>();
-        for (String arg : args) {
-            if (arg.charAt(0) == '-' && arg.length() > 2) {
-                res.add(arg.substring(0, 2));
-                res.add(arg.substring(2));
+    protected String[][] preparseArgs(String[] args) {
+        final List<String> ramls = new ArrayList<>();
+        final List<String> options = new ArrayList<>();
+        for (int i = 0; i < args.length; i++) {
+            final String arg = args[i];
+            if (arg.charAt(0) == '-') {
+                if (arg.length() > 2) {
+                    options.add(arg.substring(0, 2));
+                    options.add(arg.substring(2));
+                } else {
+                    options.add(arg);
+                    if (i < args.length - 1) {
+                        options.add(args[++i]);
+                    }
+                }
             } else {
-                res.add(arg);
+                ramls.add(arg);
             }
         }
-        return res.toArray(new String[res.size()]);
+        return new String[][]{toArray(ramls), toArray(options)};
+    }
+
+    protected String[] toArray(List<String> ss) {
+        return ss.toArray(new String[ss.size()]);
     }
 
 }

@@ -23,6 +23,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
@@ -31,10 +32,10 @@ import java.util.EnumSet;
 public class GeneratorTest {
     @Test
     public void basic() throws Exception {
-        new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basicTryOut"),
+        new GeneratorConfig(Arrays.asList("file://src/test/resources/data/basic.raml"), new File("target/basicTryOut"),
                 EnumSet.allOf(Feature.class), "http://localhost:8080", null, null, false)
                 .generate();
-        new GeneratorConfig("file://src/test/resources/data/basic.raml", new File("target/basic"),
+        new GeneratorConfig(Arrays.asList("file://src/test/resources/data/basic.raml"), new File("target/basic"),
                 EnumSet.noneOf(Feature.class), "http://localhost:8080", null, null, false)
                 .generate();
     }

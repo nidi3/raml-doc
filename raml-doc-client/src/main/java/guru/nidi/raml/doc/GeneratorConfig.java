@@ -34,7 +34,7 @@ import java.util.zip.ZipOutputStream;
  *
  */
 public class GeneratorConfig {
-    private final String ramlLocations;
+    private final List<String> ramlLocations;
     private final File target;
     private final EnumSet<Feature> features;
     private final String baseUri;
@@ -42,7 +42,7 @@ public class GeneratorConfig {
     private final Loader customization;
     private final boolean forceDelete;
 
-    public GeneratorConfig(String ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
+    public GeneratorConfig(List<String> ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
         this.ramlLocations = ramlLocations;
         this.target = target;
         this.features = features;
@@ -75,12 +75,10 @@ public class GeneratorConfig {
         return customization.fetchResource(name, -1);
     }
 
-    public static String getBaseOfFirstRaml(String ramlLocations) {
-        final int firstComma = ramlLocations.indexOf(',');
-        final int endFirst = firstComma < 0 ? ramlLocations.length() : firstComma;
-        final int pos = ramlLocations.lastIndexOf('/', endFirst);
+    public static String getBaseOfRaml(String ramlLocation) {
+        final int pos = ramlLocation.lastIndexOf('/');
         //when there's no / in the raml location, suppose it's a filename
-        return pos < 0 ? "./" : ramlLocations.substring(0, pos);
+        return pos < 0 ? "./" : ramlLocation.substring(0, pos);
     }
 
     public String getBaseUri(Raml raml) {
@@ -105,7 +103,7 @@ public class GeneratorConfig {
 
     private LoadResults loadRamls() throws IOException {
         final LoadResults res = new LoadResults();
-        for (String loc : ramlLocations.split(",")) {
+        for (String loc : ramlLocations) {
             try {
                 final SavingLoaderInterceptor sli = new SavingLoaderInterceptor();
                 final InterceptingLoader loader = new InterceptingLoader(new UriLoader(new FileLoader(new File("."))), sli);
