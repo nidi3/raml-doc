@@ -4,7 +4,7 @@
     <parent>
         <groupId>guru.nidi.raml</groupId>
         <artifactId>raml-doc</artifactId>
-        <version>0.0.9-SNAPSHOT</version>
+        <version>0.0.13-SNAPSHOT</version>
     </parent>
 
     <artifactId>raml-doc-standalone</artifactId>
@@ -58,4 +58,38 @@
             <version>1.2</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <replaceregexp file="${basedir}/../raml-doc-npm/package.json" match="&quot;version&quot;: &quot;[^&quot;]*&quot;" replace="&quot;version&quot;: &quot;${project.version}&quot;" />
+                                        <exec dir="${basedir}/../raml-doc-npm" executable="npm">
+                                            <arg value="install" />
+                                        </exec>
+                                        <exec dir="${basedir}/../raml-doc-npm" executable="grunt" />
+                                        <exec dir="${basedir}/../raml-doc-npm" executable="npm">
+                                            <arg value="publish" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -1,0 +1,26 @@
+{
+  "name": "raml-doc",
+  "title": "Create interactive documentation HTML for a RAML",
+  "description": "Create interactive documentation HTML for a RAML",
+  "version": "0.0.10-SNAPSHOT",
+  "license": "Apache-2.0",
+  "private": false,
+  "author": {
+    "name": "Stefan Niederhauser <ich@nidi.guru>",
+    "company": ""
+  },
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "raml-doc": "bin/raml-doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nidi3/raml-doc"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-copy": "~0.8.0"
+  }
+}

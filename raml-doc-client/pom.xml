@@ -4,7 +4,7 @@
     <parent>
         <groupId>guru.nidi.raml</groupId>
         <artifactId>raml-doc</artifactId>
-        <version>0.0.9-SNAPSHOT</version>
+        <version>0.0.13-SNAPSHOT</version>
     </parent>
 
     <artifactId>raml-doc-client</artifactId>
@@ -15,6 +15,28 @@
     <properties>
         <tomcat.version>8.0.24</tomcat.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <replaceregexp file="src/main/java/guru/nidi/raml/doc/Version.java" match="VERSION = &quot;[^&quot;]*&quot;" replace="VERSION = &quot;${project.version}&quot;" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <!-- the dependencies here are NOT going into raml-doc-standalone jar. -->
     <dependencies>

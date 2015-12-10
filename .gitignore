@@ -1,3 +1,7 @@
 target/
 .idea/
+**/node_modules/
+bin/
 *.iml
+.DS_Store
+raml-doc-npm/README.md

@@ -10,7 +10,7 @@
 
     <groupId>guru.nidi.raml</groupId>
     <artifactId>raml-doc</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -32,6 +32,12 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <releaseProfiles>release</releaseProfiles>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>guru.nidi.maven.plugins</groupId>
                 <artifactId>tools-maven-plugin</artifactId>

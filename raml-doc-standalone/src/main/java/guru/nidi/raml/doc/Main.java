@@ -22,6 +22,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class Main {
     public static void main(String[] args) {
+        System.out.println("RAML doc. Version " + Version.VERSION);
         try {
             final GeneratorConfig config = new OptionParser().parse(args);
             config.generate();
