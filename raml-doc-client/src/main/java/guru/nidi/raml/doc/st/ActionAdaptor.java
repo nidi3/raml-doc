@@ -22,6 +22,8 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
+import java.util.TreeMap;
+
 /**
  *
  */
@@ -34,18 +36,22 @@ class ActionAdaptor extends ObjectModelAdaptor {
 
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        if ("securitySchemes".equals(propertyName)) {
-            final Action a = (Action) o;
-            if (a.getSecuredBy() != null && !a.getSecuredBy().isEmpty()) {
-                return a.getSecuredBy();
-            }
-            if (a.getResource().getSecuredBy() != null && !a.getResource().getSecuredBy().isEmpty()) {
-                return a.getResource().getSecuredBy();
-            }
-            if (raml.getSecuredBy() != null && !raml.getSecuredBy().isEmpty()) {
-                return raml.getSecuredBy();
-            }
+        final Action a = (Action) o;
+        switch (propertyName) {
+            case "securitySchemes":
+                if (a.getSecuredBy() != null && !a.getSecuredBy().isEmpty()) {
+                    return a.getSecuredBy();
+                }
+                if (a.getResource().getSecuredBy() != null && !a.getResource().getSecuredBy().isEmpty()) {
+                    return a.getResource().getSecuredBy();
+                }
+                if (raml.getSecuredBy() != null && !raml.getSecuredBy().isEmpty()) {
+                    return raml.getSecuredBy();
+                }
+            case "sortedResponses":
+                return new TreeMap<>(a.getResponses());
+            default:
+                return super.getProperty(interp, self, o, property, propertyName);
         }
-        return super.getProperty(interp, self, o, property, propertyName);
     }
 }

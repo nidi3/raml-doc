@@ -228,6 +228,14 @@ documentation:
           application/xml:
             schema: |
               xml
+      500:
+        description: error
+        body:
+          application/nix:
+          application/schema:
+            schema: bla
+          application/example:
+            example: blu
       400:
         description: Error
       401:
@@ -239,14 +247,6 @@ documentation:
           application/x:
             schema: schschsch
             example: This is an example
-      500:
-        description: error
-        body:
-          application/nix:
-          application/schema:
-            schema: bla
-          application/example:
-            example: blu
 
 /data2:
   get:

@@ -22,7 +22,7 @@ action(action) ::= <<
                 $/namedParams/footer()$
             </div>
 
-            $/response/responses(action.responses)$
+            $/response/responses(action.sortedResponses)$
 
             $if(baseUri)$
                 <button class="try $action.type$" onclick="rd.tryOut(this,'$action.type$','$action.resource.uri$','$action.securitySchemes:{s|$s.name$,}$'); return false;">
