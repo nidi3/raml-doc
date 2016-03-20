@@ -70,6 +70,8 @@ class StringRenderer implements AttributeRenderer {
 
     private String format(String s, String formatString) {
         switch (formatString) {
+            case "lower":
+                return s.toLowerCase();
             case "markdown":
                 return markdown(s);
             case "summary":

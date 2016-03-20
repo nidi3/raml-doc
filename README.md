@@ -58,7 +58,9 @@ customization | The location where the customized `favicon.ico`, `custom-variabl
 Another possibility is to subclass RamlDocServlet and override the configuration methods.
 
 ### Resulting HTML
-The resulting HTML supports the following query parameters in the URL.
+The resulting HTML supports the following:
+- Select a method by using an anchor, e.g. `res.html#get` 
+- These query parameters:
 
 Name | Meaning | Value
 -----|---------|------

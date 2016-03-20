@@ -1,4 +1,6 @@
 action(action) ::= <<
+    <span id="$action.type$"></span>
+    <span id="$action.type;format="lower"$"></span>
     <div class="actionHeader bg_$action.type$ border_$action.type$" onclick="rd.showActionDetail(this)">
         <div class="badge badge_$action.type$">
             $action.type$

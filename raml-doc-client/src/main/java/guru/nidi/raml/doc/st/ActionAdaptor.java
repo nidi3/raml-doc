@@ -50,6 +50,8 @@ class ActionAdaptor extends ObjectModelAdaptor {
                 }
             case "sortedResponses":
                 return new TreeMap<>(a.getResponses());
+            case "type":
+                return a.getType().toString();
             default:
                 return super.getProperty(interp, self, o, property, propertyName);
         }
