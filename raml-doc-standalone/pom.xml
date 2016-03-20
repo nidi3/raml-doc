@@ -62,6 +62,9 @@
     <profiles>
         <profile>
             <id>release</id>
+            <properties>
+                <npmdir>${basedir}/../raml-doc-npm</npmdir>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -75,12 +78,12 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <replaceregexp file="${basedir}/../raml-doc-npm/package.json" match="&quot;version&quot;: &quot;[^&quot;]*&quot;" replace="&quot;version&quot;: &quot;${project.version}&quot;" />
-                                        <exec dir="${basedir}/../raml-doc-npm" executable="npm">
+                                        <replaceregexp file="${npmdir}/package.json" match="&quot;version&quot;: &quot;[^&quot;]*&quot;" replace="&quot;version&quot;: &quot;${project.version}&quot;" />
+                                        <exec dir="${npmdir}" executable="npm">
                                             <arg value="install" />
                                         </exec>
-                                        <exec dir="${basedir}/../raml-doc-npm" executable="grunt" />
-                                        <exec dir="${basedir}/../raml-doc-npm" executable="npm">
+                                        <exec dir="${npmdir}" executable="grunt" />
+                                        <exec dir="${npmdir}" executable="npm">
                                             <arg value="publish" />
                                         </exec>
                                     </target>
