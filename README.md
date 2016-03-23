@@ -69,7 +69,7 @@ u_* | A URI parameter value to predefine.
 q_* | A query parameter value to predefine.
 h_* | A header value to predefine.
 f_* | A form parameter value to predefine.
-method | Which method should be selected. | GET, POST, PUT, DELETE
+method | Which method should be selected. (Same as anchor but without scolling.) | GET, POST, PUT, DELETE
 run | If a request of the selected method should be sent to the server. | none
 
 ### Demo
