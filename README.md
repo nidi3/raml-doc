@@ -65,10 +65,10 @@ The resulting HTML supports the following:
 Name | Meaning | Value
 -----|---------|------
 expanded | Which resources in the resource tree on the left should be expanded. | Can be empty (all resources are expanded) or a comma separated list of resource names.
-u_* | A URI parameter value to predefine.
-q_* | A query parameter value to predefine.
-h_* | A header value to predefine.
-f_* | A form parameter value to predefine.
+u_* | A URI parameter value to predefine. | The value for the parameter.
+q_* | A query parameter value to predefine. | The value for the parameter. 
+h_* | A header value to predefine. | The value for the header.
+f_* | A form parameter value to predefine. | The value for the parameter.
 method | Which method should be selected. (Same as anchor but without scolling.) | GET, POST, PUT, DELETE
 run | If a request of the selected method should be sent to the server. | none
 
