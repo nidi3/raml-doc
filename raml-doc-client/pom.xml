@@ -35,6 +35,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>guru.nidi.maven.plugins</groupId>
+                <artifactId>tools-maven-plugin</artifactId>
+                <version>1.0.19</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>runMain</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>guru.nidi.raml.doc.ResourceLister</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

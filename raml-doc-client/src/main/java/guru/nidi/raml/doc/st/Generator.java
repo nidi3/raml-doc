@@ -35,10 +35,7 @@ import org.stringtemplate.v4.STGroupDir;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -46,9 +43,20 @@ import java.util.Map;
 public class Generator {
     private static final Logger log = LoggerFactory.getLogger(Generator.class);
 
-    private static final List<String> STATIC_FILES = Arrays.asList("favicon.ico", "ajax-loader.gif",
-            "style.less", "custom-variables.less", "custom-style.less",
-            "script.js", "tryout.js", "run_prettify.js", "beautify.js", "prettify-default.css");
+    private static final List<String> STATIC_FILES = loadStaticFileList();
+
+    private static List<String> loadStaticFileList() {
+        final List<String> res = new ArrayList<>();
+        try (final BufferedReader in = new BufferedReader(new InputStreamReader(Generator.class.getResourceAsStream("/guru/nidi/raml/doc/static-files.lst")))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                res.add(line);
+            }
+        } catch (IOException e) {
+            throw new AssertionError("Could not load static file list: " + e.getMessage());
+        }
+        return res;
+    }
 
     private static final List<String> CUSTOM_FILES = Arrays.asList(
             "favicon.ico", "custom-variables.less", "custom-style.less");
@@ -214,8 +222,10 @@ public class Generator {
 
     private void copyStaticResources(File base, List<String> names) throws IOException {
         for (String name : names) {
+            final File file = new File(base, name);
+            file.getParentFile().mkdirs();
             try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
-                 final FileOutputStream out = new FileOutputStream(new File(base, name))) {
+                 final FileOutputStream out = new FileOutputStream(file)) {
                 copy(in, out);
             }
         }
