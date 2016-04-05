@@ -16,6 +16,7 @@
 package guru.nidi.raml.doc.st;
 
 import guru.nidi.raml.doc.IoUtil;
+import guru.nidi.raml.doc.SchemaCache;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -35,9 +36,11 @@ class StringRenderer implements AttributeRenderer {
     private final Raml raml;
     private final JsBeautifyer jsBeautifyer;
     private final MarkdownProcessor markdownProcessor;
+    private final SchemaCache schemaCache;
 
-    public StringRenderer(Raml raml) {
+    public StringRenderer(Raml raml, SchemaCache schemaCache) {
         this.raml = raml;
+        this.schemaCache = schemaCache;
         final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
         final Invocable invocable = (Invocable) engine;
         try {
@@ -80,6 +83,8 @@ class StringRenderer implements AttributeRenderer {
                 return schema(s);
             case "js":
                 return js(s);
+            case "urled":
+                return urled(s);
             case "nameUrl":
                 return IoUtil.urlEncodedSafeName(s);
             case "pathUrl":
@@ -87,6 +92,10 @@ class StringRenderer implements AttributeRenderer {
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }
+    }
+
+    private String urled(String s) {
+        return schemaCache.cache(s);
     }
 
     private String schema(String s) {

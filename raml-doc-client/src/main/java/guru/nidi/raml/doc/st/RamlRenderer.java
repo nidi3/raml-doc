@@ -15,6 +15,7 @@
  */
 package guru.nidi.raml.doc.st;
 
+import guru.nidi.raml.doc.GeneratorConfig;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -41,6 +42,8 @@ class RamlRenderer implements AttributeRenderer {
                     return "http(s)://" + rest;
                 }
                 return raml.getProtocols().get(0).toString().toLowerCase() + "://" + rest;
+            case "titleUrl":
+                return GeneratorConfig.safeName(raml);
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }

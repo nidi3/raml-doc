@@ -71,7 +71,7 @@ public class ServletTest {
         multiRaml.setServletClass(RamlDocServlet.class.getName());
         multiRaml.setName("app");
         multiRaml.addInitParameter("ramlLocations", "classpath://data/basic.raml,classpath://data/second.raml,classpath://data/markdown.raml");
-        multiRaml.addInitParameter("features", "online,tryout,download");
+        multiRaml.addInitParameter("features", "online,tryout,download,docson");
         multiRaml.addInitParameter("baseUriParameters", "host=$host/$path,path=mirror");
         multiRaml.addInitParameter("customization", "classpath://");
         ctx.addChild(multiRaml);
@@ -114,7 +114,7 @@ public class ServletTest {
         final HttpResponse responseIndex = client.execute(getIndex);
         assertEquals(200, responseIndex.getStatusLine().getStatusCode());
         if ("/Users/nidi".equals(System.getenv("HOME"))) {
-//            Thread.sleep(1000000);
+            Thread.sleep(1000000);
         }
     }
 

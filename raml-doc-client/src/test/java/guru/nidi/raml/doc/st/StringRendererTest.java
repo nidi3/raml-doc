@@ -15,13 +15,14 @@
  */
 package guru.nidi.raml.doc.st;
 
+import guru.nidi.raml.doc.SchemaCache;
 import org.junit.Test;
 
 /**
  *
  */
 public class StringRendererTest {
-    private final StringRenderer renderer = new StringRenderer(null);
+    private final StringRenderer renderer = new StringRenderer(null, new SchemaCache());
 
     @Test
     public void code() {

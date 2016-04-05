@@ -72,7 +72,7 @@ public class Generator {
     }
 
     private String filenameFor(Raml raml) {
-        return IoUtil.safeName(raml.getTitle());
+        return GeneratorConfig.safeName(raml);
     }
 
     public void generate(Raml raml) throws IOException {
@@ -104,6 +104,7 @@ public class Generator {
         main.add("ramls", ramls);
         main.add("baseUri", config.hasFeature(Feature.TRYOUT) ? config.getBaseUri(raml) : null);
         main.add("download", config.hasFeature(Feature.DOWNLOAD));
+        main.add("docson", config.hasFeature(Feature.DOCSON));
 
         set(main, "raml", raml);
         render(main, "/main/doc", ".", new File(target, "index.html"));
@@ -170,7 +171,7 @@ public class Generator {
         group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
         group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
 
-        group.registerRenderer(String.class, new StringRenderer(raml));
+        group.registerRenderer(String.class, new StringRenderer(raml, config.getSchemaCache()));
         group.registerRenderer(AbstractParam.class, new ParamRenderer());
         group.registerRenderer(Raml.class, new RamlRenderer());
 

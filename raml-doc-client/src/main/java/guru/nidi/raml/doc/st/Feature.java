@@ -18,11 +18,11 @@ package guru.nidi.raml.doc.st;
 import java.util.EnumSet;
 
 public enum Feature {
-    ONLINE, TRYOUT, DOWNLOAD;
+    ONLINE, TRYOUT, DOWNLOAD, DOCSON;
 
     public static EnumSet<Feature> parse(String s) {
         if (s == null) {
-            return EnumSet.of(ONLINE, DOWNLOAD, TRYOUT);
+            return EnumSet.of(ONLINE, DOWNLOAD, TRYOUT, DOCSON);
         }
         final EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
         for (final String f : s.split(",")) {

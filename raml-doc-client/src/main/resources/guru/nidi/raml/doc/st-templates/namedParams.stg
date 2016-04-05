@@ -86,7 +86,11 @@ schemaExample(value) ::= <<
             <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span>
         $endif$
         <div class="model tab-body $if(!value.schema)$ invisible $endif$">
-            <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
+            $if(docson)$
+                <script src="$relPath$/../@docson/widget.js" data-schema="../@schema/$raml;format="titleUrl"$/$value.schema;format="urled"$"></script>
+            $else$
+                <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
+            $endif$
         </div>
         <div class="example tab-body $if(value.schema)$ invisible $endif$" onclick="rd.useExample(this)">
             <div class="invisible rawExample">$value.example;format="js"$</div>

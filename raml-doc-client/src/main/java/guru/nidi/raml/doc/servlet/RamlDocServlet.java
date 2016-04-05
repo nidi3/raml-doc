@@ -19,6 +19,7 @@ import guru.nidi.loader.Loader;
 import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.IoUtil;
+import guru.nidi.raml.doc.SchemaCache;
 import guru.nidi.raml.doc.st.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,27 +161,43 @@ public class RamlDocServlet extends HttpServlet {
             res.sendRedirect(req.getRequestURL().append("/" + IoUtil.urlEncoded(initer.baseDir) + "/index.html").toString().replaceAll("([^:])/+", "$1/"));
             return;
         }
-        final File source = new File(docDir(), req.getPathInfo());
-        if (!source.exists() || !source.isFile()) {
-            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+        final String path = req.getPathInfo().substring(1);
+        if (path.startsWith("@schema/")) {
+            final String schema = initer.schemaCache.schema(path.substring(8));
+            if (schema == null) {
+                res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                writeOutput(new ByteArrayInputStream(schema.getBytes("utf-8")), "text/plain", res);
+            }
         } else {
-            setContentType(res, source.getName());
-            try (final InputStream in = new FileInputStream(source);
-                 final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
-                copy(in, out);
+            final File source = new File(docDir(), path);
+            if (!source.exists() || !source.isFile()) {
+                res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            } else {
+                writeOutput(new FileInputStream(source), findContentType(source.getName()), res);
             }
         }
         res.flushBuffer();
     }
 
-    private void setContentType(HttpServletResponse res, String source) {
+    private void writeOutput(InputStream is, String type, HttpServletResponse res) throws IOException {
+        setContentType(type, res);
+        try (final InputStream in = is;
+             final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
+            copy(in, out);
+        }
+    }
+
+    private String findContentType(String source) {
         final int pos = source.lastIndexOf('.');
-        if (pos < source.length()) {
-            final String suffix = source.substring(pos + 1);
-            final String mimeType = mimeTypes.get(suffix);
-            if (mimeType != null) {
-                res.setHeader("Content-Type", mimeType);
-            }
+        return pos < source.length()
+                ? mimeTypes.get(source.substring(pos + 1))
+                : null;
+    }
+
+    private void setContentType(String type, HttpServletResponse res) {
+        if (type != null) {
+            res.setHeader("Content-Type", type);
         }
     }
 
@@ -195,13 +212,16 @@ public class RamlDocServlet extends HttpServlet {
     private class Initer {
         private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         private String baseDir;
+        private SchemaCache schemaCache;
 
         public Initer() {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        baseDir = createGeneratorConfig().generate();
+                        final GeneratorConfig config = createGeneratorConfig();
+                        baseDir = config.generate();
+                        schemaCache = config.getSchemaCache();
                     } catch (Exception e) {
                         log.error("Could not create RAML documentation", e);
                     }

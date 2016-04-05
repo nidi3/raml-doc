@@ -41,6 +41,7 @@ public class GeneratorConfig {
     private final String baseUriParameters;
     private final Loader customization;
     private final boolean forceDelete;
+    private final SchemaCache schemaCache = new SchemaCache();
 
     public GeneratorConfig(List<String> ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
         this.ramlLocations = ramlLocations;
@@ -62,6 +63,10 @@ public class GeneratorConfig {
 
     public String getBaseUri() {
         return baseUri;
+    }
+
+    public SchemaCache getSchemaCache() {
+        return schemaCache;
     }
 
     public boolean isForceDelete() {
@@ -125,8 +130,16 @@ public class GeneratorConfig {
         generator.generate(loadResults.ramls);
         for (final SavingLoaderInterceptor sli : loadResults.slis) {
             sli.writeDataToZip(generator);
+            for (final Map.Entry<String, byte[]> entry : sli.data.entrySet()) {
+                final String key = safeName(sli.raml) + "/" + sli.relativizePath(entry.getKey());
+                schemaCache.cache(key, new String(entry.getValue(), "utf-8"));
+            }
         }
         return generator.getTarget(loadResults.ramls.get(0)).getName();
+    }
+
+    public static String safeName(Raml raml) {
+        return IoUtil.safeName(raml.getTitle());
     }
 
     private static class LoadResults {
@@ -136,12 +149,23 @@ public class GeneratorConfig {
 
     private static class SavingLoaderInterceptor extends CachingLoaderInterceptor {
         private Raml raml;
+        private String ramlPath;
         private final Map<String, byte[]> data = new HashMap<>();
 
         @Override
         protected void processLoaded(String name, byte[] data) {
             final int pos = name.indexOf("://");
-            this.data.put(pos < 0 ? name : name.substring(pos + 3), data);
+            final String path = pos < 0 ? name : name.substring(pos + 3);
+            this.data.put(path, data);
+            //raml is the first resource to be loaded
+            if (ramlPath == null) {
+                ramlPath = path;
+            }
+        }
+
+        public String relativizePath(String path) {
+            int pos = ramlPath.lastIndexOf('/');
+            return path.startsWith(ramlPath.substring(0, pos)) ? path.substring(pos + 1) : path;
         }
 
         public void writeDataToFiles(File dir) throws IOException {
@@ -160,7 +184,7 @@ public class GeneratorConfig {
         }
 
         public void writeDataToZip(Generator generator) throws IOException {
-            writeDataToZip(new File(generator.getTarget(raml), IoUtil.safeName(raml.getTitle()) + ".zip"));
+            writeDataToZip(new File(generator.getTarget(raml), safeName(raml) + ".zip"));
         }
 
         public void writeDataToZip(File file) throws IOException {

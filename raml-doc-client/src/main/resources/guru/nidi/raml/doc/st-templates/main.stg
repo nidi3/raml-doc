@@ -1,4 +1,4 @@
-main(raml,ramls,template,param,relPath,baseUri,download) ::= <<
+main(raml,ramls,template,param,relPath,baseUri,download,docson) ::= <<
     <!DOCTYPE html>
     <html>
     <head>
