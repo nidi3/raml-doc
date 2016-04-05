@@ -126,6 +126,8 @@
      <li><code>language</code> Searches repositories based on the language they’re written in.</li> 
      <li><code>stars</code> Searches repositories based on the number of stars.</li> 
     </ul> 
+    <span id="GET"></span> 
+    <span id="get"></span> 
     <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)"> 
      <div class="badge badge_GET">
        GET 
@@ -139,6 +141,7 @@
      </div> 
      <form> 
       <div class="desc"> 
+       <p> Secured by: <a href="../.././security-scheme/.html"> </a> &nbsp; </p> 
        <table class="params"> 
         <thead> 
          <tr> 
@@ -211,7 +214,7 @@
              | 
             <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span> 
             <div class="model tab-body  invisible "> 
-             <pre class="code prettyprint"></pre> 
+             <script src="../.././../@docson/widget.js" data-schema="../@schema/Search/"></script> 
             </div> 
             <div class="example tab-body " onclick="rd.useExample(this)"> 
              <div class="invisible rawExample">
@@ -259,8 +262,8 @@
         </tbody> 
        </table> 
       </div> 
-      <button class="try GET" onclick="rd.tryOut(this,'GET','/search/repositories',''); return false;"> Send request </button> 
-      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/search/repositories',''); return false;"> Use modified URL </button> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/search/repositories',','); return false;"> Send request </button> 
+      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/search/repositories',','); return false;"> Use modified URL </button> 
       <img src="../.././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 
