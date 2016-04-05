@@ -47,6 +47,7 @@
                         </goals>
                         <configuration>
                             <mainClass>guru.nidi.raml.doc.ResourceLister</mainClass>
+                            <arguments>${basedir}</arguments>
                         </configuration>
                     </execution>
                 </executions>

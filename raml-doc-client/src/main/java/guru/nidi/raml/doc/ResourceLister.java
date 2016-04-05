@@ -23,12 +23,13 @@ import java.util.List;
  *
  */
 public class ResourceLister {
-    private static final File BASE = new File("src/main/resources/guru/nidi/raml/doc");
+    private static final String BASE = "src/main/resources/guru/nidi/raml/doc";
     private static final String DIR = "static";
 
     public static void main(String[] args) throws IOException {
-        try (final PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(BASE, DIR + "-files.lst"))))) {
-            for (final String file : files(new File(BASE, DIR))) {
+        final File baseDir = new File(args[0], BASE);
+        try (final PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(baseDir, DIR + "-files.lst"))))) {
+            for (final String file : files(new File(baseDir, DIR))) {
                 out.println(file);
             }
         }
