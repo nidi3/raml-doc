@@ -24,19 +24,19 @@ import java.util.Map;
 /**
  *
  */
-public class SchemaCache {
+public class ResourceCache {
     private final Map<String, String> schemas = new HashMap<>();
     private final File basedir;
     private int currentKey = 0;
 
-    public SchemaCache(File basedir) {
+    public ResourceCache(File basedir) {
         this.basedir = basedir;
     }
 
     public String cache(Raml raml, String schema) {
         String key = findSchema(raml, schema);
         if (key == null) {
-            key = cache(raml, "" + (++currentKey), schema);
+            key = cache(raml, (++currentKey) + ".inline", schema);
         }
         return key;
     }
@@ -44,20 +44,7 @@ public class SchemaCache {
     public String cache(Raml raml, String key, String schema) {
         final String fullKey = key(raml, key);
         schemas.put(fullKey, schema);
-        saveSchema(fullKey, schema);
         return fullKey;
-    }
-
-    protected void saveSchema(String key, String schema) {
-        final File file = new File(basedir, key);
-        file.getParentFile().mkdirs();
-        try (final InputStream in = new ByteArrayInputStream(schema.getBytes("utf-8"));
-             final OutputStream out = new FileOutputStream(file)) {
-            IoUtil.copy(in, out);
-        } catch (IOException e) {
-            //TODO better solution?
-            e.printStackTrace();
-        }
     }
 
     private String findSchema(Raml raml, String schema) {
@@ -82,6 +69,21 @@ public class SchemaCache {
             }
         }
         return schema;
+    }
+
+    public void flush() throws IOException {
+        for (final Map.Entry<String, String> entry : schemas.entrySet()) {
+            saveSchema(entry.getKey(), entry.getValue());
+        }
+    }
+
+    protected void saveSchema(String key, String schema) throws IOException {
+        final File file = new File(basedir, key);
+        file.getParentFile().mkdirs();
+        try (final InputStream in = new ByteArrayInputStream(schema.getBytes("utf-8"));
+             final OutputStream out = new FileOutputStream(file)) {
+            IoUtil.copy(in, out);
+        }
     }
 
 }

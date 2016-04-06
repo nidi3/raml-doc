@@ -19,7 +19,6 @@ import guru.nidi.loader.Loader;
 import guru.nidi.loader.basic.UriLoader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.IoUtil;
-import guru.nidi.raml.doc.SchemaCache;
 import guru.nidi.raml.doc.st.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

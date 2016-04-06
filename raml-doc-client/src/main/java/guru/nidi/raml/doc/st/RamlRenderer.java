@@ -15,7 +15,6 @@
  */
 package guru.nidi.raml.doc.st;
 
-import guru.nidi.raml.doc.GeneratorConfig;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 

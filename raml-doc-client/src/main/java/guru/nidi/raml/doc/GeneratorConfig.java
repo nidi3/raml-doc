@@ -41,7 +41,7 @@ public class GeneratorConfig {
     private final String baseUriParameters;
     private final Loader customization;
     private final boolean forceDelete;
-    private final SchemaCache schemaCache;
+    private final ResourceCache resourceCache;
 
     public GeneratorConfig(List<String> ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
         this.ramlLocations = ramlLocations;
@@ -51,7 +51,7 @@ public class GeneratorConfig {
         this.baseUriParameters = baseUriParameters;
         this.customization = customization;
         this.forceDelete = forceDelete;
-        schemaCache = new SchemaCache(new File(target, "@schema"));
+        resourceCache = new ResourceCache(new File(target, "@resource"));
     }
 
     public File getTarget() {
@@ -66,8 +66,8 @@ public class GeneratorConfig {
         return baseUri;
     }
 
-    public SchemaCache getSchemaCache() {
-        return schemaCache;
+    public ResourceCache getResourceCache() {
+        return resourceCache;
     }
 
     public boolean isForceDelete() {
@@ -126,17 +126,30 @@ public class GeneratorConfig {
     }
 
     public String generate() throws IOException {
-        final Generator generator = new Generator(this);
         final LoadResults loadResults = loadRamls();
+        fillResourceCache(loadResults);
+
+        final Generator generator = new Generator(this);
         generator.generate(loadResults.ramls);
+
+        writeResources(loadResults, generator);
+        return generator.getTarget(loadResults.ramls.get(0)).getName();
+    }
+
+    private void fillResourceCache(LoadResults loadResults) throws UnsupportedEncodingException {
         for (final SavingLoaderInterceptor sli : loadResults.slis) {
-            sli.writeDataToZip(generator);
             for (final Map.Entry<String, byte[]> entry : sli.data.entrySet()) {
                 final String key = sli.relativizePath(entry.getKey());
-                schemaCache.cache(sli.raml,key, new String(entry.getValue(), "utf-8"));
+                resourceCache.cache(sli.raml, key, new String(entry.getValue(), "utf-8"));
             }
         }
-        return generator.getTarget(loadResults.ramls.get(0)).getName();
+    }
+
+    private void writeResources(LoadResults loadResults, Generator generator) throws IOException {
+        for (final SavingLoaderInterceptor sli : loadResults.slis) {
+            sli.writeDataToZip(generator);
+        }
+        resourceCache.flush();
     }
 
     public static String safeName(Raml raml) {

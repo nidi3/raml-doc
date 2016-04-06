@@ -16,7 +16,7 @@
 package guru.nidi.raml.doc.st;
 
 import guru.nidi.raml.doc.IoUtil;
-import guru.nidi.raml.doc.SchemaCache;
+import guru.nidi.raml.doc.ResourceCache;
 import org.raml.model.Raml;
 import org.stringtemplate.v4.AttributeRenderer;
 
@@ -36,11 +36,11 @@ class StringRenderer implements AttributeRenderer {
     private final Raml raml;
     private final JsBeautifyer jsBeautifyer;
     private final MarkdownProcessor markdownProcessor;
-    private final SchemaCache schemaCache;
+    private final ResourceCache resourceCache;
 
-    public StringRenderer(Raml raml, SchemaCache schemaCache) {
+    public StringRenderer(Raml raml, ResourceCache resourceCache) {
         this.raml = raml;
-        this.schemaCache = schemaCache;
+        this.resourceCache = resourceCache;
         final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
         final Invocable invocable = (Invocable) engine;
         try {
@@ -95,7 +95,7 @@ class StringRenderer implements AttributeRenderer {
     }
 
     private String urled(String s) {
-        return schemaCache.cache(raml, s);
+        return resourceCache.cache(raml, s);
     }
 
     private String schema(String s) {

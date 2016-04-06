@@ -87,7 +87,7 @@ schemaExample(value) ::= <<
         $endif$
         <div class="model tab-body $if(!value.schema)$ invisible $endif$">
             $if(docson)$
-                <script src="$relPath$/../@docson/widget.js" data-schema="../@schema/$value.schema;format="urled"$"></script>
+                <script src="$relPath$/../@docson/widget.js" data-schema="../@resource/$value.schema;format="urled"$"></script>
             $else$
                 <pre class="code prettyprint">$value.schema;format="schema,js"$</pre>
             $endif$

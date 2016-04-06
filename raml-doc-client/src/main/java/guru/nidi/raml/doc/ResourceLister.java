@@ -48,6 +48,7 @@ public class ResourceLister {
                 if (file.isFile()) {
                     list.add(path + file.getName());
                 } else if (file.isDirectory()) {
+                    list.add(path + file.getName() + "/");
                     listFiles(file, path + file.getName() + "/", list);
                 }
             }
