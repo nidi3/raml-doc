@@ -1,0 +1,74 @@
+#%RAML 0.8
+---
+title: Miscellaneous
+baseUri: https://api.github.com
+version: v1
+documentation:
+  - title: Overview
+    content: |
+      This is a miscellaneous set of APIs which provide access to top level GitHub resources and info.
+
+/emojis:
+  description: Lists all the emojis available to use on GitHub.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include emojisEx.json
+
+/gitignore/templates:
+  description: |
+    When you create a new GitHub repository via the API, you can specify a .gitignore template to apply to the repository upon creation.
+    The .gitignore Templates API lists and fetches templates from the GitHub .gitignore repository.
+    <br><br>
+    List all templates available to pass as an option when creating a repository.
+
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include gitignore_templatesEx.json
+
+  /{language}:
+    description: The API also allows fetching the source of a single template.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include gitignoreEx.json
+            application/vnd.github.VERSION.raw+json:
+              example: !include gitignore_rawEx.txt
+
+/markdown:
+  description: Render an arbitrary Markdown document
+  post:
+    body:
+      application/json:
+        schema: !include markdown_schema.json
+        example: !include markdown_req.json
+    responses:
+      200:
+        body:
+          text/html:
+            example: !include markdown_res.txt
+
+  /raw:
+    description: |
+      Render a Markdown document in raw mode
+
+      The raw API is not JSON-based.
+      It takes a Markdown document as plaintext (text/plain or text/x-markdown)
+      and renders it as plain Markdown without a repository context (just like a README.md file is rendered –
+      this is the simplest way to preview a readme online).
+    post:
+      body:
+        text/plain:
+        text/x-markdown:
+      responses:
+        200:
+          body:
+            application/json:
+
