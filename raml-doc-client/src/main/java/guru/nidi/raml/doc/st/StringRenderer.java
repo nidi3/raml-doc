@@ -95,7 +95,7 @@ class StringRenderer implements AttributeRenderer {
     }
 
     private String urled(String s) {
-        return schemaCache.cache(s);
+        return schemaCache.cache(raml, s);
     }
 
     private String schema(String s) {

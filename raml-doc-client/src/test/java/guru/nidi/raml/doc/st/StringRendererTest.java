@@ -22,7 +22,11 @@ import org.junit.Test;
  *
  */
 public class StringRendererTest {
-    private final StringRenderer renderer = new StringRenderer(null, new SchemaCache());
+    private final StringRenderer renderer = new StringRenderer(null, new SchemaCache(null) {
+        @Override
+        protected void saveSchema(String key, String schema) {
+        }
+    });
 
     @Test
     public void code() {

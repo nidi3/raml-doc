@@ -37,6 +37,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+import static guru.nidi.raml.doc.IoUtil.copy;
+
 /**
  *
  */
@@ -280,13 +282,5 @@ public class Generator {
             res += "../";
         }
         return res + ".";
-    }
-
-    private void copy(InputStream in, OutputStream out) throws IOException {
-        final byte[] buf = new byte[1000];
-        int read;
-        while ((read = in.read(buf)) > 0) {
-            out.write(buf, 0, read);
-        }
     }
 }

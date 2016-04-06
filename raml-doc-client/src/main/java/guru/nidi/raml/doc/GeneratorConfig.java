@@ -41,7 +41,7 @@ public class GeneratorConfig {
     private final String baseUriParameters;
     private final Loader customization;
     private final boolean forceDelete;
-    private final SchemaCache schemaCache = new SchemaCache();
+    private final SchemaCache schemaCache;
 
     public GeneratorConfig(List<String> ramlLocations, File target, EnumSet<Feature> features, String baseUri, String baseUriParameters, Loader customization, boolean forceDelete) {
         this.ramlLocations = ramlLocations;
@@ -51,6 +51,7 @@ public class GeneratorConfig {
         this.baseUriParameters = baseUriParameters;
         this.customization = customization;
         this.forceDelete = forceDelete;
+        schemaCache = new SchemaCache(new File(target, "@schema"));
     }
 
     public File getTarget() {
@@ -131,8 +132,8 @@ public class GeneratorConfig {
         for (final SavingLoaderInterceptor sli : loadResults.slis) {
             sli.writeDataToZip(generator);
             for (final Map.Entry<String, byte[]> entry : sli.data.entrySet()) {
-                final String key = safeName(sli.raml) + "/" + sli.relativizePath(entry.getKey());
-                schemaCache.cache(key, new String(entry.getValue(), "utf-8"));
+                final String key = sli.relativizePath(entry.getKey());
+                schemaCache.cache(sli.raml,key, new String(entry.getValue(), "utf-8"));
             }
         }
         return generator.getTarget(loadResults.ramls.get(0)).getName();

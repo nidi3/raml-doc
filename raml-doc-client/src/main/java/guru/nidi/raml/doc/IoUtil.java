@@ -15,6 +15,9 @@
  */
 package guru.nidi.raml.doc;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Pattern;
@@ -83,6 +86,14 @@ public class IoUtil {
             return URLEncoder.encode(name, "utf-8");
         } catch (UnsupportedEncodingException e) {
             throw new AssertionError("Cannot happen");
+        }
+    }
+
+    public static void copy(InputStream in, OutputStream out) throws IOException {
+        final byte[] buf = new byte[1000];
+        int read;
+        while ((read = in.read(buf)) > 0) {
+            out.write(buf, 0, read);
         }
     }
 }

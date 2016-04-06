@@ -15,6 +15,9 @@
  */
 package guru.nidi.raml.doc;
 
+import org.raml.model.Raml;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,21 +26,51 @@ import java.util.Map;
  */
 public class SchemaCache {
     private final Map<String, String> schemas = new HashMap<>();
-    private final Map<String, String> keys = new HashMap<>();
+    private final File basedir;
     private int currentKey = 0;
 
-    public void cache(String key, String schema) {
-        schemas.put(key, schema);
+    public SchemaCache(File basedir) {
+        this.basedir = basedir;
     }
 
-    public String cache(String schema) {
-        String key = keys.get(schema);
+    public String cache(Raml raml, String schema) {
+        String key = findSchema(raml, schema);
         if (key == null) {
-            key = "" + (++currentKey);
-            schemas.put(key, schema);
-            keys.put(schema, key);
+            key = cache(raml, "" + (++currentKey), schema);
         }
         return key;
+    }
+
+    public String cache(Raml raml, String key, String schema) {
+        final String fullKey = key(raml, key);
+        schemas.put(fullKey, schema);
+        saveSchema(fullKey, schema);
+        return fullKey;
+    }
+
+    protected void saveSchema(String key, String schema) {
+        final File file = new File(basedir, key);
+        file.getParentFile().mkdirs();
+        try (final InputStream in = new ByteArrayInputStream(schema.getBytes("utf-8"));
+             final OutputStream out = new FileOutputStream(file)) {
+            IoUtil.copy(in, out);
+        } catch (IOException e) {
+            //TODO better solution?
+            e.printStackTrace();
+        }
+    }
+
+    private String findSchema(Raml raml, String schema) {
+        for (final Map.Entry<String, String> entry : schemas.entrySet()) {
+            if (entry.getKey().startsWith(key(raml, "")) && entry.getValue().equals(schema)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    private String key(Raml raml, String suffix) {
+        return GeneratorConfig.safeName(raml) + "/" + suffix;
     }
 
     public String schema(String key) {
@@ -50,4 +83,5 @@ public class SchemaCache {
         }
         return schema;
     }
+
 }

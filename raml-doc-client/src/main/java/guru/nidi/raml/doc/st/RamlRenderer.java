@@ -42,8 +42,6 @@ class RamlRenderer implements AttributeRenderer {
                     return "http(s)://" + rest;
                 }
                 return raml.getProtocols().get(0).toString().toLowerCase() + "://" + rest;
-            case "titleUrl":
-                return GeneratorConfig.safeName(raml);
             default:
                 throw new IllegalArgumentException("unknown format '" + formatString + "'");
         }

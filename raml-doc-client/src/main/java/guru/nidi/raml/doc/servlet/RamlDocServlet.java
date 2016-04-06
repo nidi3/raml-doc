@@ -162,26 +162,17 @@ public class RamlDocServlet extends HttpServlet {
             return;
         }
         final String path = req.getPathInfo().substring(1);
-        if (path.startsWith("@schema/")) {
-            final String schema = initer.schemaCache.schema(path.substring(8));
-            if (schema == null) {
-                res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else {
-                writeOutput(new ByteArrayInputStream(schema.getBytes("utf-8")), "text/plain", res);
-            }
+        final File source = new File(docDir(), path);
+        if (!source.exists() || !source.isFile()) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            final File source = new File(docDir(), path);
-            if (!source.exists() || !source.isFile()) {
-                res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            } else {
-                writeOutput(new FileInputStream(source), findContentType(source.getName()), res);
-            }
+            setContentType(findContentType(source.getName()), res);
+            writeOutput(new FileInputStream(source), res);
         }
         res.flushBuffer();
     }
 
-    private void writeOutput(InputStream is, String type, HttpServletResponse res) throws IOException {
-        setContentType(type, res);
+    private void writeOutput(InputStream is, HttpServletResponse res) throws IOException {
         try (final InputStream in = is;
              final OutputStream out = new BufferedOutputStream(res.getOutputStream())) {
             copy(in, out);
@@ -212,7 +203,6 @@ public class RamlDocServlet extends HttpServlet {
     private class Initer {
         private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         private String baseDir;
-        private SchemaCache schemaCache;
 
         public Initer() {
             executor.schedule(new Runnable() {
@@ -221,7 +211,6 @@ public class RamlDocServlet extends HttpServlet {
                     try {
                         final GeneratorConfig config = createGeneratorConfig();
                         baseDir = config.generate();
-                        schemaCache = config.getSchemaCache();
                     } catch (Exception e) {
                         log.error("Could not create RAML documentation", e);
                     }
