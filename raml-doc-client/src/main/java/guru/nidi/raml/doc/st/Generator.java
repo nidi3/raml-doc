@@ -49,6 +49,9 @@ public class Generator {
 
     private static List<String> loadStaticFileList() {
         final List<String> res = new ArrayList<>();
+        System.out.println("*****"+Generator.class.getResource("."));
+        System.out.println(Generator.class.getResource("/"));
+        System.out.println(Generator.class.getResource("/guru"));
         System.out.println(Generator.class.getResource("/guru/nidi/raml/doc/static-files.lst"));
         try (final BufferedReader in = new BufferedReader(new InputStreamReader(Generator.class.getResourceAsStream("/guru/nidi/raml/doc/static-files.lst")))) {
             String line;
