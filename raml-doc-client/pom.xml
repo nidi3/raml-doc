@@ -41,7 +41,7 @@
                 <version>1.0.19</version>
                 <executions>
                     <execution>
-                        <phase>generate-resources</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>runMain</goal>
                         </goals>
