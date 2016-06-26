@@ -82,7 +82,7 @@
                                         <exec dir="${npmdir}" executable="npm">
                                             <arg value="install" />
                                         </exec>
-                                        <exec dir="${npmdir}" executable="grunt" />
+                                        <exec dir="${npmdir}" executable="node_modules/.bin/grunt" />
                                         <exec dir="${npmdir}" executable="npm">
                                             <arg value="publish" />
                                         </exec>
