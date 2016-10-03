@@ -114,6 +114,8 @@
    </div> 
    <div class="desc"> 
     <p>Render an arbitrary Markdown document</p> 
+    <span id="POST"></span> 
+    <span id="post"></span> 
     <div class="actionHeader bg_POST border_POST" onclick="rd.showActionDetail(this)"> 
      <div class="badge badge_POST">
        POST 
@@ -127,6 +129,7 @@
      </div> 
      <form> 
       <div class="desc"> 
+       <p> Secured by: <a href=".././security-scheme/.html"> </a> &nbsp; </p> 
        <table class="params"> 
         <thead> 
          <tr> 
@@ -153,11 +156,11 @@
           <td></td> 
           <td colspan="2" style="vertical-align:top"> <textarea name="body"></textarea> </td> 
           <td></td> 
-          <td colspan="3" style="vertical-align: top"> | <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span> 
-           <div class="model tab-body  invisible "> 
-            <pre class="code prettyprint"></pre> 
+          <td colspan="3" style="vertical-align: top"> <span class="model tab active" onclick="rd.showTab(this,'model')">model</span> | <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span> 
+           <div class="model tab-body "> 
+            <script src=".././../@docson/widget.js" data-schema="../@resource/Miscellaneous/markdown_schema.json"></script> 
            </div> 
-           <div class="example tab-body " onclick="rd.useExample(this)"> 
+           <div class="example tab-body  invisible " onclick="rd.useExample(this)"> 
             <div class="invisible rawExample">
              { "text": "Hello world github/linguist#1 **cool**, and #1!", "mode": "gfm", "context": "github/gollum" }
             </div> 
@@ -195,7 +198,7 @@
              | 
             <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span> 
             <div class="model tab-body  invisible "> 
-             <pre class="code prettyprint"></pre> 
+             <script src=".././../@docson/widget.js" data-schema="../@resource/"></script> 
             </div> 
             <div class="example tab-body " onclick="rd.useExample(this)"> 
              <div class="invisible rawExample">
@@ -212,8 +215,8 @@ title = "This is another issue" &gt; #1&lt;/a&gt;!&lt;/p&gt;</pre>
         </tbody> 
        </table> 
       </div> 
-      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown',''); return false;"> Send request </button> 
-      <button class="try try-modified POST invisible" onclick="rd.tryOutModified(this,'POST','/markdown',''); return false;"> Use modified URL </button> 
+      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown',','); return false;"> Send request </button> 
+      <button class="try try-modified POST invisible" onclick="rd.tryOutModified(this,'POST','/markdown',','); return false;"> Use modified URL </button> 
       <img src=".././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 

@@ -115,6 +115,8 @@
    <div class="desc"> 
     <p>Render a Markdown document in raw mode</p> 
     <p>The raw API is not JSON-based. It takes a Markdown document as plaintext (text/plain or text/x-markdown) and renders it as plain Markdown without a repository context (just like a README.md file is rendered – this is the simplest way to preview a readme online).</p> 
+    <span id="POST"></span> 
+    <span id="post"></span> 
     <div class="actionHeader bg_POST border_POST" onclick="rd.showActionDetail(this)"> 
      <div class="badge badge_POST">
        POST 
@@ -128,6 +130,7 @@
      </div> 
      <form> 
       <div class="desc"> 
+       <p> Secured by: <a href="../.././security-scheme/.html"> </a> &nbsp; </p> 
        <table class="params"> 
         <thead> 
          <tr> 
@@ -192,8 +195,8 @@
         </tbody> 
        </table> 
       </div> 
-      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown/raw',''); return false;"> Send request </button> 
-      <button class="try try-modified POST invisible" onclick="rd.tryOutModified(this,'POST','/markdown/raw',''); return false;"> Use modified URL </button> 
+      <button class="try POST" onclick="rd.tryOut(this,'POST','/markdown/raw',','); return false;"> Send request </button> 
+      <button class="try try-modified POST invisible" onclick="rd.tryOutModified(this,'POST','/markdown/raw',','); return false;"> Use modified URL </button> 
       <img src="../.././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 

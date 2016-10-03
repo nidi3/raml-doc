@@ -177,7 +177,9 @@ var rd = {
         rd.dom.findParent(div, 'tr').querySelectorAll('td textarea,td input')[0].value = code;
     },
     applyQuery: function () {
-        var inputs, i, q, foldables, expanded, query = rd.query.parse(document.location.search);
+        var inputs, i, q, foldables, expanded,
+            hash = document.location.hash,
+            query = rd.query.parse(document.location.search);
         for (q in query) {
             if (q.charAt(1) === '_') {
                 inputs = document.querySelectorAll('input' + rd.query.attr('name=', q));
@@ -186,8 +188,10 @@ var rd = {
                 }
             }
         }
-        if (query['method']) {
-            var method = query['method'].toUpperCase();
+        var method = (query['method']
+            ? query['method']
+            : hash.length > 0 ? hash.substring(1) : '').toUpperCase();
+        if (method) {
             rd.showActionDetail(document.querySelector('.actionHeader.bg_' + method));
             if (query['run'] !== undefined) {
                 document.querySelector('.try.' + method).click();

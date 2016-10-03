@@ -114,6 +114,8 @@
    </div> 
    <div class="desc"> 
     <p>Lists all users, in the order that they signed up on GitHub. Note: Pagination is powered exclusively by the since parameter. Use the Link header to get the URL for the next page of users.</p> 
+    <span id="GET"></span> 
+    <span id="get"></span> 
     <div class="actionHeader bg_GET border_GET" onclick="rd.showActionDetail(this)"> 
      <div class="badge badge_GET">
        GET 
@@ -127,6 +129,7 @@
      </div> 
      <form> 
       <div class="desc"> 
+       <p> Secured by: <a href=".././security-scheme/.html"> </a> &nbsp; </p> 
        <table class="params"> 
         <thead> 
          <tr> 
@@ -181,7 +184,7 @@
              | 
             <span class="example tab inactive" onclick="rd.showTab(this,'example')">example</span> 
             <div class="model tab-body  invisible "> 
-             <pre class="code prettyprint"></pre> 
+             <script src=".././../@docson/widget.js" data-schema="../@resource/"></script> 
             </div> 
             <div class="example tab-body " onclick="rd.useExample(this)"> 
              <div class="invisible rawExample">
@@ -212,8 +215,8 @@
         </tbody> 
        </table> 
       </div> 
-      <button class="try GET" onclick="rd.tryOut(this,'GET','/users',''); return false;"> Send request </button> 
-      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/users',''); return false;"> Use modified URL </button> 
+      <button class="try GET" onclick="rd.tryOut(this,'GET','/users',','); return false;"> Send request </button> 
+      <button class="try try-modified GET invisible" onclick="rd.tryOutModified(this,'GET','/users',','); return false;"> Use modified URL </button> 
       <img src=".././../ajax-loader.gif" class="invisible loader"> 
       <div class="invisible response">
         Request URL 

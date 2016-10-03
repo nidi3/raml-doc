@@ -1,0 +1,88 @@
+#%RAML 0.8
+---
+title: Search
+baseUri: https://api.github.com
+version: v1
+documentation:
+  - title: About the Search API
+    content: !include search.md
+
+/search:
+  /repositories:
+    description: !include search_repo.md
+    get:
+      queryParameters:
+        q:
+          description: The search keywords, as well as any qualifiers.
+          example: tetris+language:assembly
+        sort:
+          description: |
+            The sort field. One of `stars`, `forks`, or `updated`. Default: results are sorted by best match.
+        order:
+          description: The sort order if `sort` parameter is provided. One of `asc` or `desc`.
+          default: desc
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include search_repoEx.json
+
+  /code:
+    description: !include search_code.md
+    get:
+      queryParameters:
+        q:
+          description: The search terms.
+          example: 'addClass+in:file+language:js+repo:jquery/jquery'
+        sort:
+          description: |
+            The sort field. Can only be `indexed`, which indicates how recently a file has been indexed by the GitHub search infrastructure.
+            Default: results are sorted by best match.
+        order:
+          description: The sort order if `sort` parameter is provided. One of `asc` or `desc`.
+          default: desc
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include search_codeEx.json
+
+  /issues:
+    description: !include search_issues.md
+    get:
+      queryParameters:
+        q:
+          description: The search terms.
+          example: 'windows+label:bug+language:python+state:open'
+        sort:
+          description: |
+            The sort field. Can be `comments`, `created`, or `updated`.
+            Default: results are sorted by best match.
+        order:
+          description: The sort order if `sort` parameter is provided. One of `asc` or `desc`.
+          default: desc
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include search_issueEx.json
+
+  /users:
+    description: !include search_user.md
+    get:
+      queryParameters:
+        q:
+          description: The search terms.
+          example: 'tom+repos:%3E42+followers:%3E1000'
+        sort:
+          description: |
+           The sort field. Can be `followers`, `repositories`, or `joined`.
+           Default: results are sorted by best match.
+        order:
+          description: The sort order if `sort` parameter is provided. One of `asc` or `desc`.
+          default: desc
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include search_userEx.json

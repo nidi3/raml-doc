@@ -1,0 +1,66 @@
+#%RAML 0.8
+---
+title: Users
+baseUri: https://api.github.com
+version: v1
+documentation:
+  - title: Overview
+    content: |
+      Many of the resources on the users API provide a shortcut for getting information about the currently authenticated user.
+      If a request URL does not include a `{username}` parameter then the response will be for the logged in user
+      (and you must pass authentication information with your request).
+
+/users:
+  description: |
+    Lists all users, in the order that they signed up on GitHub.
+    Note: Pagination is powered exclusively by the since parameter.
+    Use the Link header to get the URL for the next page of users.
+  get:
+    queryParameters:
+      since:
+        description: The integer ID of the last User that you’ve seen.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include usersEx.json
+
+  /{username}:
+    description: |
+      Get a single user
+      <br><br>
+      Note: The returned email is the user’s publicly visible email address
+      (or null if the user has not specified a public email address in their profile).
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include userEx.json
+
+    /followers:
+      description: List a user's followers.
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include followersEx.json
+
+    /following:
+      description: List who a user is following
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include followingEx.json
+      /{target_user}:
+        description: Check if one user follows another
+        get:
+          responses:
+            204:
+              description: user follows target user
+            404:
+              description: user does not follow target user
+
