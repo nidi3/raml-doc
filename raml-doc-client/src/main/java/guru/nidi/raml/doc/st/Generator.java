@@ -21,10 +21,7 @@ import guru.nidi.loader.Loader;
 import guru.nidi.raml.doc.GeneratorConfig;
 import guru.nidi.raml.doc.HtmlOptimizer;
 import guru.nidi.raml.doc.IoUtil;
-import org.raml.model.Action;
-import org.raml.model.Raml;
-import org.raml.model.Resource;
-import org.raml.model.SecurityScheme;
+import org.raml.model.*;
 import org.raml.model.parameter.AbstractParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,6 +171,8 @@ public class Generator {
         group.registerModelAdaptor(Raml.class, new RamlAdaptor());
         group.registerModelAdaptor(Resource.class, new ResourceAdaptor());
         group.registerModelAdaptor(Action.class, new ActionAdaptor(raml));
+        group.registerModelAdaptor(SecuritySchemeDescriptor.class, new SecuritySchemeDescriptorAdaptor());
+        group.registerModelAdaptor(Response.class, new ResponseAdaptor());
 
         group.registerRenderer(String.class, new StringRenderer(raml, config.getResourceCache()));
         group.registerRenderer(AbstractParam.class, new ParamRenderer());

@@ -15,41 +15,30 @@
  */
 package guru.nidi.raml.doc.st;
 
-import org.raml.model.Resource;
-import org.raml.model.parameter.UriParameter;
+import org.raml.model.SecuritySchemeDescriptor;
 import org.stringtemplate.v4.Interpreter;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
  *
  */
-class ResourceAdaptor extends ObjectModelAdaptor {
+class SecuritySchemeDescriptorAdaptor extends ObjectModelAdaptor {
     @Override
     public Object getProperty(Interpreter interp, ST self, Object o, Object property, String propertyName) throws STNoSuchPropertyException {
-        final Resource res = (Resource) o;
+        final SecuritySchemeDescriptor d = (SecuritySchemeDescriptor) o;
         switch (propertyName) {
-            case "resolvedUriParameters":
-                final Map<String, UriParameter> params = new TreeMap<>();
-                getAllResources(res, params);
-                return params;
-            case "actions":
-                return new TreeMap<>(res.getActions());
+            case "queryParameters":
+                return new TreeMap<>(d.getQueryParameters());
+            case "headers":
+                return new TreeMap<>(d.getHeaders());
+            case "responses":
+                return new TreeMap<>(d.getResponses());
             default:
                 return super.getProperty(interp, self, o, property, propertyName);
         }
     }
-
-    public void getAllResources(Resource resource, Map<String, UriParameter> res) {
-        res.putAll(resource.getUriParameters());
-        if (resource.getParentResource() != null) {
-            getAllResources(resource.getParentResource(), res);
-        }
-    }
-
 }

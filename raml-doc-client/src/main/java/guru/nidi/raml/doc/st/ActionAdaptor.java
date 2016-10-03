@@ -48,10 +48,16 @@ class ActionAdaptor extends ObjectModelAdaptor {
                 if (raml.getSecuredBy() != null && !raml.getSecuredBy().isEmpty()) {
                     return raml.getSecuredBy();
                 }
-            case "sortedResponses":
-                return new TreeMap<>(a.getResponses());
             case "type":
                 return a.getType().toString();
+            case "responses":
+                return new TreeMap<>(a.getResponses());
+            case "queryParameters":
+                return new TreeMap<>(a.getQueryParameters());
+            case "headers":
+                return new TreeMap<>(a.getHeaders());
+            case "body":
+                return a.getBody() == null ? null : new TreeMap<>(a.getBody());
             default:
                 return super.getProperty(interp, self, o, property, propertyName);
         }
