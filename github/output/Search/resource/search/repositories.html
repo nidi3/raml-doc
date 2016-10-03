@@ -159,6 +159,15 @@
           <td colspan=" 7 "> <span class="title">Query parameters</span> </td> 
          </tr> 
          <tr> 
+          <td>order</td> 
+          <td><input name="q_order"></td> 
+          <td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p> </td> 
+          <td onclick="rd.useExample(this)" class="example"></td> 
+          <td>string?</td> 
+          <td> </td> 
+          <td>desc</td> 
+         </tr> 
+         <tr> 
           <td>q</td> 
           <td><input name="q_q"></td> 
           <td><p>The search keywords, as well as any qualifiers.</p> </td> 
@@ -175,15 +184,6 @@
           <td>string?</td> 
           <td> </td> 
           <td></td> 
-         </tr> 
-         <tr> 
-          <td>order</td> 
-          <td><input name="q_order"></td> 
-          <td><p>The sort order if <code>sort</code> parameter is provided. One of <code>asc</code> or <code>desc</code>.</p> </td> 
-          <td onclick="rd.useExample(this)" class="example"></td> 
-          <td>string?</td> 
-          <td> </td> 
-          <td>desc</td> 
          </tr> 
          <tr> 
           <td colspan=" 7 "> <span class="title">Headers</span> <span class="add clickable" onclick="rd.addHeader(this)"></span> </td> 

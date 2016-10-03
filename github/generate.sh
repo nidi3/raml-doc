@@ -1,1 +1,1 @@
-java -jar ~/.m2/repository/guru/nidi/raml/raml-doc-standalone/0.8.1-SNAPSHOT/raml-doc-standalone-0.8.1-SNAPSHOT.jar input/github-misc.raml file://input/github-search.raml file://input/github-users.raml -toutput -fdownload,tryout,docson
+java -jar ~/.m2/repository/guru/nidi/raml/raml-doc-standalone/0.8.2-SNAPSHOT/raml-doc-standalone-0.8.2-SNAPSHOT.jar input/github-misc.raml file://input/github-search.raml file://input/github-users.raml -toutput -fdownload,tryout,docson
