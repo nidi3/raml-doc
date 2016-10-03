@@ -22,6 +22,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.misc.ObjectModelAdaptor;
 import org.stringtemplate.v4.misc.STNoSuchPropertyException;
 
+import java.util.Collections;
 import java.util.TreeMap;
 
 /**
@@ -48,6 +49,7 @@ class ActionAdaptor extends ObjectModelAdaptor {
                 if (raml.getSecuredBy() != null && !raml.getSecuredBy().isEmpty()) {
                     return raml.getSecuredBy();
                 }
+                return Collections.emptyList();
             case "type":
                 return a.getType().toString();
             case "responses":
