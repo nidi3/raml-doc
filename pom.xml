@@ -5,7 +5,7 @@
     <parent>
         <groupId>guru.nidi</groupId>
         <artifactId>guru-nidi-parent-pom</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.7</version>
     </parent>
 
     <groupId>guru.nidi.raml</groupId>
@@ -41,7 +41,7 @@
             <plugin>
                 <groupId>guru.nidi.maven.plugins</groupId>
                 <artifactId>tools-maven-plugin</artifactId>
-                <version>1.0.17</version>
+                <version>1.0.20</version>
                 <executions>
                     <execution>
                         <goals>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.raml</groupId>
             <artifactId>raml-parser</artifactId>
-            <version>0.8.13</version>
+            <version>0.8.17</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -76,23 +76,6 @@
                 <exclusion>
                     <groupId>log4j</groupId>
                     <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-validator</groupId>
-                    <artifactId>commons-validator</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- see https://github.com/raml-org/raml-java-parser/issues/75 -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.7.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
