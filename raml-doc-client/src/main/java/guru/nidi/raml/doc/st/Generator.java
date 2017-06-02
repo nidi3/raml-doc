@@ -129,18 +129,16 @@ public class Generator {
 
     private void checkTargetEmpty(File target, List<Raml> ramls) {
         for (final File file : target.listFiles()) {
-            if (!isAllowedInTarget(file, ramls)) {
+            if (!isAllowedInTarget(file.getName(), ramls)) {
                 throw new IllegalStateException("Cannot generate doc in folder '" + target + "' because it is not empty. " +
                         "Contains " + (file.isDirectory() ? "directory" : "file") + " '" + file.getName() + "'.");
             }
         }
     }
 
-    private boolean isAllowedInTarget(File file, List<Raml> ramls) {
-        final String name = file.getName();
-        return "index.html".equals(name) || name.startsWith("@resource") || existsTitle(name, ramls) ||
-                STATIC_FILES.contains(name) || (STATIC_FILES.contains(name + "/") && file.isDirectory()) ||
-                (name.endsWith(".css") && STATIC_FILES.contains(name.substring(0, name.length() - 4) + ".less"));
+    private boolean isAllowedInTarget(String name, List<Raml> ramls) {
+        return "index.html".equals(name) || existsTitle(name, ramls) ||
+                STATIC_FILES.contains(name) || (name.endsWith(".css") && STATIC_FILES.contains(name.substring(0, name.length() - 4) + ".less"));
     }
 
     private boolean existsTitle(String name, List<Raml> ramls) {
@@ -223,13 +221,11 @@ public class Generator {
 
     private void copyStaticResources(File base, List<String> names) throws IOException {
         for (String name : names) {
-            if (!name.endsWith("/")) {
-                final File file = new File(base, name);
-                file.getParentFile().mkdirs();
-                try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
-                     final FileOutputStream out = new FileOutputStream(file)) {
-                    copy(in, out);
-                }
+            final File file = new File(base, name);
+            file.getParentFile().mkdirs();
+            try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
+                 final FileOutputStream out = new FileOutputStream(file)) {
+                copy(in, out);
             }
         }
     }
