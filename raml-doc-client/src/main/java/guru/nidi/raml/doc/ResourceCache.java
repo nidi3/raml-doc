@@ -30,6 +30,10 @@ public class ResourceCache {
         this.basedir = basedir;
     }
 
+    public File getBasedir() {
+        return basedir;
+    }
+
     public String cache(Raml raml, String schema) {
         String key = findSchema(raml, schema);
         if (key == null) {

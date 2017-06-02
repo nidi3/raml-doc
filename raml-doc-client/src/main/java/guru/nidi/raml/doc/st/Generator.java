@@ -87,7 +87,7 @@ public class Generator {
         if (raml == ramls.get(0)) {
             config.getTarget().mkdirs();
             if (!config.isForceDelete()) {
-                checkTargetEmpty(config.getTarget(), ramls);
+                checkTargetEmpty(config.getTarget(), config.getResourceCache().getBasedir(), ramls);
             }
             deleteAll(config.getTarget());
             generateBase(raml, group);
@@ -127,18 +127,22 @@ public class Generator {
         }
     }
 
-    private void checkTargetEmpty(File target, List<Raml> ramls) {
+    private void checkTargetEmpty(File target, File cacheDir, List<Raml> ramls) {
         for (final File file : target.listFiles()) {
-            if (!isAllowedInTarget(file.getName(), ramls)) {
+            if (!isAllowedInTarget(file.getName(), cacheDir, ramls)) {
                 throw new IllegalStateException("Cannot generate doc in folder '" + target + "' because it is not empty. " +
                         "Contains " + (file.isDirectory() ? "directory" : "file") + " '" + file.getName() + "'.");
             }
         }
     }
 
-    private boolean isAllowedInTarget(String name, List<Raml> ramls) {
-        return "index.html".equals(name) || existsTitle(name, ramls) ||
-                STATIC_FILES.contains(name) || (name.endsWith(".css") && STATIC_FILES.contains(name.substring(0, name.length() - 4) + ".less"));
+    private boolean isAllowedInTarget(String name, File cacheDir, List<Raml> ramls) {
+        return "index.html".equals(name) || existsTitle(name, ramls) || isStaticFile(name) || name.equals(cacheDir.getName());
+    }
+
+    private boolean isStaticFile(String name) {
+        return STATIC_FILES.contains(name) || STATIC_FILES.contains(name + "/")
+                || (name.endsWith(".css") && STATIC_FILES.contains(name.substring(0, name.length() - 4) + ".less"));
     }
 
     private boolean existsTitle(String name, List<Raml> ramls) {
@@ -222,10 +226,13 @@ public class Generator {
     private void copyStaticResources(File base, List<String> names) throws IOException {
         for (String name : names) {
             final File file = new File(base, name);
-            file.getParentFile().mkdirs();
-            try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
-                 final FileOutputStream out = new FileOutputStream(file)) {
-                copy(in, out);
+            if (name.endsWith("/")) {
+                file.mkdirs();
+            } else {
+                try (final InputStream in = getClass().getResourceAsStream("/guru/nidi/raml/doc/static/" + name);
+                     final FileOutputStream out = new FileOutputStream(file)) {
+                    copy(in, out);
+                }
             }
         }
     }
